@@ -1,5 +1,7 @@
+import clientes
 from ventMain import *
-import sys,var,events
+import sys, var, events
+from PyQt6 import *
 
 
 class Main(QtWidgets.QMainWindow):
@@ -11,6 +13,11 @@ class Main(QtWidgets.QMainWindow):
 		Listados de eventos
 		'''
 		var.ui.actionSalir.triggered.connect(events.Eventos.Salir)
+		var.ui.txtDni.editingFinished.connect(lambda: clientes.Clientes.mostrar_valido_dni())
+		'''
+		Seleccionar motor
+		'''
+		clientes.Clientes.selMotor()
 
 
 if __name__ == "__main__":
