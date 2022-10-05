@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'ventCalendario.ui'
+# Form implementation generated from reading ui file 'ui\ventCalendario.ui'
 #
 # Created by: PyQt6 UI code generator 6.3.1
 #

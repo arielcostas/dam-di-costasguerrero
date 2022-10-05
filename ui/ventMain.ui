@@ -29,19 +29,6 @@
    <bool>false</bool>
   </property>
   <widget class="QWidget" name="centralwidget">
-   <widget class="QPushButton" name="btnSalir">
-    <property name="geometry">
-     <rect>
-      <x>680</x>
-      <y>500</y>
-      <width>75</width>
-      <height>24</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>SALIR</string>
-    </property>
-   </widget>
    <widget class="QLabel" name="lblTituloClientes">
     <property name="geometry">
      <rect>
@@ -89,7 +76,7 @@
     <property name="geometry">
      <rect>
       <x>100</x>
-      <y>60</y>
+      <y>50</y>
       <width>591</width>
       <height>22</height>
      </rect>
@@ -270,7 +257,7 @@
        </property>
        <property name="icon">
         <iconset>
-         <normaloff>img/calendar.png</normaloff>img/calendar.png</iconset>
+         <normaloff>../img/calendar.png</normaloff>../img/calendar.png</iconset>
        </property>
        <property name="iconSize">
         <size>
@@ -286,7 +273,7 @@
     <property name="geometry">
      <rect>
       <x>17</x>
-      <y>159</y>
+      <y>120</y>
       <width>761</width>
       <height>21</height>
      </rect>
@@ -302,7 +289,7 @@
     <property name="geometry">
      <rect>
       <x>80</x>
-      <y>180</y>
+      <y>150</y>
       <width>180</width>
       <height>20</height>
      </rect>
@@ -345,7 +332,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>120</y>
+      <y>90</y>
       <width>761</width>
       <height>22</height>
      </rect>
@@ -486,9 +473,9 @@
     <property name="geometry">
      <rect>
       <x>110</x>
-      <y>220</y>
+      <y>180</y>
       <width>561</width>
-      <height>22</height>
+      <height>26</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
@@ -639,11 +626,11 @@
      <enum>Qt::Horizontal</enum>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>270</x>
-      <y>260</y>
+      <y>220</y>
       <width>273</width>
       <height>22</height>
      </rect>
@@ -694,18 +681,146 @@
      </item>
     </layout>
    </widget>
+   <widget class="QTableWidget" name="tablaClientes">
+    <property name="geometry">
+     <rect>
+      <x>20</x>
+      <y>310</y>
+      <width>761</width>
+      <height>231</height>
+     </rect>
+    </property>
+    <column>
+     <property name="text">
+      <string>DNI</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Matrícula</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Marca</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Modelo</string>
+     </property>
+    </column>
+    <column>
+     <property name="text">
+      <string>Motor</string>
+     </property>
+    </column>
+   </widget>
+   <widget class="QPushButton" name="buttonLimpiarVehiculo">
+    <property name="geometry">
+     <rect>
+      <x>730</x>
+      <y>180</y>
+      <width>24</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../img/limpiar.png</normaloff>../img/limpiar.png</iconset>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="buttonBuscarVehiculo">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>180</y>
+      <width>24</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="minimumSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="maximumSize">
+     <size>
+      <width>24</width>
+      <height>24</height>
+     </size>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+    <property name="icon">
+     <iconset>
+      <normaloff>../img/buscar.png</normaloff>../img/buscar.png</iconset>
+    </property>
+   </widget>
+   <widget class="QWidget" name="">
+    <property name="geometry">
+     <rect>
+      <x>290</x>
+      <y>260</y>
+      <width>239</width>
+      <height>26</height>
+     </rect>
+    </property>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QPushButton" name="buttonVehiculoGuardar">
+       <property name="text">
+        <string>Guardar</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonVehiculoModificar">
+       <property name="text">
+        <string>Modificar</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="buttonVehiculoEliminar">
+       <property name="text">
+        <string>Eliminar</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </widget>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
    <zorder>layoutWidget</zorder>
-   <zorder>btnSalir</zorder>
+   <zorder>layoutWidget</zorder>
    <zorder>lblTituloClientes</zorder>
    <zorder>line</zorder>
    <zorder>lblTituloVehiculo</zorder>
-   <zorder>radioButtonGasolina</zorder>
-   <zorder>radioButtonDiesel</zorder>
-   <zorder>radioButtonHibrido</zorder>
-   <zorder>radioButtonElectrico</zorder>
    <zorder>line_2</zorder>
+   <zorder>tablaClientes</zorder>
+   <zorder>buttonVehiculoGuardar</zorder>
+   <zorder>buttonVehiculoModificar</zorder>
+   <zorder>buttonVehiculoEliminar</zorder>
+   <zorder>buttonLimpiarVehiculo</zorder>
+   <zorder>buttonBuscarVehiculo</zorder>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -725,12 +840,36 @@
    <addaction name="menuArchivo"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
+  <widget class="QToolBar" name="toolbar">
+   <property name="windowTitle">
+    <string>toolBar</string>
+   </property>
+   <attribute name="toolBarArea">
+    <enum>TopToolBarArea</enum>
+   </attribute>
+   <attribute name="toolBarBreak">
+    <bool>false</bool>
+   </attribute>
+   <addaction name="toolbarSalir"/>
+  </widget>
   <action name="actionSalir">
    <property name="text">
     <string>Salir</string>
    </property>
    <property name="shortcut">
     <string>Alt+S</string>
+   </property>
+  </action>
+  <action name="toolbarSalir">
+   <property name="icon">
+    <iconset>
+     <normaloff>../img/salir.png</normaloff>../img/salir.png</iconset>
+   </property>
+   <property name="text">
+    <string>Salir</string>
+   </property>
+   <property name="toolTip">
+    <string>Salir</string>
    </property>
   </action>
  </widget>
