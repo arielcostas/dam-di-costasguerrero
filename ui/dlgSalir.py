@@ -1,4 +1,4 @@
-# Form implementation generated from reading ui file 'ui\dlgSalir.ui'
+# Form implementation generated from reading ui file 'C:/Users/a21arielcg/PycharmProjects/costasguerrero/ui/dlgSalir.ui'
 #
 # Created by: PyQt6 UI code generator 6.3.1
 #
@@ -27,7 +27,7 @@ class Ui_dlgSalir(object):
         font.setPointSize(12)
         self.labelImagen.setFont(font)
         self.labelImagen.setText("")
-        self.labelImagen.setPixmap(QtGui.QPixmap("ui\\../img/peligro.png"))
+        self.labelImagen.setPixmap(QtGui.QPixmap("C:/Users/a21arielcg/PycharmProjects/costasguerrero/ui\\../img/peligro.png"))
         self.labelImagen.setScaledContents(True)
         self.labelImagen.setObjectName("labelImagen")
         self.layoutWidget = QtWidgets.QWidget(dlgSalir)

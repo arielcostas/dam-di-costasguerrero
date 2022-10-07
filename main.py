@@ -1,4 +1,7 @@
-from dialogsalir import DialogSalir
+from PyQt6 import QtWidgets
+
+from dlgcalendario import DialogCalendar
+from dlgsalir import DialogSalir
 from ui.ventMain import *
 from dni import validar as validar_dni
 
@@ -9,20 +12,21 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain = Ui_ventMain()
 		self.ventMain.setupUi(self)
 		self.dialogSalir = DialogSalir()
+		self.ventCalendar = DialogCalendar()
 
-		# Configurar que hacer cuando se pulsa salir
+		# Se pulsa salir en una barra de herramientas
 		self.ventMain.actionSalir.triggered.connect(self.on_press_salir)
 		self.ventMain.toolbarSalir.triggered.connect(self.on_press_salir)
 
-		# Configur evento cuando se pulsa 'Enter' en el campo DNI
+		# Se pulsa enter en DNI
 		self.ventMain.txtDni.editingFinished.connect(self.on_dni_comprobar)
 
-		# Configurar evento a llamar cuando se seleccione un radioButton de motor
-		self.ventMain.btnGroupMotorizacion.buttonClicked.connect(self.on_motoroption_change)
+		# Guardar cliente
+		self.ventMain.buttonGuardarCliente.clicked.connect(self.on_guardar_cliente)
 
-	def on_motoroption_change(self):
+	def get_motor(self):
 		try:
-			print(self.ventMain.btnGroupMotorizacion.checkedButton().text())
+			return self.ventMain.btnGroupMotorizacion.checkedButton().text()
 		except Exception as error:
 			print(f"Error seleccionando motor: {error}")
 
@@ -40,7 +44,29 @@ class Main(QtWidgets.QMainWindow):
 				self.ventMain.txtDni.setText(dni.upper())
 				self.ventMain.txtDni.setStyleSheet('background-color: pink;')
 		except Exception as error:
-			print("Error mostrando marcado validez DNI: ", error)
+			print(f"Error mostrando marcado validez DNI: {error}")
 
 	def on_press_salir(self):
 		self.dialogSalir.mostrar_salir()
+
+	def on_guardar_cliente(self):
+		try:
+			cliente = [
+				self.ventMain.txtDni.text(),
+				self.ventMain.txtMatricula.text(),
+				self.ventMain.txtMarca.text(),
+				self.ventMain.txtModelo.text(),
+				self.get_motor()
+			]
+
+			tabla = self.ventMain.tablaClientes
+			row_position = tabla.rowCount()
+			tabla.insertRow(row_position)
+			tabla.setItem(row_position, 0, QtWidgets.QTableWidgetItem(cliente[0]))
+			tabla.setItem(row_position, 1, QtWidgets.QTableWidgetItem(cliente[1]))
+			tabla.setItem(row_position, 2, QtWidgets.QTableWidgetItem(cliente[2]))
+			tabla.setItem(row_position, 3, QtWidgets.QTableWidgetItem(cliente[3]))
+			tabla.setItem(row_position, 4, QtWidgets.QTableWidgetItem(cliente[4]))
+
+		except Exception as error:
+			print(f"Error en carga cliente: {error}")
