@@ -1,6 +1,6 @@
 import sys
 
-from main import Main
+from ventmain import Main
 from PyQt6 import QtWidgets
 
 if __name__ == "__main__":

@@ -12,7 +12,7 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain = Ui_ventMain()
 		self.ventMain.setupUi(self)
 		self.dialogSalir = DialogSalir()
-		self.ventCalendar = DialogCalendar()
+		self.dialogCalendar = DialogCalendar()
 
 		# Se pulsa salir en una barra de herramientas
 		self.ventMain.actionSalir.triggered.connect(self.on_press_salir)
@@ -23,6 +23,20 @@ class Main(QtWidgets.QMainWindow):
 
 		# Guardar cliente
 		self.ventMain.buttonGuardarCliente.clicked.connect(self.on_guardar_cliente)
+
+		# Al seleccionar en el calendario, obtener fecha
+		self.ventMain.buttonFechaAltaCliente.clicked.connect(self.on_abrir_calendario)
+		self.dialogCalendar.dialogCalendar.calendarWidget.clicked.connect(self.on_seleccionar_fecha)
+
+		# Limpiar
+		self.ventMain.buttonLimpiarVehiculo.clicked.connect(self.on_limpiar)
+
+		# Poner mayúsculas a todos
+		self.ventMain.txtMarca.editingFinished.connect(self.mayuscula_palabra)
+		self.ventMain.txtModelo.editingFinished.connect(self.mayuscula_palabra)
+		self.ventMain.txtNombre.editingFinished.connect(self.mayuscula_palabra)
+		self.ventMain.txtDireccionCliente.editingFinished.connect(self.mayuscula_palabra)
+		self.ventMain.txtDni.editingFinished.connect(self.mayuscula_palabra)
 
 	def get_motor(self):
 		try:
@@ -70,3 +84,44 @@ class Main(QtWidgets.QMainWindow):
 
 		except Exception as error:
 			print(f"Error en carga cliente: {error}")
+
+	def on_abrir_calendario(self):
+		print(self.dialogCalendar)
+		self.dialogCalendar.show()
+
+	def on_seleccionar_fecha(self):
+		qDate = self.dialogCalendar.dialogCalendar.calendarWidget.selectedDate()
+		try:
+			data = f"{qDate.day()}/{qDate.month()}/{qDate.year()}"
+			self.ventMain.txtFechaAltaCliente.setText(data)
+			self.dialogCalendar.hide()
+		except Exception as error:
+			print(f"Error cargando fecha cliente: {error}")
+
+	def mayuscula_palabra(self):
+		self.ventMain.txtMarca.setText(self.ventMain.txtMarca.text().title())
+		self.ventMain.txtModelo.setText(self.ventMain.txtModelo.text().title())
+		self.ventMain.txtNombre.setText(self.ventMain.txtNombre.text().title())
+		self.ventMain.txtDireccionCliente.setText(self.ventMain.txtDireccionCliente.text().title())
+		self.ventMain.txtDni.setText(self.ventMain.txtDni.text().title())
+
+
+	def on_limpiar(self):
+		try:
+			self.ventMain.txtDni.setText("")
+			self.ventMain.txtDni.setText("")
+			self.ventMain.txtFechaAltaCliente.setText("")
+			self.ventMain.txtDireccionCliente.setText("")
+			self.ventMain.txtMatricula.setText("")
+			self.ventMain.txtMarca.setText("")
+			self.ventMain.txtModelo.setText("")
+
+			self.ventMain.comboMunicipioCliente.setCurrentIndex(0)
+			self.ventMain.comboProvinciaCliente.setCurrentIndex(0)
+
+			for btn in self.ventMain.btnGroupPago.buttons():
+				btn.setChecked(False)
+
+			self.ventMain.radioButtonGasolina.setChecked(True)
+		except Exception as error:
+			print(f"Error limpiando cliente: {error}")
