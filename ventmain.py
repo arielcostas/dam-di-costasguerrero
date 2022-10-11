@@ -1,5 +1,6 @@
 from PyQt6 import QtWidgets
 
+import conexion
 from dlgcalendario import DialogCalendar
 from dlgsalir import DialogSalir
 from ui.ventMain import *
@@ -37,6 +38,9 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.txtNombre.editingFinished.connect(self.mayuscula_palabra)
 		self.ventMain.txtDireccionCliente.editingFinished.connect(self.mayuscula_palabra)
 		self.ventMain.txtDni.editingFinished.connect(self.mayuscula_palabra)
+
+		conexion.Conexion.iniciarConexion()
+		self.cargar_provincias()
 
 	def get_motor(self):
 		try:
@@ -90,9 +94,9 @@ class Main(QtWidgets.QMainWindow):
 		self.dialogCalendar.show()
 
 	def on_seleccionar_fecha(self):
-		qDate = self.dialogCalendar.dialogCalendar.calendarWidget.selectedDate()
+		qdate = self.dialogCalendar.dialogCalendar.calendarWidget.selectedDate()
 		try:
-			data = f"{qDate.day()}/{qDate.month()}/{qDate.year()}"
+			data = f"{qdate.day()}/{qdate.month()}/{qdate.year()}"
 			self.ventMain.txtFechaAltaCliente.setText(data)
 			self.dialogCalendar.hide()
 		except Exception as error:
@@ -104,7 +108,6 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.txtNombre.setText(self.ventMain.txtNombre.text().title())
 		self.ventMain.txtDireccionCliente.setText(self.ventMain.txtDireccionCliente.text().title())
 		self.ventMain.txtDni.setText(self.ventMain.txtDni.text().title())
-
 
 	def on_limpiar(self):
 		try:
@@ -125,3 +128,10 @@ class Main(QtWidgets.QMainWindow):
 			self.ventMain.radioButtonGasolina.setChecked(True)
 		except Exception as error:
 			print(f"Error limpiando cliente: {error}")
+
+	def cargar_provincias(self):
+		self.ventMain.comboProvinciaCliente.clear()
+		datos = conexion.Conexion.cargar_provincias()
+		print(datos)
+		for i in datos:
+			self.ventMain.comboProvinciaCliente.addItem(i)

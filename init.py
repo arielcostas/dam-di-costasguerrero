@@ -1,5 +1,6 @@
 import sys
 
+import conexion
 from ventmain import Main
 from PyQt6 import QtWidgets
 
