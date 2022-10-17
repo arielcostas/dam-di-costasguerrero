@@ -41,8 +41,12 @@ class Main(QtWidgets.QMainWindow):
 
 		self.ventMain.txtMatricula.editingFinished.connect(self.mayuscula_palabra)
 
-		conexion.Conexion.iniciarConexion()
+		self.bbdd = conexion.Conexion()
+		self.bbdd.iniciarConexion()
 		self.cargar_provincias()
+
+		# Al seleccionar una provincia, cargar sus municipios
+		self.ventMain.comboProvinciaCliente.currentTextChanged.connect(self.cargar_municipios)
 
 	def get_motor(self):
 		try:
@@ -134,7 +138,13 @@ class Main(QtWidgets.QMainWindow):
 
 	def cargar_provincias(self):
 		self.ventMain.comboProvinciaCliente.clear()
-		datos = conexion.Conexion.cargar_provincias()
-		print(datos)
+		datos = self.bbdd.cargar_provincias()
 		for i in datos:
 			self.ventMain.comboProvinciaCliente.addItem(i)
+
+	def cargar_municipios(self):
+		self.ventMain.comboMunicipioCliente.clear()
+		provincia = self.ventMain.comboProvinciaCliente.currentText()
+		datos = self.bbdd.cargar_municipios(provincia)
+		for i in datos:
+			self.ventMain.comboMunicipioCliente.addItem(i)
