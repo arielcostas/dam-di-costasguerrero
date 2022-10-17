@@ -33,11 +33,13 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.buttonLimpiarVehiculo.clicked.connect(self.on_limpiar)
 
 		# Poner mayúsculas a todos
-		self.ventMain.txtMarca.editingFinished.connect(self.mayuscula_palabra)
-		self.ventMain.txtModelo.editingFinished.connect(self.mayuscula_palabra)
-		self.ventMain.txtNombre.editingFinished.connect(self.mayuscula_palabra)
-		self.ventMain.txtDireccionCliente.editingFinished.connect(self.mayuscula_palabra)
-		self.ventMain.txtDni.editingFinished.connect(self.mayuscula_palabra)
+		self.camposMayusculas = [self.ventMain.txtMarca, self.ventMain.txtModelo,
+								 self.ventMain.txtNombre, self.ventMain.txtDireccionCliente, self.ventMain.txtDni]
+
+		for campo in self.camposMayusculas:
+			campo.editingFinished.connect(self.mayuscula_palabra)
+
+		self.ventMain.txtMatricula.editingFinished.connect(self.mayuscula_palabra)
 
 		conexion.Conexion.iniciarConexion()
 		self.cargar_provincias()
@@ -108,6 +110,7 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.txtNombre.setText(self.ventMain.txtNombre.text().title())
 		self.ventMain.txtDireccionCliente.setText(self.ventMain.txtDireccionCliente.text().title())
 		self.ventMain.txtDni.setText(self.ventMain.txtDni.text().title())
+		self.ventMain.txtMatricula.setText(self.ventMain.txtMatricula.text().upper())
 
 	def on_limpiar(self):
 		try:
