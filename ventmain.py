@@ -77,26 +77,19 @@ class Main(QtWidgets.QMainWindow):
 		try:
 			cliente = [
 				self.ventMain.txtDni.text(),
-				self.ventMain.txtMatricula.text(),
-				self.ventMain.txtMarca.text(),
-				self.ventMain.txtModelo.text(),
-				self.get_motor()
+				self.ventMain.txtNombre.text(),
+				self.ventMain.txtFechaAltaCliente.text(),
+				self.ventMain.txtDireccionCliente.text(),
+				self.ventMain.comboProvinciaCliente.currentText(),
+				self.ventMain.comboMunicipioCliente.currentText()
 			]
 
-			tabla = self.ventMain.tablaClientes
-			row_position = tabla.rowCount()
-			tabla.insertRow(row_position)
-			tabla.setItem(row_position, 0, QtWidgets.QTableWidgetItem(cliente[0]))
-			tabla.setItem(row_position, 1, QtWidgets.QTableWidgetItem(cliente[1]))
-			tabla.setItem(row_position, 2, QtWidgets.QTableWidgetItem(cliente[2]))
-			tabla.setItem(row_position, 3, QtWidgets.QTableWidgetItem(cliente[3]))
-			tabla.setItem(row_position, 4, QtWidgets.QTableWidgetItem(cliente[4]))
+			print(cliente)
 
 		except Exception as error:
 			print(f"Error en carga cliente: {error}")
 
 	def on_abrir_calendario(self):
-		print(self.dialogCalendar)
 		self.dialogCalendar.show()
 
 	def on_seleccionar_fecha(self):
@@ -126,7 +119,6 @@ class Main(QtWidgets.QMainWindow):
 			self.ventMain.txtMarca.setText("")
 			self.ventMain.txtModelo.setText("")
 
-			self.ventMain.comboMunicipioCliente.setCurrentIndex(0)
 			self.ventMain.comboProvinciaCliente.setCurrentIndex(0)
 
 			for btn in self.ventMain.btnGroupPago.buttons():

@@ -43,3 +43,6 @@ class Conexion():
 
 		except Exception as error:
 			print(f"Error recuperando municipios de {provincia}: {error}")
+
+	def guardarCliente(self):
+		pass

@@ -123,6 +123,9 @@
          <height>20</height>
         </size>
        </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 127)</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -519,6 +522,12 @@
          <width>100</width>
          <height>20</height>
         </size>
+       </property>
+       <property name="autoFillBackground">
+        <bool>false</bool>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">background-color: rgb(255, 255, 127)</string>
        </property>
       </widget>
      </item>
@@ -950,14 +959,14 @@
  <resources/>
  <connections/>
  <buttongroups>
-  <buttongroup name="btnGroupMotorizacion">
-   <property name="exclusive">
-    <bool>true</bool>
-   </property>
-  </buttongroup>
   <buttongroup name="btnGroupPago">
    <property name="exclusive">
     <bool>false</bool>
+   </property>
+  </buttongroup>
+  <buttongroup name="btnGroupMotorizacion">
+   <property name="exclusive">
+    <bool>true</bool>
    </property>
   </buttongroup>
  </buttongroups>
