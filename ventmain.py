@@ -75,17 +75,38 @@ class Main(QtWidgets.QMainWindow):
 
 	def on_guardar_cliente(self):
 		try:
-			cliente = [
-				self.ventMain.txtDni.text(),
-				self.ventMain.txtNombre.text(),
-				self.ventMain.txtFechaAltaCliente.text(),
-				self.ventMain.txtDireccionCliente.text(),
-				self.ventMain.comboProvinciaCliente.currentText(),
-				self.ventMain.comboMunicipioCliente.currentText()
-			]
+			vm = self.ventMain
+			cliente = {
+				"dni": vm.txtDni.text(),
+				"nombre": vm.txtNombre.text(),
+				"alta": vm.txtFechaAltaCliente.text(),
+				"direccion": vm.txtDireccionCliente.text(),
+				"provincia": vm.comboProvinciaCliente.currentText(),
+				"municipio": vm.comboMunicipioCliente.currentText(),
+				"efectivo": vm.checkEfectivo.isChecked(),
+				"factura": vm.checkFactura.isChecked(),
+				"transferencia": vm.checkTransferencia.isChecked(),
+			}
 
-			print(cliente)
+			vehiculo = {
+				"matricula": vm.txtMatricula.text(),
+				"cliente": cliente.get("dni"),
+				"marca": vm.txtMarca.text(),
+				"modelo": vm.txtModelo.text(),
+				"motor": self.get_motor(),
+			}
 
+			guardado = self.bbdd.guardar_cliente(cliente) and self.bbdd.guardar_vehiculo(vehiculo)
+			msg = QtWidgets.QMessageBox()
+			if guardado:
+				msg.setText("Guardado correctamente")
+				msg.setIcon(msg.Icon.Information)
+				msg.setText("Se han guardado los datos de cliente y coche correctamente")
+			else:
+				msg.setText("Error al guardar")
+				msg.setIcon(msg.Icon.Critical)
+				msg.setText("Hubo un problema al guardar los datos")
+			msg.exec()
 		except Exception as error:
 			print(f"Error en carga cliente: {error}")
 
