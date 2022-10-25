@@ -44,6 +44,7 @@ class Main(QtWidgets.QMainWindow):
 		self.bbdd = conexion.Conexion()
 		self.bbdd.iniciarConexion()
 		self.cargar_provincias()
+		self.cargar_tablaVehiculos()
 
 		# Al seleccionar una provincia, cargar sus municipios
 		self.ventMain.comboProvinciaCliente.currentTextChanged.connect(self.cargar_municipios)
@@ -161,3 +162,15 @@ class Main(QtWidgets.QMainWindow):
 		datos = self.bbdd.cargar_municipios(provincia)
 		for i in datos:
 			self.ventMain.comboMunicipioCliente.addItem(i)
+
+	def cargar_tablaVehiculos(self):
+		self.ventMain.tablaClientes.clearContents()
+		datos = self.bbdd.cargar_vehiculos()
+		self.ventMain.tablaClientes.setRowCount(len(datos))
+		for idx, el in enumerate(datos):
+			for idx2, el2 in enumerate(el):
+				item = QtWidgets.QTableWidgetItem(str(el2))
+				item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+				self.ventMain.tablaClientes.setItem(idx, idx2, item)
+		for i in range(0, self.ventMain.tablaClientes.columnCount()):
+			self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)

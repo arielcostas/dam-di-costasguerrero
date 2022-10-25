@@ -46,6 +46,18 @@ class Conexion:
 		except Exception as error:
 			print(f"Error recuperando municipios de {provincia}: {error}")
 
+	def cargar_vehiculos(self):
+		try:
+			query = QtSql.QSqlQuery()
+			query.prepare("SELECT matricula, dnicli, marca, modelo, motor FROM coches")
+			if query.exec():
+				resultados = []
+				while query.next():
+					resultados.append([query.value(0), query.value(1), query.value(2), query.value(3), query.value(4)])
+				return resultados
+		except Exception as error:
+			print(f"Error recuperando vehiculos: {error}")
+
 	def guardar_cliente(self, cliente):
 		try:
 			query = QtSql.QSqlQuery()
