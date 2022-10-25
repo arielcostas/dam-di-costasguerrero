@@ -164,13 +164,18 @@ class Main(QtWidgets.QMainWindow):
 			self.ventMain.comboMunicipioCliente.addItem(i)
 
 	def cargar_tablaVehiculos(self):
-		self.ventMain.tablaClientes.clearContents()
-		datos = self.bbdd.cargar_vehiculos()
-		self.ventMain.tablaClientes.setRowCount(len(datos))
-		for idx, el in enumerate(datos):
-			for idx2, el2 in enumerate(el):
-				item = QtWidgets.QTableWidgetItem(str(el2))
-				item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-				self.ventMain.tablaClientes.setItem(idx, idx2, item)
-		for i in range(0, self.ventMain.tablaClientes.columnCount()):
-			self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+		try:
+			self.ventMain.tablaClientes.clearContents()
+			datos = self.bbdd.cargar_vehiculos()
+			self.ventMain.tablaClientes.setRowCount(len(datos))
+			for idx, el in enumerate(datos):
+				for idx2, el2 in enumerate(el):
+					item = QtWidgets.QTableWidgetItem(str(el2))
+					item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
+					self.ventMain.tablaClientes.setItem(idx, idx2, item)
+			for i in range(0, self.ventMain.tablaClientes.columnCount()):
+				self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+				if i < 2:
+					self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+		except Exception as error:
+			print(f"Error cargando tabla vehiculos: {error}")
