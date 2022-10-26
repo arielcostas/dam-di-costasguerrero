@@ -1,10 +1,12 @@
-from PyQt6 import QtWidgets
+import zipfile
+from datetime import datetime
 
 import conexion
+import dlgabrir
 from dlgcalendario import DialogCalendar
 from dlgsalir import DialogSalir
-from ui.ventMain import *
 from dni import validar as validar_dni
+from ui.ventMain import *
 
 
 class Main(QtWidgets.QMainWindow):
@@ -48,6 +50,9 @@ class Main(QtWidgets.QMainWindow):
 
 		# Al seleccionar una provincia, cargar sus municipios
 		self.ventMain.comboProvinciaCliente.currentTextChanged.connect(self.cargar_municipios)
+
+		# Al pulsar en el botón de copia de seguridad, hacer copia de seguridad
+		self.ventMain.actionHacerCopia.triggered.connect(self.on_hacer_copia)
 
 	def get_motor(self):
 		try:
@@ -179,3 +184,25 @@ class Main(QtWidgets.QMainWindow):
 					self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
 		except Exception as error:
 			print(f"Error cargando tabla vehiculos: {error}")
+
+	def on_hacer_copia(self):
+		try:
+			dialogo = dlgabrir.FileDialogAbrir()
+
+			fecha = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
+			copia = f"{fecha}_backup.zip"
+			directorio, filename = dialogo.getSaveFileName(self.ventMain, "Guardar copia de seguridad", copia, "Zip (*.zip)")
+			if directorio:
+				zipf = zipfile.ZipFile(f"{directorio}/{filename}", 'w', zipfile.ZIP_DEFLATED)
+				zipf.write("bbdd.sqlite")
+				zipf.close()
+
+				msg = QtWidgets.QMessageBox()
+				msg.setModal(True)
+				msg.setWindowTitle("Aviso")
+				msg.setIcon(msg.Icon.Information)
+				msg.setText("Se ha realizado la copia de seguridad correctamente")
+				msg.exec()
+
+		except Exception as error:
+			print(f"Error haciendo copia: {error}")

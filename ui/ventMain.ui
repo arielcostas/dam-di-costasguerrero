@@ -38,9 +38,12 @@
       <height>571</height>
      </rect>
     </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
     <widget class="QWidget" name="tab_5">
      <attribute name="title">
-      <string>Tab 1</string>
+      <string>Clientes</string>
      </attribute>
      <widget class="QLabel" name="lblTituloVehiculo">
       <property name="geometry">
@@ -878,9 +881,14 @@
       </layout>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_6">
+    <widget class="QWidget" name="tab_2">
      <attribute name="title">
-      <string>Tab 2</string>
+      <string>Facturación</string>
+     </attribute>
+    </widget>
+    <widget class="QWidget" name="tab_3">
+     <attribute name="title">
+      <string>Servicios</string>
      </attribute>
     </widget>
    </widget>
@@ -900,7 +908,15 @@
     </property>
     <addaction name="actionSalir"/>
    </widget>
+   <widget class="QMenu" name="menuHerramientas">
+    <property name="title">
+     <string>Herramientas</string>
+    </property>
+    <addaction name="actionHacerCopia"/>
+    <addaction name="actionRestaurarCopia"/>
+   </widget>
    <addaction name="menuArchivo"/>
+   <addaction name="menuHerramientas"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolbar">
@@ -939,6 +955,16 @@
    </property>
    <property name="toolTip">
     <string>Salir</string>
+   </property>
+  </action>
+  <action name="actionHacerCopia">
+   <property name="text">
+    <string>Crear copia de seguridad</string>
+   </property>
+  </action>
+  <action name="actionRestaurarCopia">
+   <property name="text">
+    <string>Restaurar copia de seguridad</string>
    </property>
   </action>
  </widget>
