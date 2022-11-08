@@ -548,6 +548,9 @@
          <property name="checked">
           <bool>true</bool>
          </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroupMotorizacion</string>
+         </attribute>
         </widget>
        </item>
        <item>
@@ -555,6 +558,9 @@
          <property name="text">
           <string>Diesel</string>
          </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroupMotorizacion</string>
+         </attribute>
         </widget>
        </item>
        <item>
@@ -562,6 +568,9 @@
          <property name="text">
           <string>Híbrido</string>
          </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroupMotorizacion</string>
+         </attribute>
         </widget>
        </item>
        <item>
@@ -569,6 +578,9 @@
          <property name="text">
           <string>Eléctrico</string>
          </property>
+         <attribute name="buttonGroup">
+          <string notr="true">buttonGroupMotorizacion</string>
+         </attribute>
         </widget>
        </item>
       </layout>
@@ -970,4 +982,7 @@
  </widget>
  <resources/>
  <connections/>
+ <buttongroups>
+  <buttongroup name="buttonGroupMotorizacion"/>
+ </buttongroups>
 </ui>

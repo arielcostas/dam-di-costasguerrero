@@ -2,9 +2,11 @@ import zipfile
 from datetime import datetime
 
 import conexion
-import dlgabrir
-from dlgcalendario import DialogCalendar
-from dlgsalir import DialogSalir
+from servicios.backups import ServicioBackup
+from controladores import modal
+from controladores.dlgabrir import DialogoAbrir
+from controladores.dlgcalendario import DialogCalendar
+from controladores.dlgsalir import DialogSalir
 from dni import validar as validar_dni
 from ui.ventMain import *
 
@@ -12,6 +14,8 @@ from ui.ventMain import *
 class Main(QtWidgets.QMainWindow):
 	def __init__(self):
 		super(Main, self).__init__()
+		self.servicioBackup = ServicioBackup()
+
 		self.ventMain = Ui_ventMain()
 		self.ventMain.setupUi(self)
 		self.dialogSalir = DialogSalir()
@@ -46,7 +50,7 @@ class Main(QtWidgets.QMainWindow):
 		self.bbdd = conexion.Conexion()
 		self.bbdd.iniciarConexion()
 		self.cargar_provincias()
-		self.cargar_tablaVehiculos()
+		self.cargar_tabla_vehiculos()
 
 		# Al seleccionar una provincia, cargar sus municipios
 		self.ventMain.comboProvinciaCliente.currentTextChanged.connect(self.cargar_municipios)
@@ -56,7 +60,7 @@ class Main(QtWidgets.QMainWindow):
 
 	def get_motor(self):
 		try:
-			return self.ventMain.btnGroupMotorizacion.checkedButton().text()
+			return self.ventMain.buttonGroupMotorizacion.checkedButton().text()
 		except Exception as error:
 			print(f"Error seleccionando motor: {error}")
 
@@ -138,17 +142,15 @@ class Main(QtWidgets.QMainWindow):
 
 	def on_limpiar(self):
 		try:
-			self.ventMain.txtDni.setText("")
-			self.ventMain.txtDni.setText("")
-			self.ventMain.txtFechaAltaCliente.setText("")
-			self.ventMain.txtDireccionCliente.setText("")
-			self.ventMain.txtMatricula.setText("")
-			self.ventMain.txtMarca.setText("")
-			self.ventMain.txtModelo.setText("")
+			camposTexto = [self.ventMain.txtDni, self.ventMain.txtNombre, self.ventMain.txtDireccionCliente,
+						   self.ventMain.txtFechaAltaCliente, self.ventMain.txtMatricula, self.ventMain.txtMarca,
+						   self.ventMain.txtModelo]
+			for campo in camposTexto:
+				campo.setText("")
 
 			self.ventMain.comboProvinciaCliente.setCurrentIndex(0)
 
-			for btn in self.ventMain.btnGroupPago.buttons():
+			for btn in self.ventMain.buttonGroupMotorizacion.buttons():
 				btn.setChecked(False)
 
 			self.ventMain.radioButtonGasolina.setChecked(True)
@@ -168,7 +170,7 @@ class Main(QtWidgets.QMainWindow):
 		for i in datos:
 			self.ventMain.comboMunicipioCliente.addItem(i)
 
-	def cargar_tablaVehiculos(self):
+	def cargar_tabla_vehiculos(self):
 		try:
 			self.ventMain.tablaClientes.clearContents()
 			datos = self.bbdd.cargar_vehiculos()
@@ -179,30 +181,40 @@ class Main(QtWidgets.QMainWindow):
 					item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
 					self.ventMain.tablaClientes.setItem(idx, idx2, item)
 			for i in range(0, self.ventMain.tablaClientes.columnCount()):
-				self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+				self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i,
+																					QtWidgets.QHeaderView.ResizeMode.Stretch)
 				if i < 2:
-					self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
+					self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i,
+																						QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
 		except Exception as error:
 			print(f"Error cargando tabla vehiculos: {error}")
 
 	def on_hacer_copia(self):
 		try:
-			dialogo = dlgabrir.FileDialogAbrir()
+			dialogo = DialogoAbrir()
 
 			fecha = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
 			copia = f"{fecha}_backup.zip"
-			directorio, filename = dialogo.getSaveFileName(self.ventMain, "Guardar copia de seguridad", copia, "Zip (*.zip)")
-			if directorio:
-				zipf = zipfile.ZipFile(f"{directorio}/{filename}", 'w', zipfile.ZIP_DEFLATED)
-				zipf.write("bbdd.sqlite")
-				zipf.close()
+			directorio, filename = dialogo.getSaveFileName(self, "Guardar copia de seguridad", copia, "Zip (*.zip)")
 
-				msg = QtWidgets.QMessageBox()
-				msg.setModal(True)
-				msg.setWindowTitle("Aviso")
-				msg.setIcon(msg.Icon.Information)
-				msg.setText("Se ha realizado la copia de seguridad correctamente")
-				msg.exec()
+			if directorio and self.servicioBackup.hacer_copia(directorio):
+				modal.aviso("Aviso", "Copia de seguridad realizada correctamente")
 
 		except Exception as error:
 			print(f"Error haciendo copia: {error}")
+
+	def on_restaurar_copia(self):
+		try:
+			dialogo = DialogoAbrir()
+			directorio, filename = dialogo.getOpenFileName(self, "Restaurar copia de seguridad", "", "Zip (*.zip)")
+			if directorio and self.servicioBackup.restaurar_copia(f"{directorio}/{filename}"):
+				zipf = zipfile.ZipFile(f"{directorio}/{filename}", 'r')
+				zipf.extractall()
+				zipf.close()
+
+				self.bbdd.iniciarConexion()
+				self.cargar_tabla_vehiculos()
+
+				modal.aviso("Aviso", "Se ha restaurado la copia de seguridad correctamente")
+		except Exception as error:
+			print(f"Error restaurando copia: {error}")

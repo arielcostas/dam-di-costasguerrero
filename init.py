@@ -1,7 +1,6 @@
 import sys
 
-import conexion
-from ventmain import Main
+from controladores.ventmain import Main
 from PyQt6 import QtWidgets, QtGui
 
 if __name__ == "__main__":
