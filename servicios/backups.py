@@ -16,7 +16,7 @@ class ServicioBackup:
 		zipf.close()
 		return True
 
-	def exportar_excel(self, ruta: str) -> bool:
+	def exportar_clientes_excel(self, ruta: str) -> bool:
 		try:
 			wb = xlwt.Workbook()
 			hoja_clientes = wb.add_sheet("Clientes")
@@ -50,6 +50,33 @@ class ServicioBackup:
 					hoja_clientes.write(fila, 6, ", ".join(metodosPago))
 					fila += 1
 
+			wb.save(ruta)
+			return True
+		except Exception as error:
+			print("Error al exportar a excel: ", error)
+			return False
+
+	def exportar_coches_excel(self, ruta: str) -> bool:
+		try:
+			wb = xlwt.Workbook()
+			hoja_coches = wb.add_sheet("Coches")
+			hoja_coches.write(0, 0, "Matricula")
+			hoja_coches.write(0, 1, "DNI cliente")
+			hoja_coches.write(0, 2, "Marca")
+			hoja_coches.write(0, 3, "Modelo")
+			hoja_coches.write(0, 4, "Tipo motor")
+
+			query = QtSql.QSqlQuery()
+			query.prepare("SELECT * FROM coches ORDER BY matricula")
+			if query.exec():
+				fila = 1
+				while query.next():
+					hoja_coches.write(fila, 0, query.value(0))
+					hoja_coches.write(fila, 1, query.value(1))
+					hoja_coches.write(fila, 2, query.value(2))
+					hoja_coches.write(fila, 3, query.value(3))
+					hoja_coches.write(fila, 4, query.value(4))
+					fila += 1
 			wb.save(ruta)
 			return True
 		except Exception as error:

@@ -3,6 +3,7 @@ from datetime import datetime
 
 import conexion
 from conexion import Conexion
+from controladores.dlgTipoExportacion import DialogoTipoExportacion
 from servicios.backups import ServicioBackup
 from controladores import modal
 from controladores.dlgabrir import DialogoAbrir
@@ -221,14 +222,15 @@ class Main(QtWidgets.QMainWindow):
 
 	def on_exportar_excel(self):
 		try:
-			dialogo = DialogoAbrir()
-			fecha = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
-			nombreDefecto = f"{fecha}_backup.xlsx"
-			directorio, filename = dialogo.getSaveFileName(self, "Exportar a Excel", nombreDefecto,
-														   "Hoja de cálculo (*.xlsx)")
-			if directorio:
-				self.servicioBackup.exportar_excel(directorio)
-
+			dialogo = DialogoTipoExportacion()
+			if dialogo.exec():
+				dialogoAbrir = DialogoAbrir()
+				directorio = dialogoAbrir.getExistingDirectory(self, "Seleccionar carpeta destino", "")
+				fecha = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
+				if dialogo.ui.checkboxCoches.isChecked():
+					self.servicioBackup.exportar_coches_excel(directorio + f"/coches_{fecha}.xls")
+				if dialogo.ui.checkboxClientes.isChecked():
+					self.servicioBackup.exportar_clientes_excel(directorio + f"/clientes_{fecha}.xls")
 				modal.aviso("Aviso", "Se ha exportado a Excel correctamente")
 		except Exception as error:
-			print(f"Error restaurando copia: {error}")
+			print(f"Error exportando excel: {error}")
