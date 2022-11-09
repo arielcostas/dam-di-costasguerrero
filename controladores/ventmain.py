@@ -224,6 +224,9 @@ class Main(QtWidgets.QMainWindow):
 		try:
 			dialogo = DialogoTipoExportacion()
 			if dialogo.exec():
+				if not dialogo.ui.checkboxCoches.isChecked() and not dialogo.ui.checkboxClientes.isChecked():
+					modal.error("Aviso", "Debes seleccionar al menos una opción")
+					return
 				dialogoAbrir = DialogoAbrir()
 				directorio = dialogoAbrir.getExistingDirectory(self, "Seleccionar carpeta destino", "")
 				fecha = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
