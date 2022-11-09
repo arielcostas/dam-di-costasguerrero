@@ -2,6 +2,7 @@ import zipfile
 from datetime import datetime
 
 import conexion
+from conexion import Conexion
 from servicios.backups import ServicioBackup
 from controladores import modal
 from controladores.dlgabrir import DialogoAbrir
@@ -21,9 +22,11 @@ class Main(QtWidgets.QMainWindow):
 		self.dialogSalir = DialogSalir()
 		self.dialogCalendar = DialogCalendar()
 
-		# Se pulsa salir en una barra de herramientas
+		# Botones de la barra de herramientas
 		self.ventMain.actionSalir.triggered.connect(self.on_press_salir)
-		self.ventMain.toolbarSalir.triggered.connect(self.on_press_salir)
+		self.ventMain.actionHacerCopia.triggered.connect(self.on_hacer_copia)
+		self.ventMain.actionRestaurarCopia.triggered.connect(self.on_restaurar_copia)
+		self.ventMain.actionExportarExcel.triggered.connect(self.on_exportar_excel)
 
 		# Se pulsa enter en DNI
 		self.ventMain.txtDni.editingFinished.connect(self.on_dni_comprobar)
@@ -36,11 +39,12 @@ class Main(QtWidgets.QMainWindow):
 		self.dialogCalendar.dialogCalendar.calendarWidget.clicked.connect(self.on_seleccionar_fecha)
 
 		# Limpiar
-		self.ventMain.buttonLimpiarVehiculo.clicked.connect(self.on_limpiar)
+		self.ventMain.buttonLimpiarVehiculo.clicked.connect(self.limpiar)
 
 		# Poner mayúsculas a todos
 		self.camposMayusculas = [self.ventMain.txtMarca, self.ventMain.txtModelo,
-								 self.ventMain.txtNombre, self.ventMain.txtDireccionCliente, self.ventMain.txtDni]
+								 self.ventMain.txtNombre, self.ventMain.txtDireccionCliente,
+								 self.ventMain.txtDni]
 
 		for campo in self.camposMayusculas:
 			campo.editingFinished.connect(self.mayuscula_palabra)
@@ -48,15 +52,12 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.txtMatricula.editingFinished.connect(self.mayuscula_palabra)
 
 		self.bbdd = conexion.Conexion()
-		self.bbdd.iniciarConexion()
+		self.bbdd.iniciar_conexion()
 		self.cargar_provincias()
 		self.cargar_tabla_vehiculos()
 
 		# Al seleccionar una provincia, cargar sus municipios
 		self.ventMain.comboProvinciaCliente.currentTextChanged.connect(self.cargar_municipios)
-
-		# Al pulsar en el botón de copia de seguridad, hacer copia de seguridad
-		self.ventMain.actionHacerCopia.triggered.connect(self.on_hacer_copia)
 
 	def get_motor(self):
 		try:
@@ -107,16 +108,14 @@ class Main(QtWidgets.QMainWindow):
 			}
 
 			guardado = self.bbdd.guardar_cliente(cliente) and self.bbdd.guardar_vehiculo(vehiculo)
-			msg = QtWidgets.QMessageBox()
+
 			if guardado:
-				msg.setText("Guardado correctamente")
-				msg.setIcon(msg.Icon.Information)
-				msg.setText("Se han guardado los datos de cliente y coche correctamente")
+				self.limpiar()
+				self.cargar_tabla_vehiculos()
+				modal.aviso("Guardado correctamente", "Se han guardado los datos correctamente")
 			else:
-				msg.setText("Error al guardar")
-				msg.setIcon(msg.Icon.Critical)
-				msg.setText("Hubo un problema al guardar los datos")
-			msg.exec()
+				modal.aviso("Error guardando", "No se han podido guardar los datos")
+
 		except Exception as error:
 			print(f"Error en carga cliente: {error}")
 
@@ -140,10 +139,12 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.txtDni.setText(self.ventMain.txtDni.text().title())
 		self.ventMain.txtMatricula.setText(self.ventMain.txtMatricula.text().upper())
 
-	def on_limpiar(self):
+	def limpiar(self):
 		try:
-			camposTexto = [self.ventMain.txtDni, self.ventMain.txtNombre, self.ventMain.txtDireccionCliente,
-						   self.ventMain.txtFechaAltaCliente, self.ventMain.txtMatricula, self.ventMain.txtMarca,
+			camposTexto = [self.ventMain.txtDni, self.ventMain.txtNombre,
+						   self.ventMain.txtDireccionCliente,
+						   self.ventMain.txtFechaAltaCliente, self.ventMain.txtMatricula,
+						   self.ventMain.txtMarca,
 						   self.ventMain.txtModelo]
 			for campo in camposTexto:
 				campo.setText("")
@@ -195,7 +196,8 @@ class Main(QtWidgets.QMainWindow):
 
 			fecha = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
 			copia = f"{fecha}_backup.zip"
-			directorio, filename = dialogo.getSaveFileName(self, "Guardar copia de seguridad", copia, "Zip (*.zip)")
+			directorio, filename = dialogo.getSaveFileName(self, "Guardar copia de seguridad",
+														   copia, "Zip (*.zip)")
 
 			if directorio and self.servicioBackup.hacer_copia(directorio):
 				modal.aviso("Aviso", "Copia de seguridad realizada correctamente")
@@ -206,15 +208,27 @@ class Main(QtWidgets.QMainWindow):
 	def on_restaurar_copia(self):
 		try:
 			dialogo = DialogoAbrir()
-			directorio, filename = dialogo.getOpenFileName(self, "Restaurar copia de seguridad", "", "Zip (*.zip)")
-			if directorio and self.servicioBackup.restaurar_copia(f"{directorio}/{filename}"):
-				zipf = zipfile.ZipFile(f"{directorio}/{filename}", 'r')
-				zipf.extractall()
-				zipf.close()
-
-				self.bbdd.iniciarConexion()
+			directorio, filename = dialogo.getOpenFileName(self, "Restaurar copia de seguridad", "",
+														   "Zip (*.zip)")
+			if directorio and self.servicioBackup.restaurar_copia(directorio):
+				self.bbdd = conexion.Conexion()
+				self.bbdd.iniciar_conexion()
 				self.cargar_tabla_vehiculos()
 
 				modal.aviso("Aviso", "Se ha restaurado la copia de seguridad correctamente")
+		except Exception as error:
+			print(f"Error restaurando copia: {error}")
+
+	def on_exportar_excel(self):
+		try:
+			dialogo = DialogoAbrir()
+			fecha = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
+			nombreDefecto = f"{fecha}_backup.xlsx"
+			directorio, filename = dialogo.getSaveFileName(self, "Exportar a Excel", nombreDefecto,
+														   "Hoja de cálculo (*.xlsx)")
+			if directorio:
+				self.servicioBackup.exportar_excel(directorio)
+
+				modal.aviso("Aviso", "Se ha exportado a Excel correctamente")
 		except Exception as error:
 			print(f"Error restaurando copia: {error}")

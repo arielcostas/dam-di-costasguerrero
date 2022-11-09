@@ -1,14 +1,15 @@
 from PyQt6 import QtWidgets, QtSql
 
+from controladores import modal
+
 
 class Conexion:
-	def iniciarConexion(self):
+	def iniciar_conexion(self):
 		dbfile = 'bbdd.sqlite'
 		db = QtSql.QSqlDatabase.addDatabase("QSQLITE")
 		db.setDatabaseName(dbfile)
 		if not db.open():
-			QtWidgets.QMessageBox.critical(None, "No se puede abrir la base de datos", "Conexión no establecida",
-										   QtWidgets.QMessageBox.StandardButton.Cancel)
+			modal.error("Error abriendo base de datos", "No se pudo abrir la base de datos")
 			return False
 		else:
 			print("Conexión establecida")

@@ -926,6 +926,8 @@
     </property>
     <addaction name="actionHacerCopia"/>
     <addaction name="actionRestaurarCopia"/>
+    <addaction name="separator"/>
+    <addaction name="actionExportarExcel"/>
    </widget>
    <addaction name="menuArchivo"/>
    <addaction name="menuHerramientas"/>
@@ -947,17 +949,11 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="toolbarSalir"/>
+   <addaction name="actionSalir"/>
+   <addaction name="actionHacerCopia"/>
+   <addaction name="actionRestaurarCopia"/>
   </widget>
   <action name="actionSalir">
-   <property name="text">
-    <string>Salir</string>
-   </property>
-   <property name="shortcut">
-    <string>Alt+S</string>
-   </property>
-  </action>
-  <action name="toolbarSalir">
    <property name="icon">
     <iconset>
      <normaloff>../img/salir.png</normaloff>../img/salir.png</iconset>
@@ -965,18 +961,31 @@
    <property name="text">
     <string>Salir</string>
    </property>
-   <property name="toolTip">
-    <string>Salir</string>
+   <property name="shortcut">
+    <string>Alt+S</string>
    </property>
   </action>
   <action name="actionHacerCopia">
+   <property name="icon">
+    <iconset>
+     <normaloff>../img/hacer-copia-seguridad.png</normaloff>../img/hacer-copia-seguridad.png</iconset>
+   </property>
    <property name="text">
     <string>Crear copia de seguridad</string>
    </property>
   </action>
   <action name="actionRestaurarCopia">
+   <property name="icon">
+    <iconset>
+     <normaloff>../img/restaurar-copia-seguridad.png</normaloff>../img/restaurar-copia-seguridad.png</iconset>
+   </property>
    <property name="text">
     <string>Restaurar copia de seguridad</string>
+   </property>
+  </action>
+  <action name="actionExportarExcel">
+   <property name="text">
+    <string>Exportar Excel</string>
    </property>
   </action>
  </widget>
