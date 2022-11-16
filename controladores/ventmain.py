@@ -23,6 +23,13 @@ class Main(QtWidgets.QMainWindow):
 		self.dialogSalir = DialogSalir()
 		self.dialogCalendar = DialogCalendar()
 
+		# Guarda todos los campos de texto para uso en otros métodos
+		self.campos_texto = [self.ventMain.txtDni, self.ventMain.txtNombre,
+							 self.ventMain.txtDireccionCliente,
+							 self.ventMain.txtFechaAltaCliente, self.ventMain.txtMatricula,
+							 self.ventMain.txtMarca,
+							 self.ventMain.txtModelo]
+
 		# Botones de la barra de herramientas
 		self.ventMain.actionSalir.triggered.connect(self.on_press_salir)
 		self.ventMain.actionHacerCopia.triggered.connect(self.on_hacer_copia)
@@ -66,19 +73,25 @@ class Main(QtWidgets.QMainWindow):
 		except Exception as error:
 			print(f"Error seleccionando motor: {error}")
 
+	def set_dni_valido(self, dni: str):
+		self.ventMain.lblValidardni.setStyleSheet('color: green;')
+		self.ventMain.lblValidardni.setText('V')
+		self.ventMain.txtDni.setText(dni.upper())
+		self.ventMain.txtDni.setStyleSheet('background-color: white;')
+
+	def set_dni_invalido(self, dni: str):
+		self.ventMain.lblValidardni.setStyleSheet('color: red;')
+		self.ventMain.lblValidardni.setText('X')
+		self.ventMain.txtDni.setText(dni.upper())
+		self.ventMain.txtDni.setStyleSheet('background-color: pink;')
+
 	def on_dni_comprobar(self):
 		try:
 			dni = self.ventMain.txtDni.text()
 			if validar_dni(dni):
-				self.ventMain.lblValidardni.setStyleSheet('color: green;')
-				self.ventMain.lblValidardni.setText('V')
-				self.ventMain.txtDni.setText(dni.upper())
-				self.ventMain.txtDni.setStyleSheet('background-color: white;')
+				self.set_dni_valido(dni)
 			else:
-				self.ventMain.lblValidardni.setStyleSheet('color: red;')
-				self.ventMain.lblValidardni.setText('X')
-				self.ventMain.txtDni.setText(dni.upper())
-				self.ventMain.txtDni.setStyleSheet('background-color: pink;')
+				self.set_dni_invalido(dni)
 		except Exception as error:
 			print(f"Error mostrando marcado validez DNI: {error}")
 
@@ -133,21 +146,13 @@ class Main(QtWidgets.QMainWindow):
 			print(f"Error cargando fecha cliente: {error}")
 
 	def mayuscula_palabra(self):
-		self.ventMain.txtMarca.setText(self.ventMain.txtMarca.text().title())
-		self.ventMain.txtModelo.setText(self.ventMain.txtModelo.text().title())
-		self.ventMain.txtNombre.setText(self.ventMain.txtNombre.text().title())
-		self.ventMain.txtDireccionCliente.setText(self.ventMain.txtDireccionCliente.text().title())
-		self.ventMain.txtDni.setText(self.ventMain.txtDni.text().title())
+		for campo in self.campos_texto:
+			campo.setText(campo.text().title())
 		self.ventMain.txtMatricula.setText(self.ventMain.txtMatricula.text().upper())
 
 	def limpiar(self):
 		try:
-			camposTexto = [self.ventMain.txtDni, self.ventMain.txtNombre,
-						   self.ventMain.txtDireccionCliente,
-						   self.ventMain.txtFechaAltaCliente, self.ventMain.txtMatricula,
-						   self.ventMain.txtMarca,
-						   self.ventMain.txtModelo]
-			for campo in camposTexto:
+			for campo in self.campos_texto:
 				campo.setText("")
 
 			self.ventMain.comboProvinciaCliente.setCurrentIndex(0)
@@ -228,12 +233,14 @@ class Main(QtWidgets.QMainWindow):
 					modal.error("Aviso", "Debes seleccionar al menos una opción")
 					return
 				dialogoAbrir = DialogoAbrir()
-				directorio = dialogoAbrir.getExistingDirectory(self, "Seleccionar carpeta destino", "")
+				directorio = dialogoAbrir.getExistingDirectory(self, "Seleccionar carpeta destino",
+															   "")
 				fecha = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
 				if dialogo.ui.checkboxCoches.isChecked():
 					self.servicioBackup.exportar_coches_excel(directorio + f"/coches_{fecha}.xls")
 				if dialogo.ui.checkboxClientes.isChecked():
-					self.servicioBackup.exportar_clientes_excel(directorio + f"/clientes_{fecha}.xls")
+					self.servicioBackup.exportar_clientes_excel(
+						directorio + f"/clientes_{fecha}.xls")
 				modal.aviso("Aviso", "Se ha exportado a Excel correctamente")
 		except Exception as error:
 			print(f"Error exportando excel: {error}")
