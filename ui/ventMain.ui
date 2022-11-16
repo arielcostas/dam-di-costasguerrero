@@ -594,6 +594,9 @@
         <height>201</height>
        </rect>
       </property>
+      <property name="selectionBehavior">
+       <enum>QAbstractItemView::SelectRows</enum>
+      </property>
       <column>
        <property name="text">
         <string>DNI</string>

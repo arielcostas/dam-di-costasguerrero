@@ -211,6 +211,7 @@ class Ui_ventMain(object):
         self.horizontalLayout_9.addWidget(self.radioButtonElectrico)
         self.tablaClientes = QtWidgets.QTableWidget(self.tab_5)
         self.tablaClientes.setGeometry(QtCore.QRect(70, 320, 761, 201))
+        self.tablaClientes.setSelectionBehavior(QtWidgets.QAbstractItemView.SelectionBehavior.SelectRows)
         self.tablaClientes.setObjectName("tablaClientes")
         self.tablaClientes.setColumnCount(5)
         self.tablaClientes.setRowCount(0)

@@ -67,6 +67,13 @@ class Main(QtWidgets.QMainWindow):
 		# Al seleccionar una provincia, cargar sus municipios
 		self.ventMain.comboProvinciaCliente.currentTextChanged.connect(self.cargar_municipios)
 
+		# Al selecionar una fila de la tabla
+		self.ventMain.tablaClientes.currentItemChanged.connect(self.on_item_seleccionado)
+
+	def on_item_seleccionado(self, item: QtWidgets.QTableWidgetItem):
+		dni = self.ventMain.tablaClientes.item(item.row(), 0)
+		print(dni.text())
+
 	def get_motor(self):
 		try:
 			return self.ventMain.buttonGroupMotorizacion.checkedButton().text()

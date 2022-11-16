@@ -50,7 +50,7 @@ class Conexion:
 	def cargar_vehiculos(self):
 		try:
 			query = QtSql.QSqlQuery()
-			query.prepare("SELECT matricula, dnicli, marca, modelo, motor FROM coches")
+			query.prepare("SELECT dnicli, matricula, marca, modelo, motor FROM coches")
 			if query.exec():
 				resultados = []
 				while query.next():
