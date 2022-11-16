@@ -6,8 +6,8 @@ from controladores.dlgTipoExportacion import DialogoTipoExportacion
 from controladores.dlgabrir import DialogoAbrir
 from controladores.dlgcalendario import DialogCalendar
 from controladores.dlgsalir import DialogSalir
-from dni import validar as validar_dni
-from servicios.backups import ServicioBackup
+from modelos import Cliente, Vehiculo
+from servicios import ServicioBackup, validar as validar_dni
 from ui.ventMain import *
 
 
@@ -106,25 +106,14 @@ class Main(QtWidgets.QMainWindow):
 	def on_guardar_cliente(self):
 		try:
 			vm = self.ventMain
-			cliente = {
-				"dni": vm.txtDni.text(),
-				"nombre": vm.txtNombre.text(),
-				"alta": vm.txtFechaAltaCliente.text(),
-				"direccion": vm.txtDireccionCliente.text(),
-				"provincia": vm.comboProvinciaCliente.currentText(),
-				"municipio": vm.comboMunicipioCliente.currentText(),
-				"efectivo": vm.checkEfectivo.isChecked(),
-				"factura": vm.checkFactura.isChecked(),
-				"transferencia": vm.checkTransferencia.isChecked(),
-			}
+			cliente = Cliente(vm.txtDni.text(), vm.txtNombre.text(), vm.txtFechaAltaCliente.text(),
+							  vm.txtDireccionCliente.text(), vm.comboProvinciaCliente.currentText(),
+							  vm.comboMunicipioCliente.currentText(), vm.checkEfectivo.isChecked(),
+							  vm.checkFactura.isChecked(), vm.checkTransferencia.isChecked())
 
-			vehiculo = {
-				"matricula": vm.txtMatricula.text(),
-				"cliente": cliente.get("dni"),
-				"marca": vm.txtMarca.text(),
-				"modelo": vm.txtModelo.text(),
-				"motor": self.get_motor(),
-			}
+			vehiculo = Vehiculo(vm.txtMatricula.text(), cliente.dni, vm.txtMarca.text(),
+								vm.txtModelo.text(),
+								self.get_motor())
 
 			guardado = self.bbdd.guardar_cliente(cliente) and self.bbdd.guardar_vehiculo(vehiculo)
 
@@ -188,10 +177,12 @@ class Main(QtWidgets.QMainWindow):
 			datos = self.bbdd.cargar_vehiculos()
 			self.ventMain.tablaClientes.setRowCount(len(datos))
 			for idx, el in enumerate(datos):
-				for idx2, el2 in enumerate(el):
-					item = QtWidgets.QTableWidgetItem(str(el2))
-					item.setTextAlignment(QtCore.Qt.AlignmentFlag.AlignCenter)
-					self.ventMain.tablaClientes.setItem(idx, idx2, item)
+				self.ventMain.tablaClientes.setItem(idx, 0, QtWidgets.QTableWidgetItem(el.cliente))
+				self.ventMain.tablaClientes.setItem(idx, 1, QtWidgets.QTableWidgetItem(el.matricula))
+				self.ventMain.tablaClientes.setItem(idx, 2, QtWidgets.QTableWidgetItem(el.marca))
+				self.ventMain.tablaClientes.setItem(idx, 3, QtWidgets.QTableWidgetItem(el.modelo))
+				self.ventMain.tablaClientes.setItem(idx, 4, QtWidgets.QTableWidgetItem(el.motor))
+
 			for i in range(0, self.ventMain.tablaClientes.columnCount()):
 				self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i,
 																					QtWidgets.QHeaderView.ResizeMode.Stretch)

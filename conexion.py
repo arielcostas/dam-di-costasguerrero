@@ -1,6 +1,7 @@
 from PyQt6 import QtWidgets, QtSql
 
 from controladores import modal
+from modelos import Vehiculo, Cliente
 
 
 class Conexion:
@@ -47,47 +48,48 @@ class Conexion:
 		except Exception as error:
 			print(f"Error recuperando municipios de {provincia}: {error}")
 
-	def cargar_vehiculos(self):
+	def cargar_vehiculos(self) -> list[Vehiculo]:
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare("SELECT dnicli, matricula, marca, modelo, motor FROM coches")
 			if query.exec():
-				resultados = []
+				resultados: list[Vehiculo] = list()
+
 				while query.next():
-					resultados.append([query.value(0), query.value(1), query.value(2), query.value(3), query.value(4)])
+					resultados.append(Vehiculo(query.value(0), query.value(1), query.value(2), query.value(3), query.value(4)))
 				return resultados
 		except Exception as error:
 			print(f"Error recuperando vehiculos: {error}")
 
-	def guardar_cliente(self, cliente):
+	def guardar_cliente(self, cliente: Cliente) -> bool:
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare(
 				"INSERT OR REPLACE INTO clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
 			)
-			query.addBindValue(cliente.get("dni"))
-			query.addBindValue(cliente.get("nombre"))
-			query.addBindValue(cliente.get("alta"))
-			query.addBindValue(cliente.get("direccion"))
-			query.addBindValue(cliente.get("provincia"))
-			query.addBindValue(cliente.get("municipio"))
-			query.addBindValue(int(cliente.get("efectivo")))
-			query.addBindValue(int(cliente.get("factura")))
-			query.addBindValue(int(cliente.get("transferencia")))
+			query.addBindValue(cliente.dni)
+			query.addBindValue(cliente.nombre)
+			query.addBindValue(cliente.alta)
+			query.addBindValue(cliente.direccion)
+			query.addBindValue(cliente.provincia)
+			query.addBindValue(cliente.municipio)
+			query.addBindValue(int(cliente.efectivo))
+			query.addBindValue(int(cliente.factura))
+			query.addBindValue(int(cliente.transferencia))
 			print(query.lastError().text())
 			return query.exec()
 		except Exception as error:
 			print(f"Error guardando cliente: {error}")
 
-	def guardar_vehiculo(self, vehiculo):
+	def guardar_vehiculo(self, vehiculo: Vehiculo) -> bool:
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare("INSERT INTO coches VALUES (?,?,?,?,?)")
-			query.addBindValue(vehiculo.get("matricula"))
-			query.addBindValue(vehiculo.get("cliente"))
-			query.addBindValue(vehiculo.get("marca"))
-			query.addBindValue(vehiculo.get("modelo"))
-			query.addBindValue(vehiculo.get("motor"))
+			query.addBindValue(vehiculo.matricula)
+			query.addBindValue(vehiculo.cliente)
+			query.addBindValue(vehiculo.marca)
+			query.addBindValue(vehiculo.modelo)
+			query.addBindValue(vehiculo.motor)
 
 			return query.exec()
 		except Exception as error:
