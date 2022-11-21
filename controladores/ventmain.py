@@ -211,7 +211,7 @@ class Main(QtWidgets.QMainWindow):
 			datos = self.bbdd.cargar_vehiculos()
 			self.ventMain.tablaClientes.setRowCount(len(datos))
 			for idx, el in enumerate(datos):
-				self.ventMain.tablaClientes.setItem(idx, 0, QtWidgets.QTableWidgetItem(el.cliente))
+				self.ventMain.tablaClientes.setItem(idx, 0, QtWidgets.QTableWidgetItem(el.dni))
 				self.ventMain.tablaClientes.setItem(idx, 1, QtWidgets.QTableWidgetItem(el.matricula))
 				self.ventMain.tablaClientes.setItem(idx, 2, QtWidgets.QTableWidgetItem(el.marca))
 				self.ventMain.tablaClientes.setItem(idx, 3, QtWidgets.QTableWidgetItem(el.modelo))
@@ -274,3 +274,14 @@ class Main(QtWidgets.QMainWindow):
 				modal.aviso("Aviso", "Se ha exportado a Excel correctamente")
 		except Exception as error:
 			print(f"Error exportando excel: {error}")
+
+	def on_importar_excel(self):
+		try:
+			dialogo = DialogoAbrir()
+			directorio, filename = dialogo.getOpenFileName(self, "Importar Excel", "",
+														   "Excel (*.xls)")
+			if directorio and self.servicioBackup.importar_excel(directorio):
+				self.cargar_tabla_vehiculos()
+				modal.aviso("Aviso", "Se ha importado de Excel correctamente")
+		except Exception as error:
+			print(f"Error importando excel: {error}")

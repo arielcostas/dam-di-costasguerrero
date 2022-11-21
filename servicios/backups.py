@@ -1,6 +1,10 @@
 import zipfile
+
+import xlrd
 import xlwt
 from PyQt6 import QtSql
+
+from modelos import Vehiculo
 
 
 class ServicioBackup:
@@ -82,3 +86,34 @@ class ServicioBackup:
 		except Exception as error:
 			print("Error al exportar a excel: ", error)
 			return False
+
+	def importar_excel(self, directorio) -> bool:
+		try:
+			book = xlrd.open_workbook(directorio)
+			sheet = book.sheet_by_index(0)
+			filas: list[Vehiculo] = []
+			for fila in range(1, sheet.nrows): # Empieza en 1 para saltarse la cabecera
+				matricula = sheet.cell_value(fila, 0)
+				dni = sheet.cell_value(fila, 1)
+				marca = sheet.cell_value(fila, 2)
+				modelo = sheet.cell_value(fila, 3)
+				tipo_motor = sheet.cell_value(fila, 4)
+				filas.append(Vehiculo(matricula, dni, marca, modelo, tipo_motor))
+
+			query = QtSql.QSqlQuery()
+			query.prepare("INSERT INTO coches (matricula, dnicli, marca, modelo, motor) VALUES (?, ?, ?, ?, ?)")
+
+			for fila in filas:
+				query.addBindValue(fila.matricula)
+				query.addBindValue(fila.dni)
+				query.addBindValue(fila.marca)
+				query.addBindValue(fila.modelo)
+				query.addBindValue(fila.motor)
+				query.exec()
+
+			return True
+		except Exception as error:
+			print("Error al importar de excel: ", error)
+			return False
+
+

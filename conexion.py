@@ -86,7 +86,7 @@ class Conexion:
 			query = QtSql.QSqlQuery()
 			query.prepare("INSERT INTO coches VALUES (?,?,?,?,?)")
 			query.addBindValue(vehiculo.matricula)
-			query.addBindValue(vehiculo.cliente)
+			query.addBindValue(vehiculo.dni)
 			query.addBindValue(vehiculo.marca)
 			query.addBindValue(vehiculo.modelo)
 			query.addBindValue(vehiculo.motor)

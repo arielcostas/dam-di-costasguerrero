@@ -934,6 +934,7 @@
     <addaction name="actionRestaurarCopia"/>
     <addaction name="separator"/>
     <addaction name="actionExportarExcel"/>
+    <addaction name="actionImportarExcel"/>
    </widget>
    <addaction name="menuArchivo"/>
    <addaction name="menuHerramientas"/>
@@ -955,9 +956,10 @@
    <attribute name="toolBarBreak">
     <bool>false</bool>
    </attribute>
-   <addaction name="actionSalir"/>
    <addaction name="actionHacerCopia"/>
    <addaction name="actionRestaurarCopia"/>
+   <addaction name="actionSalir"/>
+   <addaction name="separator"/>
   </widget>
   <action name="actionSalir">
    <property name="icon">
@@ -992,6 +994,11 @@
   <action name="actionExportarExcel">
    <property name="text">
     <string>Exportar Excel</string>
+   </property>
+  </action>
+  <action name="actionImportarExcel">
+   <property name="text">
+    <string>Importar Excel</string>
    </property>
   </action>
  </widget>
