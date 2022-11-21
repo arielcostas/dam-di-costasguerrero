@@ -1,11 +1,6 @@
-from datetime import datetime
-
 import conexion
 from controladores import modal
-from controladores.dlgTipoExportacion import DialogoTipoExportacion
-from controladores.dlgabrir import DialogoAbrir
 from controladores.dlgcalendario import DialogCalendar
-from controladores.dlgsalir import DialogSalir
 from modelos import Cliente, Vehiculo
 from servicios import ServicioBackup, validar as validar_dni
 from ui.ventMain import *
@@ -18,7 +13,7 @@ class Main(QtWidgets.QMainWindow):
 
 		self.ventMain = Ui_ventMain()
 		self.ventMain.setupUi(self)
-		self.dialogSalir = DialogSalir()
+
 		self.dialogCalendar = DialogCalendar()
 
 		# Guarda todos los campos de texto para uso en otros métodos
@@ -29,11 +24,13 @@ class Main(QtWidgets.QMainWindow):
 							 self.ventMain.txtModelo]
 
 		# Botones de la barra de herramientas
-		self.ventMain.actionSalir.triggered.connect(self.on_press_salir)
-		self.ventMain.actionHacerCopia.triggered.connect(self.on_hacer_copia)
-		self.ventMain.actionRestaurarCopia.triggered.connect(self.on_restaurar_copia)
-		self.ventMain.actionExportarExcel.triggered.connect(self.on_exportar_excel)
-		self.ventMain.actionImportarExcel.triggered.connect(self.on_importar_excel)
+		from .main import actions
+
+		self.ventMain.actionSalir.triggered.connect(lambda: actions.salir(self))
+		self.ventMain.actionHacerCopia.triggered.connect(lambda: actions.exportar_copia(self))
+		self.ventMain.actionRestaurarCopia.triggered.connect(lambda: actions.importar_copia(self))
+		self.ventMain.actionExportarExcel.triggered.connect(lambda: actions.exportar_excel(self))
+		self.ventMain.actionImportarExcel.triggered.connect(lambda: actions.importar_excel(self))
 
 		# Se pulsa enter en DNI
 		self.ventMain.txtDni.editingFinished.connect(self.on_dni_comprobar)
@@ -213,7 +210,8 @@ class Main(QtWidgets.QMainWindow):
 			self.ventMain.tablaClientes.setRowCount(len(datos))
 			for idx, el in enumerate(datos):
 				self.ventMain.tablaClientes.setItem(idx, 0, QtWidgets.QTableWidgetItem(el.dni))
-				self.ventMain.tablaClientes.setItem(idx, 1, QtWidgets.QTableWidgetItem(el.matricula))
+				self.ventMain.tablaClientes.setItem(idx, 1,
+													QtWidgets.QTableWidgetItem(el.matricula))
 				self.ventMain.tablaClientes.setItem(idx, 2, QtWidgets.QTableWidgetItem(el.marca))
 				self.ventMain.tablaClientes.setItem(idx, 3, QtWidgets.QTableWidgetItem(el.modelo))
 				self.ventMain.tablaClientes.setItem(idx, 4, QtWidgets.QTableWidgetItem(el.motor))
@@ -226,59 +224,3 @@ class Main(QtWidgets.QMainWindow):
 																						QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
 		except Exception as error:
 			print(f"Error cargando tabla vehiculos: {error}")
-
-	def on_hacer_copia(self):
-		try:
-			dialogo = DialogoAbrir()
-
-			fecha = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
-			copia = f"{fecha}_backup.zip"
-			directorio, filename = dialogo.getSaveFileName(self, "Guardar copia de seguridad",
-														   copia, "Zip (*.zip)")
-
-			if directorio and self.servicioBackup.hacer_copia(directorio):
-				modal.aviso("Aviso", "Copia de seguridad realizada correctamente")
-
-		except Exception as error:
-			print(f"Error haciendo copia: {error}")
-
-	def on_restaurar_copia(self):
-		try:
-			dialogo = DialogoAbrir()
-			directorio, filename = dialogo.getOpenFileName(self, "Restaurar copia de seguridad", "",
-														   "Zip (*.zip)")
-			if directorio and self.servicioBackup.restaurar_copia(directorio):
-				self.bbdd = conexion.Conexion()
-				self.bbdd.iniciar_conexion()
-				self.cargar_tabla_vehiculos()
-
-				modal.aviso("Aviso", "Se ha restaurado la copia de seguridad correctamente")
-		except Exception as error:
-			print(f"Error restaurando copia: {error}")
-
-	def on_exportar_excel(self):
-		try:
-			dialogo_exportacion = DialogoTipoExportacion()
-			if dialogo_exportacion.exec():
-				if not dialogo_exportacion.ui.checkboxCoches.isChecked() and not dialogo_exportacion.ui.checkboxClientes.isChecked():
-					modal.error("Aviso", "Debes seleccionar al menos una opción")
-					return
-				dialogo_abrir = DialogoAbrir()
-				directorio = dialogo_abrir.getSaveFileName(self, "Exportar a Excel", "", "Excel (*.xls)")
-				if directorio[0]:
-					self.servicioBackup.exportar_excel(directorio[0], dialogo_exportacion.ui.checkboxClientes.isChecked(),
-													  dialogo_exportacion.ui.checkboxCoches.isChecked())
-				modal.aviso("Aviso", "Se ha exportado a Excel correctamente")
-		except Exception as error:
-			print(f"Error exportando excel: {error}")
-
-	def on_importar_excel(self):
-		try:
-			dialogo = DialogoAbrir()
-			directorio, filename = dialogo.getOpenFileName(self, "Importar Excel", "",
-														   "Excel (*.xls)")
-			if directorio and self.servicioBackup.importar_excel(directorio):
-				self.cargar_tabla_vehiculos()
-				modal.aviso("Aviso", "Se ha importado de Excel correctamente")
-		except Exception as error:
-			print(f"Error importando excel: {error}")

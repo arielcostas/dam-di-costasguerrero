@@ -15,7 +15,7 @@ class DialogSalir(QtWidgets.QDialog):
 		self.dialogSalir.buttonCancelar.clicked.connect(self.cancel_salir)  # Al cancelar que quiere salir
 
 	def mostrar_salir(self):
-		self.show()
+		self.exec()
 
 	def cancel_salir(self):
 		self.hide()
