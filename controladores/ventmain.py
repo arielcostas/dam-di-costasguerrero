@@ -70,7 +70,41 @@ class Main(QtWidgets.QMainWindow):
 
 	def on_item_seleccionado(self, item: QtWidgets.QTableWidgetItem):
 		dni = self.ventMain.tablaClientes.item(item.row(), 0)
-		print(dni.text())
+		matricula = self.ventMain.tablaClientes.item(item.row(), 1)
+		self.cargar_datos_cliente(dni.text())
+		self.cargar_datos_vehiculo(matricula.text())
+
+	def cargar_datos_cliente(self, dni: str):
+		try:
+			cliente: Cliente = self.bbdd.cargar_cliente(dni)
+			self.ventMain.txtDni.setText(cliente.dni)
+			self.ventMain.txtNombre.setText(cliente.nombre)
+			self.ventMain.txtDireccionCliente.setText(cliente.direccion)
+			self.ventMain.txtFechaAltaCliente.setText(cliente.alta)
+			self.ventMain.comboProvinciaCliente.setCurrentText(cliente.provincia)
+			self.ventMain.comboMunicipioCliente.setCurrentText(cliente.municipio)
+			self.ventMain.checkEfectivo.setChecked(cliente.efectivo == 1)
+			self.ventMain.checkFactura.setChecked(cliente.factura == 1)
+			self.ventMain.checkTransferencia.setChecked(cliente.transferencia == 1)
+		except Exception as error:
+			print(f"Error cargando datos del cliente: {error}")
+
+	def cargar_datos_vehiculo(self, matricula: str):
+		try:
+			vehiculo = self.bbdd.cargar_vehiculo(matricula)
+			self.ventMain.txtMatricula.setText(vehiculo.matricula)
+			self.ventMain.txtMarca.setText(vehiculo.marca)
+			self.ventMain.txtModelo.setText(vehiculo.modelo)
+			if vehiculo.motor == "Gasolina":
+				self.ventMain.radioButtonGasolina.setChecked(True)
+			elif vehiculo.motor == "Diesel":
+				self.ventMain.radioButtonDiesel.setChecked(True)
+			elif vehiculo.motor == "Híbrido":
+				self.ventMain.radioButtonHibrido.setChecked(True)
+			elif vehiculo.motor == "Eléctrico":
+				self.ventMain.radioButtonElectrico.setChecked(True)
+		except Exception as error:
+			print(f"Error cargando datos del vehículo: {error}")
 
 	def get_motor(self):
 		try:

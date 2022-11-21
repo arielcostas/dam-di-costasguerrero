@@ -56,7 +56,7 @@ class Conexion:
 				resultados: list[Vehiculo] = list()
 
 				while query.next():
-					resultados.append(Vehiculo(query.value(0), query.value(1), query.value(2), query.value(3), query.value(4)))
+					resultados.append(Vehiculo(query.value(1), query.value(0), query.value(2), query.value(3), query.value(4)))
 				return resultados
 		except Exception as error:
 			print(f"Error recuperando vehiculos: {error}")
@@ -94,3 +94,25 @@ class Conexion:
 			return query.exec()
 		except Exception as error:
 			print(f"Error guardando vehiculo: {error}")
+
+	def cargar_vehiculo(self, matricula: str) -> Vehiculo:
+		try:
+			query = QtSql.QSqlQuery()
+			query.prepare("SELECT dnicli, matricula, marca, modelo, motor FROM coches WHERE matricula = :mat")
+			query.bindValue(':mat', matricula)
+			if query.exec():
+				while query.next():
+					return Vehiculo(query.value(0), query.value(1), query.value(2), query.value(3), query.value(4))
+		except Exception as error:
+			print(f"Error recuperando vehiculo: {error}")
+
+	def cargar_cliente(self, dni: str) -> Cliente:
+		try:
+			query = QtSql.QSqlQuery()
+			query.prepare("SELECT * FROM clientes WHERE dni = :dni")
+			query.bindValue(':dni', dni)
+			if query.exec():
+				while query.next():
+					return Cliente(query.value(1), query.value(0), query.value(2), query.value(3), query.value(4), query.value(5), query.value(6), query.value(7), query.value(8))
+		except Exception as error:
+			print(f"Error recuperando cliente: {error}")
