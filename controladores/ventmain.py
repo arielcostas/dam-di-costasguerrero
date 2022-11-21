@@ -33,6 +33,7 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.actionHacerCopia.triggered.connect(self.on_hacer_copia)
 		self.ventMain.actionRestaurarCopia.triggered.connect(self.on_restaurar_copia)
 		self.ventMain.actionExportarExcel.triggered.connect(self.on_exportar_excel)
+		self.ventMain.actionImportarExcel.triggered.connect(self.on_importar_excel)
 
 		# Se pulsa enter en DNI
 		self.ventMain.txtDni.editingFinished.connect(self.on_dni_comprobar)
@@ -257,20 +258,16 @@ class Main(QtWidgets.QMainWindow):
 
 	def on_exportar_excel(self):
 		try:
-			dialogo = DialogoTipoExportacion()
-			if dialogo.exec():
-				if not dialogo.ui.checkboxCoches.isChecked() and not dialogo.ui.checkboxClientes.isChecked():
+			dialogo_exportacion = DialogoTipoExportacion()
+			if dialogo_exportacion.exec():
+				if not dialogo_exportacion.ui.checkboxCoches.isChecked() and not dialogo_exportacion.ui.checkboxClientes.isChecked():
 					modal.error("Aviso", "Debes seleccionar al menos una opción")
 					return
-				dialogoAbrir = DialogoAbrir()
-				directorio = dialogoAbrir.getExistingDirectory(self, "Seleccionar carpeta destino",
-															   "")
-				fecha = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
-				if dialogo.ui.checkboxCoches.isChecked():
-					self.servicioBackup.exportar_coches_excel(directorio + f"/coches_{fecha}.xls")
-				if dialogo.ui.checkboxClientes.isChecked():
-					self.servicioBackup.exportar_clientes_excel(
-						directorio + f"/clientes_{fecha}.xls")
+				dialogo_abrir = DialogoAbrir()
+				directorio = dialogo_abrir.getSaveFileName(self, "Exportar a Excel", "", "Excel (*.xls)")
+				if directorio[0]:
+					self.servicioBackup.exportar_excel(directorio[0], dialogo_exportacion.ui.checkboxClientes.isChecked(),
+													  dialogo_exportacion.ui.checkboxCoches.isChecked())
 				modal.aviso("Aviso", "Se ha exportado a Excel correctamente")
 		except Exception as error:
 			print(f"Error exportando excel: {error}")
