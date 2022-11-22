@@ -1,2 +1,3 @@
 **/__pycache__/**
 bbdd.sqlite
+ui/*.py

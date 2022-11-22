@@ -81,9 +81,6 @@ class ServicioBackup:
 			print("Error al exportar a excel: ", error)
 			return False
 
-	def importar_excel_viejo(self, directorio) -> bool:
-
-
 	def comprobar_tipos_importables_excel(self, ruta) -> [bool, bool]:
 		try:
 			book = xlrd.open_workbook(ruta)
@@ -118,7 +115,7 @@ class ServicioBackup:
 	def importar_clientes_excel(self, sheet: Sheet) -> bool:
 		try:
 			filas: list[Cliente] = []
-			for fila in range(1, sheet.nrows): # Empieza en 1 para saltarse la cabecera
+			for fila in range(1, sheet.nrows):  # Empieza en 1 para saltarse la cabecera
 				filas.append(Cliente(
 					sheet.cell_value(fila, 0),
 					sheet.cell_value(fila, 1),
