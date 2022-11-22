@@ -24,9 +24,9 @@ class Main(QtWidgets.QMainWindow):
 							 self.ventMain.txtModelo]
 
 		# Botones de la barra de herramientas
-		from .main import actions
+		from .main import actions, cargar
 
-		self.ventMain.actionSalir.triggered.connect(lambda: actions.salir(self))
+		self.ventMain.actionSalir.triggered.connect(lambda: actions.salir())
 		self.ventMain.actionHacerCopia.triggered.connect(lambda: actions.exportar_copia(self))
 		self.ventMain.actionRestaurarCopia.triggered.connect(lambda: actions.importar_copia(self))
 		self.ventMain.actionExportarExcel.triggered.connect(lambda: actions.exportar_excel(self))
@@ -57,11 +57,12 @@ class Main(QtWidgets.QMainWindow):
 
 		self.bbdd = conexion.Conexion()
 		self.bbdd.iniciar_conexion()
-		self.cargar_provincias()
-		self.cargar_tabla_vehiculos()
+		cargar.lista_provincias(self)
+		cargar.tabla_vehiculos(self)
 
-		# Al seleccionar una provincia, cargar sus municipios
-		self.ventMain.comboProvinciaCliente.currentTextChanged.connect(self.cargar_municipios)
+		self.ventMain.comboProvinciaCliente.currentTextChanged.connect(
+			lambda: cargar.lista_municipios(self)
+		)
 
 		# Al selecionar una fila de la tabla
 		self.ventMain.tablaClientes.currentItemChanged.connect(self.on_item_seleccionado)
@@ -151,7 +152,10 @@ class Main(QtWidgets.QMainWindow):
 
 			if guardado:
 				self.limpiar()
-				self.cargar_tabla_vehiculos()
+
+				from controladores.main import cargar
+				cargar.tabla_vehiculos(self)
+
 				modal.aviso("Guardado correctamente", "Se han guardado los datos correctamente")
 			else:
 				modal.aviso("Error guardando", "No se han podido guardar los datos")
@@ -190,37 +194,4 @@ class Main(QtWidgets.QMainWindow):
 		except Exception as error:
 			print(f"Error limpiando cliente: {error}")
 
-	def cargar_provincias(self):
-		self.ventMain.comboProvinciaCliente.clear()
-		datos = self.bbdd.cargar_provincias()
-		for i in datos:
-			self.ventMain.comboProvinciaCliente.addItem(i)
 
-	def cargar_municipios(self):
-		self.ventMain.comboMunicipioCliente.clear()
-		provincia = self.ventMain.comboProvinciaCliente.currentText()
-		datos = self.bbdd.cargar_municipios(provincia)
-		for i in datos:
-			self.ventMain.comboMunicipioCliente.addItem(i)
-
-	def cargar_tabla_vehiculos(self):
-		try:
-			self.ventMain.tablaClientes.clearContents()
-			datos = self.bbdd.cargar_vehiculos()
-			self.ventMain.tablaClientes.setRowCount(len(datos))
-			for idx, el in enumerate(datos):
-				self.ventMain.tablaClientes.setItem(idx, 0, QtWidgets.QTableWidgetItem(el.dni))
-				self.ventMain.tablaClientes.setItem(idx, 1,
-													QtWidgets.QTableWidgetItem(el.matricula))
-				self.ventMain.tablaClientes.setItem(idx, 2, QtWidgets.QTableWidgetItem(el.marca))
-				self.ventMain.tablaClientes.setItem(idx, 3, QtWidgets.QTableWidgetItem(el.modelo))
-				self.ventMain.tablaClientes.setItem(idx, 4, QtWidgets.QTableWidgetItem(el.motor))
-
-			for i in range(0, self.ventMain.tablaClientes.columnCount()):
-				self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i,
-																					QtWidgets.QHeaderView.ResizeMode.Stretch)
-				if i < 2:
-					self.ventMain.tablaClientes.horizontalHeader().setSectionResizeMode(i,
-																						QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
-		except Exception as error:
-			print(f"Error cargando tabla vehiculos: {error}")

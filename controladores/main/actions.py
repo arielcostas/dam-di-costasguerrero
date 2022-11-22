@@ -8,9 +8,9 @@ from controladores.dlgsalir import DialogSalir
 from controladores.ventmain import Main
 
 
-def salir(self: Main):
-	dialogSalir = DialogSalir()
-	dialogSalir.mostrar_salir()
+def salir():
+	dialog_salir = DialogSalir()
+	dialog_salir.mostrar_salir()
 
 
 def exportar_copia(self: Main):
@@ -37,7 +37,8 @@ def importar_copia(self: Main):
 		if directorio and self.servicioBackup.restaurar_copia(directorio):
 			self.bbdd = conexion.Conexion()
 			self.bbdd.iniciar_conexion()
-			self.cargar_tabla_vehiculos()
+			import cargar
+			cargar.tabla_vehiculos(self)
 
 			modal.aviso("Aviso", "Se ha restaurado la copia de seguridad correctamente")
 	except Exception as error:
@@ -50,6 +51,7 @@ def exportar_excel(self: Main):
 		if dialogo_exportacion.exec():
 			if not dialogo_exportacion.ui.checkboxCoches.isChecked() and not dialogo_exportacion.ui.checkboxClientes.isChecked():
 				modal.error("Aviso", "Debes seleccionar al menos una opción")
+				exportar_excel(self)
 				return
 			dialogo_abrir = DialogoAbrir()
 			directorio = dialogo_abrir.getSaveFileName(self, "Exportar a Excel", "",
@@ -58,7 +60,7 @@ def exportar_excel(self: Main):
 				self.servicioBackup.exportar_excel(directorio[0],
 												   dialogo_exportacion.ui.checkboxClientes.isChecked(),
 												   dialogo_exportacion.ui.checkboxCoches.isChecked())
-			modal.aviso("Aviso", "Se ha exportado a Excel correctamente")
+				modal.aviso("Aviso", "Se ha exportado a Excel correctamente")
 	except Exception as error:
 		print(f"Error exportando excel: {error}")
 
@@ -69,7 +71,8 @@ def importar_excel(self: Main):
 		directorio, filename = dialogo.getOpenFileName(self, "Importar Excel", "",
 													   "Excel (*.xls)")
 		if directorio and self.servicioBackup.importar_excel(directorio):
-			self.cargar_tabla_vehiculos()
+			import cargar
+			cargar.tabla_vehiculos(self)
 			modal.aviso("Aviso", "Se ha importado de Excel correctamente")
 	except Exception as error:
 		print(f"Error importando excel: {error}")

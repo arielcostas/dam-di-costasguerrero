@@ -1,7 +1,7 @@
 from PyQt6 import QtWidgets
 
 
-def aviso(titulo, texto):
+def aviso(titulo: str, texto: str) -> None:
 	msg = QtWidgets.QMessageBox()
 	msg.setModal(True)
 	msg.setWindowTitle(titulo)
@@ -9,7 +9,8 @@ def aviso(titulo, texto):
 	msg.setText(texto)
 	msg.exec()
 
-def error(titulo, texto):
+
+def error(titulo: str, texto: str) -> None:
 	msg = QtWidgets.QMessageBox()
 	msg.setModal(True)
 	msg.setWindowTitle(titulo)
