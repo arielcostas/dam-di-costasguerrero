@@ -3,9 +3,10 @@ import zipfile
 import xlrd
 import xlwt
 from PyQt6 import QtSql
+from xlrd.sheet import Sheet
 from xlwt import Workbook
 
-from modelos import Vehiculo
+from modelos import Vehiculo, Cliente
 
 
 class ServicioBackup:
@@ -80,10 +81,62 @@ class ServicioBackup:
 			print("Error al exportar a excel: ", error)
 			return False
 
-	def importar_excel(self, directorio) -> bool:
+	def importar_excel_viejo(self, directorio) -> bool:
+
+
+	def comprobar_tipos_importables_excel(self, ruta) -> [bool, bool]:
 		try:
-			book = xlrd.open_workbook(directorio)
-			sheet = book.sheet_by_index(0)
+			book = xlrd.open_workbook(ruta)
+			hojas = book.sheets()
+
+			# resultado = NoClientes y NoCoches
+			resultado = (False, False)
+
+			for hoja in hojas:
+				if hoja.name == "clientes":
+					# resultado = SiClientes y LoqueseaCoches
+					resultado = (True, resultado[1])
+				if hoja.name == "coches":
+					# resultado = LoqueseaClientes y SiCoches
+					resultado = (resultado[0], True)
+			return resultado
+		except Exception as error:
+			print("Error al comprobar tipos importables: ", error)
+			return False, False
+
+	def importar_excel(self, ruta: str, clientes: bool, coches: bool) -> bool:
+		try:
+			book = xlrd.open_workbook(ruta)
+			if clientes:
+				self.importar_clientes_excel(book.sheet_by_name("clientes"))
+			if coches:
+				self.importar_coches_excel(book.sheet_by_name("coches"))
+		except Exception as error:
+			print("Error al exportar a excel: ", error)
+			return False
+
+	def importar_clientes_excel(self, sheet: Sheet) -> bool:
+		try:
+			filas: list[Cliente] = []
+			for fila in range(1, sheet.nrows): # Empieza en 1 para saltarse la cabecera
+				filas.append(Cliente(
+					sheet.cell_value(fila, 0),
+					sheet.cell_value(fila, 1),
+					sheet.cell_value(fila, 2),
+					sheet.cell_value(fila, 3),
+					sheet.cell_value(fila, 4),
+					sheet.cell_value(fila, 5),
+					sheet.cell_value(fila, 6),
+					sheet.cell_value(fila, 7),
+					sheet.cell_value(fila, 8)
+				))
+
+		except Exception as error:
+			print("Error al importar clientes excel: ", error)
+			return False
+
+	def importar_coches_excel(self, sheet: Sheet) -> bool:
+		try:
 			filas: list[Vehiculo] = []
 			for fila in range(1, sheet.nrows):  # Empieza en 1 para saltarse la cabecera
 				matricula = sheet.cell_value(fila, 0)

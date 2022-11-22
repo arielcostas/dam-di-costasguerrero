@@ -4,10 +4,13 @@ from ui.dlgTipoExportacion import Ui_dialogoTipoExportacion
 
 
 class DialogoTipoExportacion(QtWidgets.QDialog):
-	def __init__(self):
+	def __init__(self, clientes: bool, vehiculos: bool):
 		super(DialogoTipoExportacion, self).__init__()
 		self.ui = Ui_dialogoTipoExportacion()
 		self.ui.setupUi(self)
+
+		self.ui.checkboxClientes.setEnabled(clientes)
+		self.ui.checkboxCoches.setEnabled(vehiculos)
 
 		self.ui.buttonGuardar.clicked.connect(self.accept)
 		self.ui.buttonCancelar.clicked.connect(self.reject)
