@@ -82,7 +82,7 @@
        <string notr="true">background-color: rgb(170,255,255)</string>
       </property>
       <property name="text">
-       <string>XESTIÓN VEHÍCULO</string>
+       <string>XESTIONAR VEHÍCULO</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -383,7 +383,7 @@
        <string notr="true">background-color: rgb(170,255,255)</string>
       </property>
       <property name="text">
-       <string>XESTIÓN CLIENTES</string>
+       <string>XESTIONAR CLIENTES</string>
       </property>
       <property name="alignment">
        <set>Qt::AlignCenter</set>
@@ -419,7 +419,7 @@
           </font>
          </property>
          <property name="text">
-          <string>Dirección:</string>
+          <string>Rúa e nº:</string>
          </property>
          <property name="alignment">
           <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
@@ -878,7 +878,7 @@
        <item>
         <widget class="QPushButton" name="buttonGuardarCliente">
          <property name="text">
-          <string>Guardar</string>
+          <string>uardar</string>
          </property>
         </widget>
        </item>

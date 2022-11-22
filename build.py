@@ -38,7 +38,7 @@ def compilar_ui():
 				print("compilar_ui: Compilando", os.path.join(root, file))
 				uic.compileUi(
 					os.path.join(root, file),
-					open(os.path.join(root, file[:-3] + ".py"), "w"),
+					open(os.path.join(root, file[:-3] + ".py"), "w", encoding="utf-8"),
 				)
 
 
