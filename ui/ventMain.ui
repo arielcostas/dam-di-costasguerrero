@@ -533,9 +533,9 @@
      <widget class="QWidget" name="layoutWidget_3">
       <property name="geometry">
        <rect>
-        <x>390</x>
+        <x>382</x>
         <y>290</y>
-        <width>273</width>
+        <width>281</width>
         <height>22</height>
        </rect>
       </property>
@@ -870,7 +870,7 @@
        <rect>
         <x>400</x>
         <y>330</y>
-        <width>239</width>
+        <width>241</width>
         <height>26</height>
        </rect>
       </property>
@@ -878,14 +878,7 @@
        <item>
         <widget class="QPushButton" name="buttonGuardarCliente">
          <property name="text">
-          <string>uardar</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="buttonModificarCliente">
-         <property name="text">
-          <string>Modificar</string>
+          <string>Gardar</string>
          </property>
         </widget>
        </item>

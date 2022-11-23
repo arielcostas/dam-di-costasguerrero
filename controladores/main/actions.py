@@ -3,6 +3,7 @@ from datetime import datetime
 import conexion
 from controladores import modal
 from controladores.dlgTipoExportacion import DialogoTipoExportacion
+from controladores.dlgTipoImportacion import DialogoTipoImportacion
 from controladores.dlgabrir import DialogoAbrir
 from controladores.dlgsalir import DialogSalir
 from controladores.ventmain import Main
@@ -69,17 +70,17 @@ def importar_excel(self: Main):
 	try:
 		# Elegir el archivo de donde lee
 		dialogo = DialogoAbrir()
-		directorio, filename = dialogo.getOpenFileName(self, "Importar Excel", "",
+		directorio, filetype = dialogo.getOpenFileName(self, "Importar Excel", "",
 													   "Excel (*.xls)")
-		if directorio[0]:
+		if directorio:
 			# Comprobar si el excel tiene tabla de clientes, coches o ambas
 			puedeCargarClientes, puedeCargarCoches = self.servicioBackup.comprobar_tipos_importables_excel(
-				directorio[0])
+				directorio)
 
 			# El excel contiene tabla de clientes o coches
 			if puedeCargarClientes or puedeCargarCoches:
 				# Mostrar diálogo para elegir que tablas de las disponibles se cargan
-				dialogo_importar = DialogoTipoExportacion(puedeCargarClientes, puedeCargarCoches)
+				dialogo_importar = DialogoTipoImportacion(puedeCargarClientes, puedeCargarCoches)
 				if dialogo_importar.exec():
 					if not dialogo_importar.ui.checkboxCoches.isChecked() and not dialogo_importar.ui.checkboxClientes.isChecked():
 						modal.error("Aviso", "Debes seleccionar al menos una opción")
@@ -87,11 +88,14 @@ def importar_excel(self: Main):
 						return
 					# Cargar las tablas elegidas
 					self.servicioBackup.importar_excel(
-						directorio[0],
+						directorio,
 						dialogo_importar.ui.checkboxClientes.isChecked(),
 						dialogo_importar.ui.checkboxCoches.isChecked()
 					)
 					modal.aviso("Aviso", "Se ha importado correctamente")
+
+					from controladores.main import cargar
+					cargar.tabla_vehiculos(self)
 			else:
 				modal.error("Error", "El archivo no contiene tablas de clientes ni de coches")
 

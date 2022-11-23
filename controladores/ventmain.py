@@ -1,3 +1,5 @@
+from PyQt6.QtWidgets import QMessageBox
+
 import conexion
 from controladores import modal
 from controladores.dlgcalendario import DialogCalendar
@@ -35,8 +37,9 @@ class Main(QtWidgets.QMainWindow):
 		# Se pulsa enter en DNI
 		self.ventMain.txtDni.editingFinished.connect(self.on_dni_comprobar)
 
-		# Guardar cliente
+		# Guardar y eliminar clientes
 		self.ventMain.buttonGuardarCliente.clicked.connect(self.on_guardar_cliente)
+		self.ventMain.buttonEliminarCliente.clicked.connect(self.on_borrar_cliente)
 
 		# Al seleccionar en el calendario, obtener fecha
 		self.ventMain.buttonFechaAltaCliente.clicked.connect(self.on_abrir_calendario)
@@ -68,10 +71,11 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.tablaClientes.currentItemChanged.connect(self.on_item_seleccionado)
 
 	def on_item_seleccionado(self, item: QtWidgets.QTableWidgetItem):
-		dni = self.ventMain.tablaClientes.item(item.row(), 0)
-		matricula = self.ventMain.tablaClientes.item(item.row(), 1)
-		self.cargar_datos_cliente(dni.text())
-		self.cargar_datos_vehiculo(matricula.text())
+		if item is not None:
+			dni = self.ventMain.tablaClientes.item(item.row(), 0)
+			matricula = self.ventMain.tablaClientes.item(item.row(), 1)
+			self.cargar_datos_cliente(dni.text())
+			self.cargar_datos_vehiculo(matricula.text())
 
 	def cargar_datos_cliente(self, dni: str):
 		try:
@@ -163,6 +167,25 @@ class Main(QtWidgets.QMainWindow):
 		except Exception as error:
 			print(f"Error en carga cliente: {error}")
 
+	def on_borrar_cliente(self):
+		from controladores.main import cargar
+		try:
+			dni = self.ventMain.txtDni.text()
+			borrar = QMessageBox.question(None, 'Borrar cliente',
+										  f"¿Estás seguro de borrar el cliente {dni}?",
+										  QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+										  QMessageBox.StandardButton.No)
+			if borrar == QMessageBox.StandardButton.Yes:
+				if self.bbdd.eliminar_cliente(dni):
+					print("Cliente eliminado")
+					self.limpiar()
+					print("Formulario borrado")
+					cargar.tabla_vehiculos(self)
+					print("Vehículos cargados")
+					modal.aviso("Borrado correctamente", "Se ha borrado el cliente correctamente")
+		except Exception as error:
+			print(f"Error borrando cliente: {error}")
+
 	def on_abrir_calendario(self):
 		self.dialogCalendar.show()
 
@@ -193,5 +216,3 @@ class Main(QtWidgets.QMainWindow):
 			self.ventMain.radioButtonGasolina.setChecked(True)
 		except Exception as error:
 			print(f"Error limpiando cliente: {error}")
-
-

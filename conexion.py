@@ -84,7 +84,7 @@ class Conexion:
 	def guardar_vehiculo(self, vehiculo: Vehiculo) -> bool:
 		try:
 			query = QtSql.QSqlQuery()
-			query.prepare("INSERT INTO coches VALUES (?,?,?,?,?)")
+			query.prepare("INSERT OR REPLACE INTO coches VALUES (?,?,?,?,?)")
 			query.addBindValue(vehiculo.matricula)
 			query.addBindValue(vehiculo.dni)
 			query.addBindValue(vehiculo.marca)
@@ -113,6 +113,27 @@ class Conexion:
 			query.bindValue(':dni', dni)
 			if query.exec():
 				while query.next():
-					return Cliente(query.value(1), query.value(0), query.value(2), query.value(3), query.value(4), query.value(5), query.value(6), query.value(7), query.value(8))
+					return Cliente(query.value(0), query.value(1), query.value(2), query.value(3), query.value(4), query.value(5), query.value(6), query.value(7), query.value(8))
 		except Exception as error:
 			print(f"Error recuperando cliente: {error}")
+
+	def eliminar_cliente(self, dni: str) -> bool:
+		"""
+		Elimina todos los coches de un cliente, y luego el propio cliente
+		:param dni: El DNI del cliente a eliminar
+		:return: True si se ha eliminado correctamente, False si ha habido algún error
+		"""
+		try:
+			query1 = QtSql.QSqlQuery()
+			query1.prepare("DELETE FROM coches WHERE dnicli = :dni")
+			query1.bindValue(':dni', dni)
+			q1e = query1.exec()
+
+			query2 = QtSql.QSqlQuery()
+			query2.prepare("DELETE FROM clientes WHERE dni = :dni")
+			query2.bindValue(':dni', dni)
+			q2e = query2.exec()
+
+			return q1e and q2e
+		except Exception as error:
+			print(f"Error eliminando cliente: {error}")

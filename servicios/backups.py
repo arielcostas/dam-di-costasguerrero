@@ -128,6 +128,22 @@ class ServicioBackup:
 					sheet.cell_value(fila, 8)
 				))
 
+			query = QtSql.QSqlQuery()
+			query.prepare("INSERT INTO clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
+
+			for fila in filas:
+				query.addBindValue(fila.dni)
+				query.addBindValue(fila.nombre)
+				query.addBindValue(fila.alta)
+				query.addBindValue(fila.direccion)
+				query.addBindValue(fila.provincia)
+				query.addBindValue(fila.municipio)
+				query.addBindValue(fila.efectivo)
+				query.addBindValue(fila.factura)
+				query.addBindValue(fila.transferencia)
+				query.exec()
+			return True
+
 		except Exception as error:
 			print("Error al importar clientes excel: ", error)
 			return False
