@@ -1,3 +1,16 @@
+CREATE TABLE provincias
+(
+	id        INTEGER,
+	provincia TEXT
+);
+
+CREATE TABLE municipios
+(
+	provincia_id INTEGER,
+	municipio    TEXT,
+	id           INTEGER
+);
+
 CREATE TABLE clientes
 (
 	dni                     TEXT NOT NULL UNIQUE,

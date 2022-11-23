@@ -3,7 +3,9 @@ Script para limpiar y compilar el proyecto
 """
 
 import os, shutil
-from PyQt6 import uic
+import sqlite3
+
+from PyQt6 import uic, QtSql
 
 
 def limpiar_pycache():
@@ -42,7 +44,24 @@ def compilar_ui():
 				)
 
 
+def crear_basedatos():
+	"""
+	Realiza todas las consultas del archivo `crearTablas.sql` en la base de datos QtSql
+	"""
+	conn = sqlite3.connect("bbdd.sqlite")
+	try:
+		for root, dirs, files in os.walk("basesdatos"):
+			for file in files:
+				if file.endswith(".sql"):
+					print("crear_basedatos: Ejecutando", os.path.join(root, file))
+					with open (os.path.join(root, file), "r", encoding="utf-8") as f:
+						lineas = f.read()
+						conn.executescript(lineas)
+	except Exception as e:
+		print("crear_basedatos: Error ", e)
+
 if __name__ == "__main__":
 	limpiar_pycache()
 	limpiar_ui()
 	compilar_ui()
+	crear_basedatos()

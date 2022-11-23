@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDataSourceStorage">
+    <option name="dataSources">
+      <list>
+        <State>
+          <option name="id" value="70b800d8-32ab-4964-b9ae-71c0477d929c" />
+          <option name="name" value="bbdd.sqlite (DDL)" />
+          <option name="dbmsName" value="SQLITE" />
+          <option name="urls">
+            <array>
+              <option value="file://$PROJECT_DIR$/backups" />
+            </array>
+          </option>
+        </State>
+      </list>
+    </option>
+  </component>
+</project>
