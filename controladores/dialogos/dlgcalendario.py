@@ -5,9 +5,9 @@ from PyQt6 import QtWidgets, QtCore
 from ui.dlgCalendario import Ui_dlgCalendario
 
 
-class DialogCalendar(QtWidgets.QDialog):
+class DialogoCalendario(QtWidgets.QDialog):
 	def __init__(self):
-		super(DialogCalendar, self).__init__()
+		super(DialogoCalendario, self).__init__()
 		self.dialogCalendar = Ui_dlgCalendario()
 		self.dialogCalendar.setupUi(self)
 		a = datetime.now()

@@ -1,6 +1,6 @@
-from PyQt6 import QtWidgets, QtSql
+from PyQt6 import QtSql
 
-from controladores import modal
+from controladores.modales import aviso
 from modelos import Vehiculo, Cliente
 
 
@@ -10,7 +10,7 @@ class Conexion:
 		db = QtSql.QSqlDatabase.addDatabase("QSQLITE")
 		db.setDatabaseName(dbfile)
 		if not db.open():
-			modal.error("Error abriendo base de datos", "No se pudo abrir la base de datos")
+			aviso.error("Error abriendo base de datos", "No se pudo abrir la base de datos")
 			return False
 		else:
 			print("Conexión establecida")

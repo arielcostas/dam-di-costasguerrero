@@ -5,9 +5,9 @@ from PyQt6 import QtWidgets
 from ui.dlgSalir import Ui_dlgSalir
 
 
-class DialogSalir(QtWidgets.QDialog):
+class DialogoSalir(QtWidgets.QDialog):
 	def __init__(self):
-		super(DialogSalir, self).__init__()
+		super(DialogoSalir, self).__init__()
 		self.dialogSalir = Ui_dlgSalir()
 		self.dialogSalir.setupUi(self)
 

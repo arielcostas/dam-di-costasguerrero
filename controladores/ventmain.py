@@ -1,8 +1,8 @@
 from PyQt6.QtWidgets import QMessageBox
 
 import conexion
-from controladores import modal
-from controladores.dlgcalendario import DialogCalendar
+from controladores.modales import aviso
+from controladores.dialogos import DialogoCalendario
 from modelos import Cliente, Vehiculo
 from servicios import ServicioBackup, validar as validar_dni
 from ui.ventMain import *
@@ -16,7 +16,7 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain = Ui_ventMain()
 		self.ventMain.setupUi(self)
 
-		self.dialogCalendar = DialogCalendar()
+		self.dialogCalendar = DialogoCalendario()
 
 		# Guarda todos los campos de texto para uso en otros métodos
 		self.campos_texto = [self.ventMain.txtDni, self.ventMain.txtNombre,
@@ -160,9 +160,9 @@ class Main(QtWidgets.QMainWindow):
 				from controladores.main import cargar
 				cargar.tabla_vehiculos(self)
 
-				modal.aviso("Guardado correctamente", "Se han guardado los datos correctamente")
+				aviso.info("Guardado correctamente", "Se han guardado los datos correctamente")
 			else:
-				modal.aviso("Error guardando", "No se han podido guardar los datos")
+				aviso.info("Error guardando", "No se han podido guardar los datos")
 
 		except Exception as error:
 			print(f"Error en carga cliente: {error}")
@@ -182,7 +182,7 @@ class Main(QtWidgets.QMainWindow):
 					print("Formulario borrado")
 					cargar.tabla_vehiculos(self)
 					print("Vehículos cargados")
-					modal.aviso("Borrado correctamente", "Se ha borrado el cliente correctamente")
+					aviso.info("Borrado correctamente", "Se ha borrado el cliente correctamente")
 		except Exception as error:
 			print(f"Error borrando cliente: {error}")
 

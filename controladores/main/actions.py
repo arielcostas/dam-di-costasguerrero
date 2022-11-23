@@ -1,16 +1,13 @@
 from datetime import datetime
 
 import conexion
-from controladores import modal
-from controladores.dlgTipoExportacion import DialogoTipoExportacion
-from controladores.dlgTipoImportacion import DialogoTipoImportacion
-from controladores.dlgabrir import DialogoAbrir
-from controladores.dlgsalir import DialogSalir
+from controladores.modales import aviso
+from controladores.dialogos import DialogoAbrir, DialogoSalir, DialogoTipoExportacion, DialogoTipoImportacion
 from controladores.ventmain import Main
 
 
 def salir():
-	dialog_salir = DialogSalir()
+	dialog_salir = DialogoSalir()
 	dialog_salir.mostrar_salir()
 
 
@@ -24,7 +21,7 @@ def exportar_copia(self: Main):
 													   copia, "Zip (*.zip)")
 
 		if directorio and self.servicioBackup.hacer_copia(directorio):
-			modal.aviso("Aviso", "Copia de seguridad realizada correctamente")
+			aviso.info("Aviso", "Copia de seguridad realizada correctamente")
 
 	except Exception as error:
 		print(f"Error haciendo copia: {error}")
@@ -41,7 +38,7 @@ def importar_copia(self: Main):
 			import cargar
 			cargar.tabla_vehiculos(self)
 
-			modal.aviso("Aviso", "Se ha restaurado la copia de seguridad correctamente")
+			aviso.info("Aviso", "Se ha restaurado la copia de seguridad correctamente")
 	except Exception as error:
 		print(f"Error restaurando copia: {error}")
 
@@ -51,7 +48,7 @@ def exportar_excel(self: Main):
 		dialogo_exportacion = DialogoTipoExportacion()
 		if dialogo_exportacion.exec():
 			if not dialogo_exportacion.ui.checkboxCoches.isChecked() and not dialogo_exportacion.ui.checkboxClientes.isChecked():
-				modal.error("Aviso", "Debes seleccionar al menos una opción")
+				aviso.error("Aviso", "Debes seleccionar al menos una opción")
 				exportar_excel(self)
 				return
 			dialogo_abrir = DialogoAbrir()
@@ -61,7 +58,7 @@ def exportar_excel(self: Main):
 				self.servicioBackup.exportar_excel(directorio[0],
 												   dialogo_exportacion.ui.checkboxClientes.isChecked(),
 												   dialogo_exportacion.ui.checkboxCoches.isChecked())
-				modal.aviso("Aviso", "Se ha exportado a Excel correctamente")
+				aviso.info("Aviso", "Se ha exportado a Excel correctamente")
 	except Exception as error:
 		print(f"Error exportando excel: {error}")
 
@@ -83,7 +80,7 @@ def importar_excel(self: Main):
 				dialogo_importar = DialogoTipoImportacion(puedeCargarClientes, puedeCargarCoches)
 				if dialogo_importar.exec():
 					if not dialogo_importar.ui.checkboxCoches.isChecked() and not dialogo_importar.ui.checkboxClientes.isChecked():
-						modal.error("Aviso", "Debes seleccionar al menos una opción")
+						aviso.error("Aviso", "Debes seleccionar al menos una opción")
 						#importar_excel(self)
 						return
 					# Cargar las tablas elegidas
@@ -92,12 +89,12 @@ def importar_excel(self: Main):
 						dialogo_importar.ui.checkboxClientes.isChecked(),
 						dialogo_importar.ui.checkboxCoches.isChecked()
 					)
-					modal.aviso("Aviso", "Se ha importado correctamente")
+					aviso.info("Aviso", "Se ha importado correctamente")
 
 					from controladores.main import cargar
 					cargar.tabla_vehiculos(self)
 			else:
-				modal.error("Error", "El archivo no contiene tablas de clientes ni de coches")
+				aviso.error("Error", "El archivo no contiene tablas de clientes ni de coches")
 
 	except Exception as error:
 		print(f"Error importando excel: {error}")

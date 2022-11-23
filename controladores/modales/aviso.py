@@ -1,7 +1,7 @@
 from PyQt6 import QtWidgets
 
 
-def aviso(titulo: str, texto: str) -> None:
+def info(titulo: str, texto: str) -> None:
 	msg = QtWidgets.QMessageBox()
 	msg.setModal(True)
 	msg.setWindowTitle(titulo)
