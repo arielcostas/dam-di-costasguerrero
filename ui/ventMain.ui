@@ -59,7 +59,7 @@
          <number>30</number>
         </property>
         <property name="bottomMargin">
-         <number>0</number>
+         <number>20</number>
         </property>
         <item>
          <widget class="QLabel" name="lblTituloClientes">
@@ -99,7 +99,20 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_7">
+         <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="1,1,6,1,1,2,1,2,1,1">
+          <item>
+           <spacer name="horizontalSpacer_11">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item>
            <widget class="QLabel" name="lblDni">
             <property name="minimumSize">
@@ -130,12 +143,6 @@
           <item>
            <widget class="QLineEdit" name="txtDni">
             <property name="minimumSize">
-             <size>
-              <width>100</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
              <size>
               <width>100</width>
               <height>20</height>
@@ -208,12 +215,6 @@
               <height>20</height>
              </size>
             </property>
-            <property name="maximumSize">
-             <size>
-              <width>200</width>
-              <height>20</height>
-             </size>
-            </property>
            </widget>
           </item>
           <item>
@@ -251,12 +252,6 @@
               <height>20</height>
              </size>
             </property>
-            <property name="maximumSize">
-             <size>
-              <width>80</width>
-              <height>20</height>
-             </size>
-            </property>
            </widget>
           </item>
           <item>
@@ -264,12 +259,6 @@
             <property name="minimumSize">
              <size>
               <width>22</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>20</width>
               <height>20</height>
              </size>
             </property>
@@ -288,10 +277,36 @@
             </property>
            </widget>
           </item>
+          <item>
+           <spacer name="horizontalSpacer_12">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
          </layout>
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_8">
+          <item>
+           <spacer name="horizontalSpacer_9">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
           <item>
            <widget class="QLabel" name="lblDireccionCliente">
             <property name="minimumSize">
@@ -324,13 +339,7 @@
             <property name="minimumSize">
              <size>
               <width>0</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>20</height>
+              <height>22</height>
              </size>
             </property>
            </widget>
@@ -367,13 +376,7 @@
             <property name="minimumSize">
              <size>
               <width>190</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>16777215</width>
-              <height>20</height>
+              <height>22</height>
              </size>
             </property>
            </widget>
@@ -410,16 +413,23 @@
             <property name="minimumSize">
              <size>
               <width>190</width>
-              <height>20</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>170</width>
-              <height>20</height>
+              <height>22</height>
              </size>
             </property>
            </widget>
+          </item>
+          <item>
+           <spacer name="horizontalSpacer_10">
+            <property name="orientation">
+             <enum>Qt::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
           </item>
          </layout>
         </item>
@@ -573,14 +583,7 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout_2">
-          <property name="leftMargin">
-           <number>0</number>
-          </property>
-          <property name="rightMargin">
-           <number>0</number>
-          </property>
-          <item>
+
            <layout class="QHBoxLayout" name="horizontalLayout_10">
             <item>
              <spacer name="horizontalSpacer_7">
@@ -627,13 +630,7 @@
               <property name="minimumSize">
                <size>
                 <width>100</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>20</height>
+                <height>22</height>
                </size>
               </property>
               <property name="autoFillBackground">
@@ -676,13 +673,7 @@
               <property name="minimumSize">
                <size>
                 <width>100</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>20</height>
+                <height>22</height>
                </size>
               </property>
              </widget>
@@ -719,13 +710,7 @@
               <property name="minimumSize">
                <size>
                 <width>100</width>
-                <height>20</height>
-               </size>
-              </property>
-              <property name="maximumSize">
-               <size>
-                <width>100</width>
-                <height>20</height>
+                <height>22</height>
                </size>
               </property>
              </widget>
@@ -744,8 +729,7 @@
              </spacer>
             </item>
            </layout>
-          </item>
-         </layout>
+
         </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout_9">
