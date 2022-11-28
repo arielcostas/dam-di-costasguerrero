@@ -98,3 +98,7 @@ def importar_excel(self: Main):
 
 	except Exception as error:
 		print(f"Error importando excel: {error}")
+
+
+def cambiar_propietario(self: Main):
+	print()

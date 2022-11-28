@@ -33,6 +33,7 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.actionRestaurarCopia.triggered.connect(lambda: actions.importar_copia(self))
 		self.ventMain.actionExportarExcel.triggered.connect(lambda: actions.exportar_excel(self))
 		self.ventMain.actionImportarExcel.triggered.connect(lambda: actions.importar_excel(self))
+		self.ventMain.actionCambiarPropietario.triggered.connect(lambda: actions.cambiar_propietario(self))
 
 		# Se pulsa enter en DNI
 		self.ventMain.txtDni.editingFinished.connect(self.on_dni_comprobar)
@@ -81,6 +82,7 @@ class Main(QtWidgets.QMainWindow):
 		try:
 			cliente: Cliente = self.bbdd.cargar_cliente(dni)
 			self.ventMain.txtDni.setText(cliente.dni)
+			self.ventMain.txtDni.setDisabled(True)
 			self.ventMain.txtNombre.setText(cliente.nombre)
 			self.ventMain.txtDireccionCliente.setText(cliente.direccion)
 			self.ventMain.txtFechaAltaCliente.setText(cliente.alta)
@@ -96,6 +98,7 @@ class Main(QtWidgets.QMainWindow):
 		try:
 			vehiculo = self.bbdd.cargar_vehiculo(matricula)
 			self.ventMain.txtMatricula.setText(vehiculo.matricula)
+			self.ventMain.txtMatricula.setDisabled(True)
 			self.ventMain.txtMarca.setText(vehiculo.marca)
 			self.ventMain.txtModelo.setText(vehiculo.modelo)
 			if vehiculo.motor == "Gasolina":
@@ -208,6 +211,8 @@ class Main(QtWidgets.QMainWindow):
 			for campo in self.campos_texto:
 				campo.setText("")
 
+			self.ventMain.txtMatricula.setDisabled(False)
+			self.ventMain.txtDni.setDisabled(False)
 			self.ventMain.comboProvinciaCliente.setCurrentIndex(0)
 
 			for btn in self.ventMain.buttonGroupMotorizacion.buttons():
