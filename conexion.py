@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from PyQt6 import QtSql
 
 from controladores.modales import aviso
@@ -51,7 +53,7 @@ class Conexion:
 	def cargar_vehiculos(self) -> list[Vehiculo]:
 		try:
 			query = QtSql.QSqlQuery()
-			query.prepare("SELECT dnicli, matricula, marca, modelo, motor FROM coches")
+			query.prepare("SELECT dnicli, matricula, marca, modelo, motor FROM coches WHERE fecha_baja IS NULL")
 			if query.exec():
 				resultados: list[Vehiculo] = list()
 
@@ -98,7 +100,7 @@ class Conexion:
 	def cargar_vehiculo(self, matricula: str) -> Vehiculo:
 		try:
 			query = QtSql.QSqlQuery()
-			query.prepare("SELECT matricula, dnicli, marca, modelo, motor FROM coches WHERE matricula = :mat")
+			query.prepare("SELECT matricula, dnicli, marca, modelo, motor FROM coches WHERE matricula = :mat AND fecha_baja IS NULL")
 			query.bindValue(':mat', matricula)
 			if query.exec():
 				while query.next():
@@ -109,7 +111,7 @@ class Conexion:
 	def cargar_cliente(self, dni: str) -> Cliente:
 		try:
 			query = QtSql.QSqlQuery()
-			query.prepare("SELECT * FROM clientes WHERE dni = :dni")
+			query.prepare("SELECT * FROM clientes WHERE dni = :dni AND fecha_baja IS NULL")
 			query.bindValue(':dni', dni)
 			if query.exec():
 				while query.next():
@@ -125,12 +127,14 @@ class Conexion:
 		"""
 		try:
 			query1 = QtSql.QSqlQuery()
-			query1.prepare("DELETE FROM coches WHERE dnicli = :dni")
+			query1.prepare("UPDATE coches SET fecha_baja=:fecha_baja WHERE dnicli = :dni")
+			query1.bindValue(':fecha_baja', datetime.now().strftime("%Y-%m-%d"))
 			query1.bindValue(':dni', dni)
 			q1e = query1.exec()
 
 			query2 = QtSql.QSqlQuery()
-			query2.prepare("DELETE FROM clientes WHERE dni = :dni")
+			query2.prepare("UPDATE clientes SET fecha_baja=:fecha_baja WHERE dni = :dni")
+			query2.bindValue(':fecha_baja', datetime.now().strftime("%Y-%m-%d"))
 			query2.bindValue(':dni', dni)
 			q2e = query2.exec()
 

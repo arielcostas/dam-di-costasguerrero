@@ -43,7 +43,7 @@ class ServicioBackup:
 				hoja_clientes.write(0, i, e)
 
 			query = QtSql.QSqlQuery()
-			query.prepare("SELECT * FROM clientes ORDER BY alta")
+			query.prepare("SELECT * FROM clientes WHERE fecha_baja IS NULL ORDER BY alta")
 			if query.exec():
 				fila = 1
 				while query.next():
@@ -66,7 +66,7 @@ class ServicioBackup:
 			hoja_coches.write(0, 4, "Tipo motor")
 
 			query = QtSql.QSqlQuery()
-			query.prepare("SELECT * FROM coches ORDER BY matricula")
+			query.prepare("SELECT * FROM coches WHERE fecha_baja IS NULL ORDER BY matricula")
 			if query.exec():
 				fila = 1
 				while query.next():
