@@ -38,3 +38,6 @@ CREATE TABLE coches
 	PRIMARY KEY (matricula),
 	FOREIGN KEY (dnicli) REFERENCES clientes (dni)
 );
+
+ALTER TABLE clientes ADD COLUMN fecha_baja TEXT DEFAULT NULL;
+ALTER TABLE coches ADD COLUMN fecha_baja TEXT DEFAULT NULL;

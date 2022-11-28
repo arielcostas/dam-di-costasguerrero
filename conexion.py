@@ -65,7 +65,7 @@ class Conexion:
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare(
-				"INSERT OR REPLACE INTO clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)"
+				"INSERT OR REPLACE INTO clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)"
 			)
 			query.addBindValue(cliente.dni)
 			query.addBindValue(cliente.nombre)
@@ -84,7 +84,7 @@ class Conexion:
 	def guardar_vehiculo(self, vehiculo: Vehiculo) -> bool:
 		try:
 			query = QtSql.QSqlQuery()
-			query.prepare("INSERT OR REPLACE INTO coches VALUES (?,?,?,?,?)")
+			query.prepare("INSERT OR REPLACE INTO coches VALUES (?,?,?,?,?, NULL)")
 			query.addBindValue(vehiculo.matricula)
 			query.addBindValue(vehiculo.dni)
 			query.addBindValue(vehiculo.marca)
@@ -98,7 +98,7 @@ class Conexion:
 	def cargar_vehiculo(self, matricula: str) -> Vehiculo:
 		try:
 			query = QtSql.QSqlQuery()
-			query.prepare("SELECT dnicli, matricula, marca, modelo, motor FROM coches WHERE matricula = :mat")
+			query.prepare("SELECT matricula, dnicli, marca, modelo, motor FROM coches WHERE matricula = :mat")
 			query.bindValue(':mat', matricula)
 			if query.exec():
 				while query.next():

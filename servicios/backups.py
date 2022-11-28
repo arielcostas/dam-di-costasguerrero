@@ -129,7 +129,7 @@ class ServicioBackup:
 				))
 
 			query = QtSql.QSqlQuery()
-			query.prepare("INSERT INTO clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)")
+			query.prepare("INSERT INTO clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)")
 
 			for fila in filas:
 				query.addBindValue(fila.dni)
