@@ -727,6 +727,52 @@
             </property>
            </spacer>
           </item>
+          <item>
+           <widget class="QPushButton" name="buttonBuscarVehiculo">
+            <property name="minimumSize">
+             <size>
+              <width>24</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>24</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>../img/buscar.png</normaloff>../img/buscar.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QPushButton" name="buttonLimpiarVehiculo">
+            <property name="minimumSize">
+             <size>
+              <width>24</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>24</width>
+              <height>24</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset>
+              <normaloff>../img/limpiar.png</normaloff>../img/limpiar.png</iconset>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -840,52 +886,6 @@
            <widget class="QPushButton" name="buttonEliminarCliente">
             <property name="text">
              <string>Eliminar</string>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonBuscarVehiculo">
-            <property name="minimumSize">
-             <size>
-              <width>24</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>24</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>../img/buscar.png</normaloff>../img/buscar.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item>
-           <widget class="QPushButton" name="buttonLimpiarVehiculo">
-            <property name="minimumSize">
-             <size>
-              <width>24</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="maximumSize">
-             <size>
-              <width>24</width>
-              <height>24</height>
-             </size>
-            </property>
-            <property name="text">
-             <string/>
-            </property>
-            <property name="icon">
-             <iconset>
-              <normaloff>../img/limpiar.png</normaloff>../img/limpiar.png</iconset>
             </property>
            </widget>
           </item>
