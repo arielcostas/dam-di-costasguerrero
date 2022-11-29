@@ -2,6 +2,7 @@ from datetime import datetime
 
 from PyQt6 import QtSql
 
+from bbdd import ClienteRepository
 from controladores.modales import aviso
 from modelos import Vehiculo, Cliente
 
@@ -49,19 +50,6 @@ class Conexion:
 
 		except Exception as error:
 			print(f"Error recuperando municipios de {provincia}: {error}")
-
-	def cargar_clientes(self) -> list[Cliente]:
-		try:
-			query = QtSql.QSqlQuery()
-			query.prepare("SELECT * FROM clientes WHERE fecha_baja IS NULL")
-			if query.exec():
-				resultados: list[Cliente] = list()
-
-				while query.next():
-					resultados.append(Cliente(query.value(0), query.value(1), query.value(2), query.value(3), query.value(4), query.value(5), query.value(6), query.value(7), query.value(8)))
-				return resultados
-		except Exception as error:
-			print(f"Error recuperando clientes: {error}")
 
 	def cargar_vehiculos(self) -> list[Vehiculo]:
 		try:
@@ -121,17 +109,6 @@ class Conexion:
 		except Exception as error:
 			print(f"Error recuperando vehiculo: {error}")
 
-	def cargar_cliente(self, dni: str) -> Cliente:
-		try:
-			query = QtSql.QSqlQuery()
-			query.prepare("SELECT * FROM clientes WHERE dni = :dni AND fecha_baja IS NULL")
-			query.bindValue(':dni', dni)
-			if query.exec():
-				while query.next():
-					return Cliente(query.value(0), query.value(1), query.value(2), query.value(3), query.value(4), query.value(5), query.value(6), query.value(7), query.value(8))
-		except Exception as error:
-			print(f"Error recuperando cliente: {error}")
-
 	def eliminar_cliente(self, dni: str) -> bool:
 		"""
 		Elimina todos los coches de un cliente, y luego el propio cliente
@@ -145,11 +122,7 @@ class Conexion:
 			query1.bindValue(':dni', dni)
 			q1e = query1.exec()
 
-			query2 = QtSql.QSqlQuery()
-			query2.prepare("UPDATE clientes SET fecha_baja=:fecha_baja WHERE dni = :dni")
-			query2.bindValue(':fecha_baja', datetime.now().strftime("%Y-%m-%d"))
-			query2.bindValue(':dni', dni)
-			q2e = query2.exec()
+			q2e = ClienteRepository.delete_by_dni(dni)
 
 			return q1e and q2e
 		except Exception as error:

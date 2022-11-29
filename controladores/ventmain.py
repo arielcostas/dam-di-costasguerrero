@@ -1,6 +1,7 @@
 from PyQt6.QtWidgets import QMessageBox
 
 import conexion
+from bbdd import ClienteRepository
 from controladores.modales import aviso
 from controladores.dialogos import DialogoCalendario
 from modelos import Cliente, Vehiculo
@@ -81,7 +82,7 @@ class Main(QtWidgets.QMainWindow):
 
 	def cargar_datos_cliente(self, dni: str):
 		try:
-			cliente: Cliente = self.bbdd.cargar_cliente(dni)
+			cliente: Cliente = ClienteRepository.get_by_dni(dni)
 			self.ventMain.txtDni.setText(cliente.dni)
 			self.ventMain.txtDni.setDisabled(True)
 			self.ventMain.txtNombre.setText(cliente.nombre)
@@ -140,9 +141,6 @@ class Main(QtWidgets.QMainWindow):
 				self.set_dni_invalido(dni)
 		except Exception as error:
 			print(f"Error mostrando marcado validez DNI: {error}")
-
-	def on_press_salir(self):
-		self.dialogSalir.mostrar_salir()
 
 	def on_guardar_cliente(self):
 		try:

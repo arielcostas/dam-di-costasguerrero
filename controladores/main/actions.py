@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import conexion
+from bbdd import ClienteRepository
 from controladores.dialogos.cambiarpropietario import DialogoCambiarPropietario
 from controladores.main import cargar
 from controladores.modales import aviso
@@ -104,7 +105,7 @@ def importar_excel(self: Main):
 
 def cambiar_propietario(self: Main):
 	try:
-		clientes = self.bbdd.cargar_clientes()
+		clientes = ClienteRepository().get_all()
 		vehiculos = self.bbdd.cargar_vehiculos_incluye_eliminados()
 		dcp = DialogoCambiarPropietario(clientes, vehiculos)
 		if dcp.exec():
