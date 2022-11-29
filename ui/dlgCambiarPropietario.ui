@@ -7,19 +7,19 @@
     <x>0</x>
     <y>0</y>
     <width>320</width>
-    <height>200</height>
+    <height>220</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
     <width>320</width>
-    <height>200</height>
+    <height>220</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>320</width>
-    <height>200</height>
+    <height>220</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -46,7 +46,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="comboBox"/>
+    <widget class="QComboBox" name="vehiculo"/>
    </item>
    <item>
     <widget class="QLabel" name="label_3">
@@ -56,14 +56,17 @@
     </widget>
    </item>
    <item>
-    <widget class="QComboBox" name="comboBox_2"/>
+    <widget class="QComboBox" name="cliente"/>
    </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="topMargin">
+      <number>30</number>
+     </property>
      <item>
       <widget class="QPushButton" name="buttonCambiar">
        <property name="text">
-        <string>Guardar</string>
+        <string>Actualizar</string>
        </property>
       </widget>
      </item>

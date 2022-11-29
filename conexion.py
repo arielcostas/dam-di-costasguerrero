@@ -50,6 +50,19 @@ class Conexion:
 		except Exception as error:
 			print(f"Error recuperando municipios de {provincia}: {error}")
 
+	def cargar_clientes(self) -> list[Cliente]:
+		try:
+			query = QtSql.QSqlQuery()
+			query.prepare("SELECT * FROM clientes WHERE fecha_baja IS NULL")
+			if query.exec():
+				resultados: list[Cliente] = list()
+
+				while query.next():
+					resultados.append(Cliente(query.value(0), query.value(1), query.value(2), query.value(3), query.value(4), query.value(5), query.value(6), query.value(7), query.value(8)))
+				return resultados
+		except Exception as error:
+			print(f"Error recuperando clientes: {error}")
+
 	def cargar_vehiculos(self) -> list[Vehiculo]:
 		try:
 			query = QtSql.QSqlQuery()
@@ -141,3 +154,16 @@ class Conexion:
 			return q1e and q2e
 		except Exception as error:
 			print(f"Error eliminando cliente: {error}")
+
+	def cargar_vehiculos_incluye_eliminados(self):
+		try:
+			query = QtSql.QSqlQuery()
+			query.prepare("SELECT dnicli, matricula, marca, modelo, motor FROM coches")
+			if query.exec():
+				resultados: list[Vehiculo] = list()
+
+				while query.next():
+					resultados.append(Vehiculo(query.value(1), query.value(0), query.value(2), query.value(3), query.value(4)))
+				return resultados
+		except Exception as error:
+			print(f"Error recuperando vehiculos: {error}")

@@ -1,6 +1,8 @@
 from datetime import datetime
 
 import conexion
+from controladores.dialogos.cambiarpropietario import DialogoCambiarPropietario
+from controladores.main import cargar
 from controladores.modales import aviso
 from controladores.dialogos import DialogoAbrir, DialogoSalir, DialogoTipoExportacion, DialogoTipoImportacion
 from controladores.ventmain import Main
@@ -101,4 +103,20 @@ def importar_excel(self: Main):
 
 
 def cambiar_propietario(self: Main):
-	print()
+	try:
+		clientes = self.bbdd.cargar_clientes()
+		vehiculos = self.bbdd.cargar_vehiculos_incluye_eliminados()
+		dcp = DialogoCambiarPropietario(clientes, vehiculos)
+		if dcp.exec():
+			matricula = dcp.ui.vehiculo.currentText().split(" (")[0]
+			dni = dcp.ui.cliente.currentText().split(" - ")[0]
+
+			if self.servicioPropietarios.cambiar_propietario(matricula, dni):
+				cargar.tabla_vehiculos(self)
+				aviso.info("Aviso", "Se ha cambiado el propietario correctamente")
+			else:
+				aviso.error("Error", "No se ha podido cambiar el propietario")
+
+
+	except Exception as error:
+		print(f"Error cambiando propietario: {error}")

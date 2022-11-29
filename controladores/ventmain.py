@@ -4,7 +4,7 @@ import conexion
 from controladores.modales import aviso
 from controladores.dialogos import DialogoCalendario
 from modelos import Cliente, Vehiculo
-from servicios import ServicioBackup, validar as validar_dni
+from servicios import ServicioBackup, validar as validar_dni, ServicioPropietarios
 from ui.ventMain import *
 
 
@@ -12,6 +12,7 @@ class Main(QtWidgets.QMainWindow):
 	def __init__(self):
 		super(Main, self).__init__()
 		self.servicioBackup = ServicioBackup()
+		self.servicioPropietarios = ServicioPropietarios()
 
 		self.ventMain = Ui_ventMain()
 		self.ventMain.setupUi(self)
