@@ -19,22 +19,6 @@ class Conexion:
 			print("Conexión establecida")
 			return True
 
-	def cargar_provincias(self):
-		try:
-			query = QtSql.QSqlQuery()
-			query.prepare("SELECT provincia FROM provincias")
-			if query.exec():
-				resultados = [""]
-				while query.next():
-					resultados.append(query.value(0))
-				return resultados
-			else:
-				return ["else!"]
-
-
-		except Exception as error:
-			print(f"Error recuperando provincias: {error}")
-
 	def cargar_municipios(self, provincia):
 		try:
 			query = QtSql.QSqlQuery()

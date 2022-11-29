@@ -1,11 +1,12 @@
 from PyQt6 import QtWidgets
 
+from bbdd import LugaresRepository
 from controladores.ventmain import Main
 
 
 def lista_provincias(self: Main):
 	self.ventMain.comboProvinciaCliente.clear()
-	datos = self.bbdd.cargar_provincias()
+	datos = LugaresRepository.get_provincias()
 	for i in datos:
 		self.ventMain.comboProvinciaCliente.addItem(i)
 
