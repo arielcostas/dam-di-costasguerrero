@@ -169,7 +169,9 @@
             </property>
             <property name="font">
              <font>
-              <bold>true</bold>
+              <pointsize>10</pointsize>
+              <bold>false</bold>
+              <kerning>false</kerning>
              </font>
             </property>
             <property name="text">

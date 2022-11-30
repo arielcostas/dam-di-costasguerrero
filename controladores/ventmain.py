@@ -121,16 +121,12 @@ class Main(QtWidgets.QMainWindow):
 			print(f"Error seleccionando motor: {error}")
 
 	def set_dni_valido(self, dni: str):
-		self.ventMain.lblValidardni.setStyleSheet('color: green;')
-		self.ventMain.lblValidardni.setText('V')
+		self.ventMain.lblValidardni.setText('✅')
 		self.ventMain.txtDni.setText(dni.upper())
-		self.ventMain.txtDni.setStyleSheet('background-color: white;')
 
 	def set_dni_invalido(self, dni: str):
-		self.ventMain.lblValidardni.setStyleSheet('color: red;')
-		self.ventMain.lblValidardni.setText('X')
+		self.ventMain.lblValidardni.setText('❌')
 		self.ventMain.txtDni.setText(dni.upper())
-		self.ventMain.txtDni.setStyleSheet('background-color: pink;')
 
 	def on_dni_comprobar(self):
 		try:
@@ -154,6 +150,11 @@ class Main(QtWidgets.QMainWindow):
 								vm.txtModelo.text(),
 								self.get_motor())
 
+			if not validar_dni(cliente.dni):
+				self.set_dni_invalido(cliente.dni)
+				aviso.error("Error guardando", "DNI no válido")
+				return
+
 			guardado = self.bbdd.guardar_cliente(cliente) and self.bbdd.guardar_vehiculo(vehiculo)
 
 			if guardado:
@@ -164,10 +165,11 @@ class Main(QtWidgets.QMainWindow):
 
 				aviso.info("Guardado correctamente", "Se han guardado los datos correctamente")
 			else:
-				aviso.info("Error guardando", "No se han podido guardar los datos")
+				aviso.error("Error guardando", "No se han podido guardar los datos")
 
 		except Exception as error:
-			print(f"Error en carga cliente: {error}")
+			print(f"Error guardando: {error}")
+			aviso.error("Error guardando", "No se han podido guardar los datos")
 
 	def on_borrar_cliente(self):
 		from controladores.main import cargar

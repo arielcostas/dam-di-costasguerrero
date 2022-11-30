@@ -7,6 +7,7 @@ from xlrd.sheet import Sheet
 from xlwt import Workbook
 
 from modelos import Vehiculo, Cliente
+from servicios import dni
 
 
 class ServicioBackup:
@@ -116,6 +117,8 @@ class ServicioBackup:
 		try:
 			filas: list[Cliente] = []
 			for fila in range(1, sheet.nrows):  # Empieza en 1 para saltarse la cabecera
+				if not dni.validar(sheet.cell_value(fila, 0)):
+					continue
 				filas.append(Cliente(
 					sheet.cell_value(fila, 0),
 					sheet.cell_value(fila, 1),
