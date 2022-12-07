@@ -20,9 +20,10 @@ def lista_municipios(self: Main):
 
 
 def tabla_vehiculos(self: Main):
+	historico = self.ventMain.checkMostrarHistorico.isChecked()
 	try:
 		self.ventMain.tablaClientes.clearContents()
-		datos = self.bbdd.cargar_vehiculos()
+		datos = self.bbdd.cargar_vehiculos(historico)
 		self.ventMain.tablaClientes.setRowCount(len(datos))
 		for idx, el in enumerate(datos):
 			self.ventMain.tablaClientes \
@@ -35,6 +36,8 @@ def tabla_vehiculos(self: Main):
 				.setItem(idx, 3, QtWidgets.QTableWidgetItem(el.modelo))
 			self.ventMain.tablaClientes \
 				.setItem(idx, 4, QtWidgets.QTableWidgetItem(el.motor))
+			self.ventMain.tablaClientes \
+				.setItem(idx, 5, QtWidgets.QTableWidgetItem(el.fecha_baja))
 
 		for i in range(0, self.ventMain.tablaClientes.columnCount()):
 			self.ventMain.tablaClientes \

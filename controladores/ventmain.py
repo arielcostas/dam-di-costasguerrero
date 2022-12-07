@@ -73,6 +73,8 @@ class Main(QtWidgets.QMainWindow):
 		# Al selecionar una fila de la tabla
 		self.ventMain.tablaClientes.currentItemChanged.connect(self.on_item_seleccionado)
 
+		self.ventMain.checkMostrarHistorico.stateChanged.connect(lambda: cargar.tabla_vehiculos(self))
+
 	def on_item_seleccionado(self, item: QtWidgets.QTableWidgetItem):
 		if item is not None:
 			dni = self.ventMain.tablaClientes.item(item.row(), 0)

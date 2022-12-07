@@ -904,6 +904,13 @@
             </property>
            </spacer>
           </item>
+          <item>
+           <widget class="QCheckBox" name="checkMostrarHistorico">
+            <property name="text">
+             <string>Mostrar histórico</string>
+            </property>
+           </widget>
+          </item>
          </layout>
         </item>
         <item>
@@ -953,6 +960,11 @@
           <column>
            <property name="text">
             <string>Motor</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Fecha baja</string>
            </property>
           </column>
          </widget>

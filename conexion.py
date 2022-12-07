@@ -35,15 +35,18 @@ class Conexion:
 		except Exception as error:
 			print(f"Error recuperando municipios de {provincia}: {error}")
 
-	def cargar_vehiculos(self) -> list[Vehiculo]:
+	def cargar_vehiculos(self, historico: bool = False) -> list[Vehiculo]:
 		try:
 			query = QtSql.QSqlQuery()
-			query.prepare("SELECT dnicli, matricula, marca, modelo, motor FROM coches WHERE fecha_baja IS NULL")
+			if historico:
+				query.prepare("SELECT dnicli, matricula, marca, modelo, motor, fecha_baja FROM coches")
+			else:
+				query.prepare("SELECT dnicli, matricula, marca, modelo, motor, fecha_baja FROM coches WHERE fecha_baja IS NULL")
 			if query.exec():
 				resultados: list[Vehiculo] = list()
 
 				while query.next():
-					resultados.append(Vehiculo(query.value(1), query.value(0), query.value(2), query.value(3), query.value(4)))
+					resultados.append(Vehiculo(query.value(1), query.value(0), query.value(2), query.value(3), query.value(4), query.value(5)))
 				return resultados
 		except Exception as error:
 			print(f"Error recuperando vehiculos: {error}")
