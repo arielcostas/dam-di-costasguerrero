@@ -54,11 +54,12 @@ def crear_basedatos():
 			for file in files:
 				if file.endswith(".sql"):
 					print("crear_basedatos: Ejecutando", os.path.join(root, file))
-					with open (os.path.join(root, file), "r", encoding="utf-8") as f:
+					with open(os.path.join(root, file), "r", encoding="utf-8") as f:
 						lineas = f.read()
 						conn.executescript(lineas)
 	except Exception as e:
 		print("crear_basedatos: Error ", e)
+
 
 if __name__ == "__main__":
 	limpiar_pycache()

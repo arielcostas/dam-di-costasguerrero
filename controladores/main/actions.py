@@ -5,7 +5,8 @@ from bbdd import ClienteRepository
 from controladores.dialogos.cambiarpropietario import DialogoCambiarPropietario
 from controladores.main import cargar
 from controladores.modales import aviso
-from controladores.dialogos import DialogoAbrir, DialogoSalir, DialogoTipoExportacion, DialogoTipoImportacion
+from controladores.dialogos import DialogoAbrir, DialogoSalir, DialogoTipoExportacion, \
+	DialogoTipoImportacion
 from controladores.ventmain import Main
 
 
@@ -33,8 +34,11 @@ def exportar_copia(self: Main):
 def importar_copia(self: Main):
 	try:
 		dialogo = DialogoAbrir()
-		directorio, filename = dialogo.getOpenFileName(self, "Restaurar copia de seguridad", "",
-													   "Zip (*.zip)")
+		directorio, filename = dialogo.getOpenFileName(
+			self,
+			"Restaurar copia de seguridad", "",
+			"Archivo comprimido en ZIP (*.zip)"
+		)
 		if directorio and self.servicioBackup.restaurar_copia(directorio):
 			self.bbdd = conexion.Conexion()
 			self.bbdd.iniciar_conexion()
@@ -55,12 +59,16 @@ def exportar_excel(self: Main):
 				exportar_excel(self)
 				return
 			dialogo_abrir = DialogoAbrir()
-			directorio = dialogo_abrir.getSaveFileName(self, "Exportar a Excel", "",
-													   "Excel (*.xls)")
+			directorio = dialogo_abrir.getSaveFileName(
+				self, "Exportar a Excel", "",
+				"Hoja de cálculo de Excel (*.xlsx)"
+			)
 			if directorio[0]:
-				self.servicioBackup.exportar_excel(directorio[0],
-												   dialogo_exportacion.ui.checkboxClientes.isChecked(),
-												   dialogo_exportacion.ui.checkboxCoches.isChecked())
+				self.servicioBackup.exportar_excel(
+					directorio[0],
+					dialogo_exportacion.ui.checkboxClientes.isChecked(),
+					dialogo_exportacion.ui.checkboxCoches.isChecked()
+				)
 				aviso.info("Aviso", "Se ha exportado a Excel correctamente")
 	except Exception as error:
 		print(f"Error exportando excel: {error}")
@@ -70,21 +78,26 @@ def importar_excel(self: Main):
 	try:
 		# Elegir el archivo de donde lee
 		dialogo = DialogoAbrir()
-		directorio, filetype = dialogo.getOpenFileName(self, "Importar Excel", "",
-													   "Excel (*.xls)")
+		directorio, filetype = dialogo.getOpenFileName(
+			self, "Importar Excel", "",
+			"Hoja de cálculo de Excel (*.xlsx)"
+		)
 		if directorio:
 			# Comprobar si el excel tiene tabla de clientes, coches o ambas
-			puedeCargarClientes, puedeCargarCoches = self.servicioBackup.comprobar_tipos_importables_excel(
-				directorio)
+			puede_cargar_clientes, puede_cargar_coches = \
+				self.servicioBackup.comprobar_tipos_importables_excel(directorio)
 
 			# El excel contiene tabla de clientes o coches
-			if puedeCargarClientes or puedeCargarCoches:
+			if puede_cargar_clientes or puede_cargar_coches:
 				# Mostrar diálogo para elegir que tablas de las disponibles se cargan
-				dialogo_importar = DialogoTipoImportacion(puedeCargarClientes, puedeCargarCoches)
+				dialogo_importar = DialogoTipoImportacion(
+					puede_cargar_clientes,
+					puede_cargar_coches
+				)
 				if dialogo_importar.exec():
 					if not dialogo_importar.ui.checkboxCoches.isChecked() and not dialogo_importar.ui.checkboxClientes.isChecked():
 						aviso.error("Aviso", "Debes seleccionar al menos una opción")
-						#importar_excel(self)
+						# importar_excel(self)
 						return
 					# Cargar las tablas elegidas
 					self.servicioBackup.importar_excel(

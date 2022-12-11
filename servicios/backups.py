@@ -1,23 +1,25 @@
 import zipfile
+from datetime import datetime
 
-import xlrd
-import xlwt
+import openpyxl
 from PyQt6 import QtSql
-from xlrd.sheet import Sheet
-from xlwt import Workbook
+from openpyxl.workbook import Workbook
+from openpyxl.worksheet.worksheet import Worksheet
 
 from modelos import Vehiculo, Cliente
 from servicios import dni
 
 
 class ServicioBackup:
-	def restaurar_copia(self, ruta: str) -> bool:
+	@staticmethod
+	def restaurar_copia(ruta: str) -> bool:
 		zipf = zipfile.ZipFile(ruta, 'r')
 		zipf.extractall()
 		zipf.close()
 		return True
 
-	def hacer_copia(self, ruta: str) -> bool:
+	@staticmethod
+	def hacer_copia(ruta: str) -> bool:
 		zipf = zipfile.ZipFile(ruta, 'w', zipfile.ZIP_DEFLATED)
 		zipf.write("bbdd.sqlite")
 		zipf.close()
@@ -25,7 +27,8 @@ class ServicioBackup:
 
 	def exportar_excel(self, ruta: str, clientes: bool, coches: bool) -> bool:
 		try:
-			wb = Workbook()
+			wb = openpyxl.Workbook()
+			wb.remove_sheet(wb.active)
 			if clientes:
 				self.exportar_clientes_excel(wb)
 			if coches:
@@ -35,13 +38,13 @@ class ServicioBackup:
 			print("Error al exportar a excel: ", error)
 			return False
 
-	def exportar_clientes_excel(self, wb: Workbook) -> bool:
+	@staticmethod
+	def exportar_clientes_excel(wb: openpyxl.Workbook) -> bool:
 		try:
-			hoja_clientes = wb.add_sheet("clientes")
+			hoja_clientes: Worksheet = wb.create_sheet("clientes")
 			elementos = ["DNI", "Nombre", "Fecha alta", "Direccion", "Provincia", "Municipio",
 						 "Admite efectivo", "Admite factura", "Admite transferencia"]
-			for i, e in enumerate(elementos):
-				hoja_clientes.write(0, i, e)
+			hoja_clientes.append(elementos)
 
 			query = QtSql.QSqlQuery()
 			query.prepare("SELECT * FROM clientes WHERE fecha_baja IS NULL ORDER BY alta")
@@ -49,7 +52,7 @@ class ServicioBackup:
 				fila = 1
 				while query.next():
 					for i in range(0, 9):
-						hoja_clientes.write(fila, i, query.value(i))
+						hoja_clientes.cell(column=i, row=fila, value=query.value(i))
 					fila += 1
 
 			return True
@@ -57,44 +60,40 @@ class ServicioBackup:
 			print("Error al exportar a excel: ", error)
 			return False
 
-	def exportar_coches_excel(self, wb: Workbook) -> bool:
+	@staticmethod
+	def exportar_coches_excel(wb: openpyxl.Workbook) -> bool:
 		try:
-			hoja_coches = wb.add_sheet("coches")
-			hoja_coches.write(0, 0, "Matricula")
-			hoja_coches.write(0, 1, "DNI cliente")
-			hoja_coches.write(0, 2, "Marca")
-			hoja_coches.write(0, 3, "Modelo")
-			hoja_coches.write(0, 4, "Tipo motor")
+			hoja_coches: Worksheet = wb.create_sheet("coches")
+
+			hoja_coches.append(["Matricula", "DNI", "Marca", "Modelo", "Motor"])
 
 			query = QtSql.QSqlQuery()
 			query.prepare("SELECT * FROM coches WHERE fecha_baja IS NULL ORDER BY matricula")
 			if query.exec():
 				fila = 1
 				while query.next():
-					hoja_coches.write(fila, 0, query.value(0))
-					hoja_coches.write(fila, 1, query.value(1))
-					hoja_coches.write(fila, 2, query.value(2))
-					hoja_coches.write(fila, 3, query.value(3))
-					hoja_coches.write(fila, 4, query.value(4))
+					for i in range(0, 5):
+						hoja_coches.cell(column=i, row=fila, value=query.value(i))
 					fila += 1
 			return True
 		except Exception as error:
 			print("Error al exportar a excel: ", error)
 			return False
 
-	def comprobar_tipos_importables_excel(self, ruta) -> [bool, bool]:
+	@staticmethod
+	def comprobar_tipos_importables_excel(ruta) -> [bool, bool]:
 		try:
-			book = xlrd.open_workbook(ruta)
-			hojas = book.sheets()
+			book: Workbook = openpyxl.load_workbook(ruta)
+			hojas = book.get_sheet_names()
 
 			# resultado = NoClientes y NoCoches
 			resultado = (False, False)
 
 			for hoja in hojas:
-				if hoja.name == "clientes":
+				if hoja == "clientes":
 					# resultado = SiClientes y LoqueseaCoches
 					resultado = (True, resultado[1])
-				if hoja.name == "coches":
+				if hoja == "coches":
 					# resultado = LoqueseaClientes y SiCoches
 					resultado = (resultado[0], True)
 			return resultado
@@ -104,63 +103,70 @@ class ServicioBackup:
 
 	def importar_excel(self, ruta: str, clientes: bool, coches: bool) -> bool:
 		try:
-			book = xlrd.open_workbook(ruta)
+			book: Workbook = openpyxl.load_workbook(ruta)
 			if clientes:
-				self.importar_clientes_excel(book.sheet_by_name("clientes"))
+				self.importar_clientes_excel(book["clientes"])
 			if coches:
-				self.importar_coches_excel(book.sheet_by_name("coches"))
+				self.importar_coches_excel(book["coches"])
 		except Exception as error:
 			print("Error al exportar a excel: ", error)
 			return False
 
-	def importar_clientes_excel(self, sheet: Sheet) -> bool:
+	@staticmethod
+	def importar_clientes_excel(sheet: Worksheet) -> bool:
 		try:
 			filas: list[Cliente] = []
-			for fila in range(1, sheet.nrows):  # Empieza en 1 para saltarse la cabecera
-				if not dni.validar(sheet.cell_value(fila, 0)):
+			for fila in sheet.iter_rows(min_row=2):
+				if not dni.validar(fila[0].value):
+					print("DNI no valido: ", fila[0].value)
 					continue
+
 				filas.append(Cliente(
-					sheet.cell_value(fila, 0),
-					sheet.cell_value(fila, 1),
-					sheet.cell_value(fila, 2),
-					sheet.cell_value(fila, 3),
-					sheet.cell_value(fila, 4),
-					sheet.cell_value(fila, 5),
-					sheet.cell_value(fila, 6),
-					sheet.cell_value(fila, 7),
-					sheet.cell_value(fila, 8)
+					fila[0].value,
+					fila[1].value,
+					fila[2].value,
+					fila[3].value,
+					fila[4].value,
+					fila[5].value,
+					fila[6].value,
+					fila[7].value,
+					fila[8].value
 				))
 
 			query = QtSql.QSqlQuery()
-			query.prepare("INSERT INTO clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)")
 
 			for fila in filas:
+				query.prepare("INSERT INTO clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)")
 				query.addBindValue(fila.dni)
 				query.addBindValue(fila.nombre)
-				query.addBindValue(fila.alta)
+				query.addBindValue(fila.alta.strftime("%Y-%m-%d"))
 				query.addBindValue(fila.direccion)
 				query.addBindValue(fila.provincia)
 				query.addBindValue(fila.municipio)
 				query.addBindValue(fila.efectivo)
 				query.addBindValue(fila.factura)
 				query.addBindValue(fila.transferencia)
-				query.exec()
+				if not(query.exec()):
+					print("Error al importar cliente: " + query.lastError().text())
 			return True
 
 		except Exception as error:
 			print("Error al importar clientes excel: ", error)
 			return False
 
-	def importar_coches_excel(self, sheet: Sheet) -> bool:
+	@staticmethod
+	def importar_coches_excel(sheet: Worksheet) -> bool:
 		try:
 			filas: list[Vehiculo] = []
-			for fila in range(1, sheet.nrows):  # Empieza en 1 para saltarse la cabecera
-				matricula = sheet.cell_value(fila, 0)
-				dni = sheet.cell_value(fila, 1)
-				marca = sheet.cell_value(fila, 2)
-				modelo = sheet.cell_value(fila, 3)
-				tipo_motor = sheet.cell_value(fila, 4)
-				filas.append(Vehiculo(matricula, dni, marca, modelo, tipo_motor))
+			for fila in sheet.iter_rows(min_row=2):  # Empieza en 1 para saltarse la cabecera
+
+				filas.append(Vehiculo(
+					fila[0].value,
+					fila[1].value,
+					fila[2].value,
+					fila[3].value,
+					fila[4].value
+				))
 
 			query = QtSql.QSqlQuery()
 			query.prepare(
