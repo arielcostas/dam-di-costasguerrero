@@ -54,7 +54,9 @@ def exportar_excel(self: Main):
 	try:
 		dialogo_exportacion = DialogoTipoExportacion()
 		if dialogo_exportacion.exec():
-			if not dialogo_exportacion.ui.checkboxCoches.isChecked() and not dialogo_exportacion.ui.checkboxClientes.isChecked():
+			if not dialogo_exportacion.ui.checkboxCoches.isChecked() \
+				and not dialogo_exportacion.ui.checkboxClientes.isChecked() \
+				and not dialogo_exportacion.ui.checkBoxServicios.isChecked():
 				aviso.error("Aviso", "Debes seleccionar al menos una opción")
 				exportar_excel(self)
 				return
@@ -68,6 +70,7 @@ def exportar_excel(self: Main):
 					directorio[0],
 					dialogo_exportacion.ui.checkboxClientes.isChecked(),
 					dialogo_exportacion.ui.checkboxCoches.isChecked(),
+					dialogo_exportacion.ui.checkBoxServicios.isChecked(),
 					dialogo_exportacion.ui.checkboxIncluirHistorico.isChecked()
 				)
 				aviso.info("Aviso", "Se ha exportado a Excel correctamente")

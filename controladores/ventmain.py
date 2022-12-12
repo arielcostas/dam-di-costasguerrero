@@ -28,7 +28,7 @@ class Main(QtWidgets.QMainWindow):
 							 self.ventMain.txtModelo]
 
 		# Botones de la barra de herramientas
-		from .main import actions, cargar
+		from .main import actions, cargar, tabservicios
 
 		self.ventMain.actionSalir.triggered.connect(lambda: actions.salir())
 		self.ventMain.actionHacerCopia.triggered.connect(lambda: actions.exportar_copia(self))
@@ -75,6 +75,10 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.tablaClientes.currentItemChanged.connect(self.on_item_seleccionado)
 
 		self.ventMain.checkMostrarHistorico.stateChanged.connect(lambda: cargar.tabla_vehiculos(self))
+
+		tabservicios.init_tab(self)
+
+
 
 	def on_item_seleccionado(self, item: QtWidgets.QTableWidgetItem):
 		if item is not None:

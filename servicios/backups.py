@@ -25,7 +25,8 @@ class ServicioBackup:
 		zipf.close()
 		return True
 
-	def exportar_excel(self, ruta: str, clientes: bool, coches: bool, incluir_historico: bool = False) -> bool:
+	def exportar_excel(self, ruta: str, clientes: bool, coches: bool, servicios: bool,
+					   incluir_historico: bool = False) -> bool:
 		try:
 			wb = openpyxl.Workbook()
 			wb.remove_sheet(wb.active)
@@ -33,6 +34,8 @@ class ServicioBackup:
 				self.exportar_clientes_excel(wb, incluir_historico)
 			if coches:
 				self.exportar_coches_excel(wb, incluir_historico)
+			if servicios:
+				self.exportar_servicios_excel(wb, incluir_historico)
 			wb.save(ruta)
 		except Exception as error:
 			print("Error al exportar a excel: ", error)
@@ -57,7 +60,7 @@ class ServicioBackup:
 				fila = 2
 				while query.next():
 					for i in range(1, 11):
-						hoja_clientes.cell(column=i, row=fila, value=query.value(i-1))
+						hoja_clientes.cell(column=i, row=fila, value=query.value(i - 1))
 					fila += 1
 
 			return True
@@ -74,7 +77,7 @@ class ServicioBackup:
 
 			query = QtSql.QSqlQuery()
 			if historico:
-				query.exec("SELECT * FROM vehiculos")
+				query.exec("SELECT * FROM coches")
 			else:
 				query.prepare("SELECT * FROM coches WHERE fecha_baja IS NULL ORDER BY matricula")
 
@@ -82,7 +85,31 @@ class ServicioBackup:
 				fila = 2
 				while query.next():
 					for i in range(1, 7):
-						hoja_coches.cell(column=i, row=fila, value=query.value(i-1))
+						hoja_coches.cell(column=i, row=fila, value=query.value(i - 1))
+					fila += 1
+			return True
+		except Exception as error:
+			print("Error al exportar a excel: ", error)
+			return False
+
+	@staticmethod
+	def exportar_servicios_excel(wb: openpyxl.Workbook, historico: bool) -> bool:
+		try:
+			hoja_servicios: Worksheet = wb.create_sheet("servicios")
+
+			hoja_servicios.append(["ID", "Nombre", "Precio unitario", "Fecha de alta", "Fecha de modificación", "Fecha de baja"])
+
+			query = QtSql.QSqlQuery()
+			if historico:
+				query.exec("SELECT * FROM servicios")
+			else:
+				query.prepare("SELECT * FROM servicios WHERE fechaBaja IS NULL")
+
+			if query.exec():
+				fila = 2
+				while query.next():
+					for i in range(1, 7):
+						hoja_servicios.cell(column=i, row=fila, value=query.value(i - 1))
 					fila += 1
 			return True
 		except Exception as error:
@@ -155,7 +182,7 @@ class ServicioBackup:
 				query.addBindValue(fila.efectivo)
 				query.addBindValue(fila.factura)
 				query.addBindValue(fila.transferencia)
-				if not(query.exec()):
+				if not (query.exec()):
 					print("Error al importar cliente: " + query.lastError().text())
 			return True
 
