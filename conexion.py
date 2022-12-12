@@ -96,7 +96,8 @@ class Conexion:
 		except Exception as error:
 			print(f"Error recuperando vehiculo: {error}")
 
-	def eliminar_cliente(self, dni: str) -> bool:
+	@staticmethod
+	def eliminar_cliente_coches(dni: str) -> bool:
 		"""
 		Elimina todos los coches de un cliente, y luego el propio cliente
 		:param dni: El DNI del cliente a eliminar
@@ -114,6 +115,22 @@ class Conexion:
 			return q1e and q2e
 		except Exception as error:
 			print(f"Error eliminando cliente: {error}")
+
+	@staticmethod
+	def eliminar_vehiculo(matricula: str) -> bool:
+		"""
+		Elimina un vehículo de un cliente
+		:param matricula: La matrícula del vehículo a eliminar
+		:return: True si se ha eliminado correctamente, False si ha habido algún error
+		"""
+		try:
+			query = QtSql.QSqlQuery()
+			query.prepare("UPDATE coches SET fecha_baja=:fecha_baja WHERE matricula = :mat")
+			query.bindValue(':fecha_baja', datetime.now().strftime("%Y-%m-%d"))
+			query.bindValue(':mat', matricula)
+			return query.exec()
+		except Exception as error:
+			print(f"Error eliminando vehiculo: {error}")
 
 	def cargar_vehiculos_incluye_eliminados(self):
 		try:

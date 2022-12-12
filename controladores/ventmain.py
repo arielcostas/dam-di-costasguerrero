@@ -36,13 +36,14 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.actionExportarExcel.triggered.connect(lambda: actions.exportar_excel(self))
 		self.ventMain.actionImportarExcel.triggered.connect(lambda: actions.importar_excel(self))
 		self.ventMain.actionCambiarPropietario.triggered.connect(lambda: actions.cambiar_propietario(self))
+		self.ventMain.actionBajaCliente.triggered.connect(self.on_borrar_cliente_coche)
 
 		# Se pulsa enter en DNI
 		self.ventMain.txtDni.editingFinished.connect(self.on_dni_comprobar)
 
 		# Guardar y eliminar clientes
 		self.ventMain.buttonGuardarCliente.clicked.connect(self.on_guardar_cliente)
-		self.ventMain.buttonEliminarCliente.clicked.connect(self.on_borrar_cliente)
+		self.ventMain.buttonEliminarCliente.clicked.connect(self.on_borrar_coche)
 
 		# Al seleccionar en el calendario, obtener fecha
 		self.ventMain.buttonFechaAltaCliente.clicked.connect(self.on_abrir_calendario)
@@ -173,24 +174,41 @@ class Main(QtWidgets.QMainWindow):
 			print(f"Error guardando: {error}")
 			aviso.error("Error guardando", "No se han podido guardar los datos")
 
-	def on_borrar_cliente(self):
+	def on_borrar_coche(self):
+		from controladores.main import cargar
+		try:
+			matricula = self.ventMain.txtMatricula.text()
+			borrar = QMessageBox.question(None, 'Borrar vehículo',
+										  f"¿Estás seguro de borrar el vehículo {matricula}?",
+										  QMessageBox.StandardButton.Yes |
+										  QMessageBox.StandardButton.No,
+										  QMessageBox.StandardButton.No)
+
+			if borrar == QMessageBox.StandardButton.Yes:
+				if self.bbdd.eliminar_vehiculo(matricula):
+					self.limpiar()
+					cargar.tabla_vehiculos(self)
+					aviso.info("Borrado correctamente", "Se ha borrado el vehículo correctamente")
+		except Exception as error:
+			print(f"Error borrando coche: {error}")
+
+	def on_borrar_cliente_coche(self):
 		from controladores.main import cargar
 		try:
 			dni = self.ventMain.txtDni.text()
-			borrar = QMessageBox.question(None, 'Borrar cliente',
-										  f"¿Estás seguro de borrar el cliente {dni}?",
-										  QMessageBox.StandardButton.Yes | QMessageBox.StandardButton.No,
+			borrar = QMessageBox.question(None, 'Borrar vehículo',
+										  f"¿Estás seguro de borrar al cliente {dni}?",
+										  QMessageBox.StandardButton.Yes |
+										  QMessageBox.StandardButton.No,
 										  QMessageBox.StandardButton.No)
+
 			if borrar == QMessageBox.StandardButton.Yes:
-				if self.bbdd.eliminar_cliente(dni):
-					print("Cliente eliminado")
+				if self.bbdd.eliminar_cliente_coches(dni):
 					self.limpiar()
-					print("Formulario borrado")
 					cargar.tabla_vehiculos(self)
-					print("Vehículos cargados")
-					aviso.info("Borrado correctamente", "Se ha borrado el cliente correctamente")
+					aviso.info("Borrado correctamente", "Se ha borrado el cliente y sus vehículos correctamente")
 		except Exception as error:
-			print(f"Error borrando cliente: {error}")
+			print(f"Error borrando cliente y coches: {error}")
 
 	def on_abrir_calendario(self):
 		self.dialogCalendar.show()

@@ -1013,8 +1013,16 @@
     <addaction name="actionExportarExcel"/>
     <addaction name="actionImportarExcel"/>
    </widget>
+   <widget class="QMenu" name="menuAcciones">
+    <property name="title">
+     <string>Acciones</string>
+    </property>
+    <addaction name="actionCambiarPropietario"/>
+    <addaction name="actionBajaCliente"/>
+   </widget>
    <addaction name="menuArchivo"/>
    <addaction name="menuHerramientas"/>
+   <addaction name="menuAcciones"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolbar">
@@ -1086,6 +1094,15 @@
    </property>
    <property name="text">
     <string>Cambiar propietario</string>
+   </property>
+  </action>
+  <action name="actionBajaCliente">
+   <property name="icon">
+    <iconset>
+     <normaloff>../img/borrar-cliente.png</normaloff>../img/borrar-cliente.png</iconset>
+   </property>
+   <property name="text">
+    <string>Dar de baja cliente</string>
    </property>
   </action>
  </widget>
