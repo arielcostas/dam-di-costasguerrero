@@ -66,13 +66,7 @@
           <property name="minimumSize">
            <size>
             <width>180</width>
-            <height>20</height>
-           </size>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>180</width>
-            <height>20</height>
+            <height>30</height>
            </size>
           </property>
           <property name="font">
@@ -552,10 +546,10 @@
         </item>
         <item>
          <widget class="QLabel" name="lblTituloVehiculo">
-          <property name="maximumSize">
+          <property name="minimumSize">
            <size>
-            <width>200</width>
-            <height>25</height>
+            <width>180</width>
+            <height>30</height>
            </size>
           </property>
           <property name="font">
