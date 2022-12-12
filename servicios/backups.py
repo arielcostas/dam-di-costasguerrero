@@ -25,34 +25,39 @@ class ServicioBackup:
 		zipf.close()
 		return True
 
-	def exportar_excel(self, ruta: str, clientes: bool, coches: bool) -> bool:
+	def exportar_excel(self, ruta: str, clientes: bool, coches: bool, incluir_historico: bool = False) -> bool:
 		try:
 			wb = openpyxl.Workbook()
 			wb.remove_sheet(wb.active)
 			if clientes:
-				self.exportar_clientes_excel(wb)
+				self.exportar_clientes_excel(wb, incluir_historico)
 			if coches:
-				self.exportar_coches_excel(wb)
+				self.exportar_coches_excel(wb, incluir_historico)
 			wb.save(ruta)
 		except Exception as error:
 			print("Error al exportar a excel: ", error)
 			return False
 
 	@staticmethod
-	def exportar_clientes_excel(wb: openpyxl.Workbook) -> bool:
+	def exportar_clientes_excel(wb: openpyxl.Workbook, historico: bool) -> bool:
 		try:
 			hoja_clientes: Worksheet = wb.create_sheet("clientes")
 			elementos = ["DNI", "Nombre", "Fecha alta", "Direccion", "Provincia", "Municipio",
-						 "Admite efectivo", "Admite factura", "Admite transferencia"]
+						 "Admite efectivo", "Admite factura", "Admite transferencia",
+						 "Fecha de baja"]
 			hoja_clientes.append(elementos)
 
 			query = QtSql.QSqlQuery()
-			query.prepare("SELECT * FROM clientes WHERE fecha_baja IS NULL ORDER BY alta")
+			if historico:
+				query.exec("SELECT * FROM clientes")
+			else:
+				query.prepare("SELECT * FROM clientes WHERE fecha_baja IS NULL ORDER BY alta")
+
 			if query.exec():
-				fila = 1
+				fila = 2
 				while query.next():
-					for i in range(0, 9):
-						hoja_clientes.cell(column=i, row=fila, value=query.value(i))
+					for i in range(1, 11):
+						hoja_clientes.cell(column=i, row=fila, value=query.value(i-1))
 					fila += 1
 
 			return True
@@ -61,19 +66,23 @@ class ServicioBackup:
 			return False
 
 	@staticmethod
-	def exportar_coches_excel(wb: openpyxl.Workbook) -> bool:
+	def exportar_coches_excel(wb: openpyxl.Workbook, historico: bool) -> bool:
 		try:
 			hoja_coches: Worksheet = wb.create_sheet("coches")
 
-			hoja_coches.append(["Matricula", "DNI", "Marca", "Modelo", "Motor"])
+			hoja_coches.append(["Matricula", "DNI", "Marca", "Modelo", "Motor", "Fecha de baja"])
 
 			query = QtSql.QSqlQuery()
-			query.prepare("SELECT * FROM coches WHERE fecha_baja IS NULL ORDER BY matricula")
+			if historico:
+				query.exec("SELECT * FROM vehiculos")
+			else:
+				query.prepare("SELECT * FROM coches WHERE fecha_baja IS NULL ORDER BY matricula")
+
 			if query.exec():
-				fila = 1
+				fila = 2
 				while query.next():
-					for i in range(0, 5):
-						hoja_coches.cell(column=i, row=fila, value=query.value(i))
+					for i in range(1, 7):
+						hoja_coches.cell(column=i, row=fila, value=query.value(i-1))
 					fila += 1
 			return True
 		except Exception as error:

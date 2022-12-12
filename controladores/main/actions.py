@@ -67,7 +67,8 @@ def exportar_excel(self: Main):
 				self.servicioBackup.exportar_excel(
 					directorio[0],
 					dialogo_exportacion.ui.checkboxClientes.isChecked(),
-					dialogo_exportacion.ui.checkboxCoches.isChecked()
+					dialogo_exportacion.ui.checkboxCoches.isChecked(),
+					dialogo_exportacion.ui.checkboxIncluirHistorico.isChecked()
 				)
 				aviso.info("Aviso", "Se ha exportado a Excel correctamente")
 	except Exception as error:

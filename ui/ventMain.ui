@@ -731,6 +731,9 @@
           </item>
           <item>
            <widget class="QPushButton" name="buttonBuscarVehiculo">
+            <property name="enabled">
+             <bool>false</bool>
+            </property>
             <property name="minimumSize">
              <size>
               <width>24</width>
