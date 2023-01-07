@@ -2,7 +2,7 @@ from datetime import datetime
 
 from PyQt6 import QtSql
 
-from modelos import Cliente
+from bbdd.modelos import Cliente
 
 
 class ClienteRepository:
@@ -72,3 +72,24 @@ class ClienteRepository:
 		query.bindValue(':fecha_baja', datetime.now().strftime("%Y-%m-%d"))
 		query.bindValue(':dni', dni)
 		return query.exec()
+
+	@staticmethod
+	def insert(cliente: Cliente) -> bool:
+		try:
+			query = QtSql.QSqlQuery()
+			query.prepare(
+				"INSERT OR REPLACE INTO clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)"
+			)
+			query.addBindValue(cliente.dni)
+			query.addBindValue(cliente.nombre)
+			query.addBindValue(cliente.alta)
+			query.addBindValue(cliente.direccion)
+			query.addBindValue(cliente.provincia)
+			query.addBindValue(cliente.municipio)
+			query.addBindValue(int(cliente.efectivo))
+			query.addBindValue(int(cliente.factura))
+			query.addBindValue(int(cliente.transferencia))
+			print(query.lastError().text())
+			return query.exec()
+		except Exception as error:
+			print(f"Error guardando cliente: {error}")

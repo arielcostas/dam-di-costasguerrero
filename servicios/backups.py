@@ -1,12 +1,11 @@
 import zipfile
-from datetime import datetime
 
 import openpyxl
 from PyQt6 import QtSql
 from openpyxl.workbook import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
-from modelos import Vehiculo, Cliente
+from bbdd.modelos import Vehiculo, Cliente
 from servicios import dni
 
 

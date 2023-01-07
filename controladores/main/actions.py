@@ -1,7 +1,6 @@
 from datetime import datetime
 
-import conexion
-from bbdd import ClienteRepository
+from bbdd import ClienteRepository, conexion, VehiculoRepository
 from controladores.dialogos.cambiarpropietario import DialogoCambiarPropietario
 from controladores.main import cargar
 from controladores.modales import aviso
@@ -40,8 +39,7 @@ def importar_copia(self: Main):
 			"Archivo comprimido en ZIP (*.zip)"
 		)
 		if directorio and self.servicioBackup.restaurar_copia(directorio):
-			self.bbdd = conexion.Conexion()
-			self.bbdd.iniciar_conexion()
+			conexion.abrir()
 			import cargar
 			cargar.tabla_vehiculos(self)
 
@@ -123,7 +121,7 @@ def importar_excel(self: Main):
 def cambiar_propietario(self: Main):
 	try:
 		clientes = ClienteRepository().get_all()
-		vehiculos = self.bbdd.cargar_vehiculos_incluye_eliminados()
+		vehiculos = VehiculoRepository.get_all(True)
 		dcp = DialogoCambiarPropietario(clientes, vehiculos)
 		if dcp.exec():
 			matricula = dcp.ui.vehiculo.currentText().split(" (")[0]

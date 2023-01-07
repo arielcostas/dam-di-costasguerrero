@@ -1,10 +1,9 @@
 from PyQt6.QtWidgets import QMessageBox
 
-import conexion
-from bbdd import ClienteRepository
+from bbdd import ClienteRepository, conexion, VehiculoRepository
 from controladores.modales import aviso
 from controladores.dialogos import DialogoCalendario
-from modelos import Cliente, Vehiculo
+from bbdd.modelos import Cliente, Vehiculo
 from servicios import ServicioBackup, validar as validar_dni, ServicioPropietarios
 from ui.ventMain import *
 
@@ -62,8 +61,7 @@ class Main(QtWidgets.QMainWindow):
 
 		self.ventMain.txtMatricula.editingFinished.connect(self.mayuscula_palabra)
 
-		self.bbdd = conexion.Conexion()
-		self.bbdd.iniciar_conexion()
+		conexion.abrir()
 		cargar.lista_provincias(self)
 		cargar.tabla_vehiculos(self)
 
@@ -105,7 +103,7 @@ class Main(QtWidgets.QMainWindow):
 
 	def cargar_datos_vehiculo(self, matricula: str):
 		try:
-			vehiculo = self.bbdd.cargar_vehiculo(matricula)
+			vehiculo = VehiculoRepository.get_by_id(matricula)
 			self.ventMain.txtMatricula.setText(vehiculo.matricula)
 			self.ventMain.txtMatricula.setDisabled(True)
 			self.ventMain.txtMarca.setText(vehiculo.marca)
@@ -162,7 +160,7 @@ class Main(QtWidgets.QMainWindow):
 				aviso.error("Error guardando", "DNI no válido")
 				return
 
-			guardado = self.bbdd.guardar_cliente(cliente) and self.bbdd.guardar_vehiculo(vehiculo)
+			guardado = ClienteRepository.insert(cliente) and VehiculoRepository.insert(vehiculo)
 
 			if guardado:
 				self.limpiar()
@@ -182,6 +180,7 @@ class Main(QtWidgets.QMainWindow):
 		from controladores.main import cargar
 		try:
 			matricula = self.ventMain.txtMatricula.text()
+			# TODO: Mover a otro sitio
 			borrar = QMessageBox.question(None, 'Borrar vehículo',
 										  f"¿Estás seguro de borrar el vehículo {matricula}?",
 										  QMessageBox.StandardButton.Yes |
@@ -189,7 +188,7 @@ class Main(QtWidgets.QMainWindow):
 										  QMessageBox.StandardButton.No)
 
 			if borrar == QMessageBox.StandardButton.Yes:
-				if self.bbdd.eliminar_vehiculo(matricula):
+				if VehiculoRepository.delete(matricula):
 					self.limpiar()
 					cargar.tabla_vehiculos(self)
 					aviso.info("Borrado correctamente", "Se ha borrado el vehículo correctamente")
@@ -200,14 +199,18 @@ class Main(QtWidgets.QMainWindow):
 		from controladores.main import cargar
 		try:
 			dni = self.ventMain.txtDni.text()
+			# TODO: Mover a otro sitio
 			borrar = QMessageBox.question(None, 'Borrar vehículo',
-										  f"¿Estás seguro de borrar al cliente {dni}?",
+										  f"¿Estás seguro de borrar al cliente {dni} y todos sus vehículos?",
 										  QMessageBox.StandardButton.Yes |
 										  QMessageBox.StandardButton.No,
 										  QMessageBox.StandardButton.No)
 
 			if borrar == QMessageBox.StandardButton.Yes:
-				if self.bbdd.eliminar_cliente_coches(dni):
+				q1e = VehiculoRepository.delete_by_dni(dni)
+				q2e = ClienteRepository.delete_by_dni(dni)
+
+				if q1e and q2e:
 					self.limpiar()
 					cargar.tabla_vehiculos(self)
 					aviso.info("Borrado correctamente", "Se ha borrado el cliente y sus vehículos correctamente")

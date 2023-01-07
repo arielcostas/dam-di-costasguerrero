@@ -2,7 +2,7 @@ from datetime import datetime
 
 from PyQt6 import QtSql
 
-from modelos.servicio import Servicio
+from bbdd.modelos import Servicio
 
 
 class ServicioRepository:

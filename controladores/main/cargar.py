@@ -1,6 +1,6 @@
 from PyQt6 import QtWidgets
 
-from bbdd import LugaresRepository
+from bbdd import LugaresRepository, VehiculoRepository
 from controladores.ventmain import Main
 
 
@@ -14,7 +14,7 @@ def lista_provincias(self: Main):
 def lista_municipios(self: Main):
 	self.ventMain.comboMunicipioCliente.clear()
 	provincia = self.ventMain.comboProvinciaCliente.currentText()
-	datos = self.bbdd.cargar_municipios(provincia)
+	datos = LugaresRepository.get_municipios(provincia)
 	for i in datos:
 		self.ventMain.comboMunicipioCliente.addItem(i)
 
@@ -23,7 +23,7 @@ def tabla_vehiculos(self: Main):
 	historico = self.ventMain.checkMostrarHistorico.isChecked()
 	try:
 		self.ventMain.tablaClientes.clearContents()
-		datos = self.bbdd.cargar_vehiculos(historico)
+		datos = VehiculoRepository.get_all(historico)
 		self.ventMain.tablaClientes.setRowCount(len(datos))
 		for idx, el in enumerate(datos):
 			self.ventMain.tablaClientes \

@@ -1,15 +1,18 @@
 from datetime import datetime
-from typing import List
 
 from PyQt6 import QtSql
 
-from modelos import Vehiculo
-from modelos.servicio import Servicio
+from bbdd.modelos import Vehiculo
 
 
 class VehiculoRepository:
 	@staticmethod
-	def get_all(historico: bool)-> list[Vehiculo]:
+	def get_all(historico: bool = False)-> list[Vehiculo]:
+		"""
+		Recupera todos los vehiculos de la base de datos
+		:param historico: Si es True, recupera todos los vehiculos, si es False, solo los activos
+		:return: Una lista con todos los vehiculos
+		"""
 		try:
 			query = QtSql.QSqlQuery()
 			if historico:
@@ -34,10 +37,15 @@ class VehiculoRepository:
 			print(f"Error recuperando vehiculos: {error}")
 
 	@staticmethod
-	def get_by_id(sid: str) -> Vehiculo:
+	def get_by_id(matricula: str) -> Vehiculo:
+		"""
+		Recupera un vehiculo de la base de datos
+		:param matricula: La matricula del vehiculo a recuperar
+		:return: El vehiculo recuperado o None si no se ha encontrado
+		"""
 		query = QtSql.QSqlQuery()
-		query.prepare("SELECT * FROM servicios WHERE id = ? LIMIT 1")
-		query.addBindValue(sid)
+		query.prepare("SELECT * FROM coches WHERE matricula = ? LIMIT 1")
+		query.addBindValue(matricula)
 
 		if query.exec():
 			query.next()
@@ -49,4 +57,43 @@ class VehiculoRepository:
 				query.value(4),
 				query.value(5),
 			)
+		else:
+			return None
 
+	@staticmethod
+	def insert(vehiculo: Vehiculo) -> bool:
+		try:
+			query = QtSql.QSqlQuery()
+			query.prepare("INSERT OR REPLACE INTO coches VALUES (?,?,?,?,?, NULL)")
+			query.addBindValue(vehiculo.matricula)
+			query.addBindValue(vehiculo.dni)
+			query.addBindValue(vehiculo.marca)
+			query.addBindValue(vehiculo.modelo)
+			query.addBindValue(vehiculo.motor)
+
+			return query.exec()
+		except Exception as error:
+			print(f"Error guardando vehiculo: {error}")
+
+	@staticmethod
+	def delete(matricula: str) -> bool:
+		try:
+			query = QtSql.QSqlQuery()
+			query.prepare("UPDATE coches SET fecha_baja = CURRENT_TIMESTAMP WHERE matricula = ?")
+			query.addBindValue(matricula)
+
+			return query.exec()
+		except Exception as error:
+			print(f"Error eliminando vehiculo: {error}")
+
+	@staticmethod
+	def delete_by_dni(dni: str) -> bool:
+		try:
+			query = QtSql.QSqlQuery()
+			query.prepare("UPDATE coches SET fecha_baja=:fecha_baja WHERE dnicli = :dni")
+			query.bindValue(':fecha_baja', datetime.now().strftime("%Y-%m-%d"))
+			query.bindValue(':dni', dni)
+
+			return query.exec()
+		except Exception as error:
+			print(f"Error eliminando vehiculos: {error}")

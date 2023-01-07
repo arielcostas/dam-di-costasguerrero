@@ -9,10 +9,8 @@ taller. Los clientes pueden tener uno o varios vehículos.
 
 ## Requisitos
 
-- Python 3.10 o superior
+- Python 3.11
 - pip
-- Las dependencias del proyecto, que se pueden instalar con `pip install -r requirements.txt`
-- Un editor de texto o IDE para Python (recomendado PyCharm)
 
 ## Ejecución
 
@@ -21,7 +19,7 @@ taller. Los clientes pueden tener uno o varios vehículos.
 
 2. Ejecute `python build.py` para compilar el programa para su equipo.
 
-3. Ejecute `python init.py` para ejecutar el programa.
+3. Ejecute `python main.py` para ejecutar el programa.
 
 Los pasos 1 y 2 solo son necesarios la primera vez que se ejecuta el programa tras su obtención (ya
 sea clonando el repositorio o distribuído como ZIP).

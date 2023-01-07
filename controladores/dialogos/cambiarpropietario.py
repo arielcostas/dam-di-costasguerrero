@@ -1,6 +1,6 @@
 from PyQt6 import QtWidgets
 
-from modelos import Cliente, Vehiculo
+from bbdd.modelos import Cliente, Vehiculo
 from ui.dlgCambiarPropietario import Ui_dialogoCambiarPropietario
 
 

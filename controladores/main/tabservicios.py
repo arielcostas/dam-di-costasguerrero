@@ -3,7 +3,7 @@ from PyQt6 import QtWidgets
 from bbdd.servicio import ServicioRepository
 from controladores import modales
 from controladores.ventmain import Main
-from modelos.servicio import Servicio
+from bbdd.modelos import Servicio
 
 NUEVO_PRODUCTO_ID = "NUEVO"
 
