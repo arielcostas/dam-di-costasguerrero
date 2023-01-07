@@ -82,7 +82,7 @@ class ClienteRepository:
 			)
 			query.addBindValue(cliente.dni)
 			query.addBindValue(cliente.nombre)
-			query.addBindValue(cliente.alta)
+			query.addBindValue(cliente.fecha_alta)
 			query.addBindValue(cliente.direccion)
 			query.addBindValue(cliente.provincia)
 			query.addBindValue(cliente.municipio)

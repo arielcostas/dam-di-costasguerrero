@@ -8,7 +8,7 @@ class CuadroPreguntaSiNo:
 		self.mensaje = mensaje
 
 	def mostrar(self) -> bool:
-		box = QtWidgets.QMessageBox()
-
-		result = QtWidgets.QMessageBox.question(None, self.titulo, self.mensaje) == QtWidgets.QMessageBox.StandardButton.Yes
-		return result
+		return QtWidgets.QMessageBox.question(
+			None, self.titulo,
+			self.mensaje
+		) == QtWidgets.QMessageBox.StandardButton.Yes

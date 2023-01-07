@@ -1,11 +1,11 @@
 from datetime import datetime
 
 from PyQt6.QtCore import QDate
-from PyQt6.QtWidgets import QMessageBox
 
 from bbdd import ClienteRepository, conexion, VehiculoRepository
-from controladores.modales import aviso
 from bbdd.modelos import Cliente, Vehiculo
+from controladores import modales
+from controladores.modales import aviso
 from servicios import ServicioBackup, validar as validar_dni, ServicioPropietarios
 from ui.ventMain import *
 
@@ -20,11 +20,13 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.setupUi(self)
 
 		# Guarda todos los campos de texto para uso en otros métodos
-		self.campos_texto = [self.ventMain.txtDni, self.ventMain.txtNombre,
-							 self.ventMain.txtDireccionCliente,
-							 self.ventMain.txtMatricula,
-							 self.ventMain.txtMarca,
-							 self.ventMain.txtModelo]
+		self.campos_texto = [
+			self.ventMain.txtDni, self.ventMain.txtNombre,
+			self.ventMain.txtDireccionCliente,
+			self.ventMain.txtMatricula,
+			self.ventMain.txtMarca,
+			self.ventMain.txtModelo
+		]
 
 		# Botones de la barra de herramientas
 		from .main import actions, cargar, tabservicios
@@ -34,7 +36,8 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.actionRestaurarCopia.triggered.connect(lambda: actions.importar_copia(self))
 		self.ventMain.actionExportarExcel.triggered.connect(lambda: actions.exportar_excel(self))
 		self.ventMain.actionImportarExcel.triggered.connect(lambda: actions.importar_excel(self))
-		self.ventMain.actionCambiarPropietario.triggered.connect(lambda: actions.cambiar_propietario(self))
+		self.ventMain.actionCambiarPropietario.triggered.connect(
+			lambda: actions.cambiar_propietario(self))
 		self.ventMain.actionBajaCliente.triggered.connect(self.on_borrar_cliente_coche)
 
 		# Se pulsa enter en DNI
@@ -49,9 +52,11 @@ class Main(QtWidgets.QMainWindow):
 		self.limpiar()
 
 		# Poner mayúsculas a todos
-		self.camposMayusculas = [self.ventMain.txtMarca, self.ventMain.txtModelo,
-								 self.ventMain.txtNombre, self.ventMain.txtDireccionCliente,
-								 self.ventMain.txtDni]
+		self.camposMayusculas = [
+			self.ventMain.txtMarca, self.ventMain.txtModelo,
+			self.ventMain.txtNombre, self.ventMain.txtDireccionCliente,
+			self.ventMain.txtDni
+		]
 
 		for campo in self.camposMayusculas:
 			campo.editingFinished.connect(self.mayuscula_palabra)
@@ -69,11 +74,10 @@ class Main(QtWidgets.QMainWindow):
 		# Al selecionar una fila de la tabla
 		self.ventMain.tablaClientes.currentItemChanged.connect(self.on_item_seleccionado)
 
-		self.ventMain.checkMostrarHistorico.stateChanged.connect(lambda: cargar.tabla_vehiculos(self))
+		self.ventMain.checkMostrarHistorico.stateChanged.connect(
+			lambda: cargar.tabla_vehiculos(self))
 
 		tabservicios.init_tab(self)
-
-
 
 	def on_item_seleccionado(self, item: QtWidgets.QTableWidgetItem):
 		if item is not None:
@@ -89,7 +93,9 @@ class Main(QtWidgets.QMainWindow):
 			self.ventMain.txtDni.setDisabled(True)
 			self.ventMain.txtNombre.setText(cliente.nombre)
 			self.ventMain.txtDireccionCliente.setText(cliente.direccion)
-			self.ventMain.txtFechaAltaCliente.setText(cliente.alta)
+			self.ventMain.txtFechaAlta.setDate(
+				QDate.fromString(cliente.fecha_alta, 'yyyy-MM-dd')
+			)
 			self.ventMain.comboProvinciaCliente.setCurrentText(cliente.provincia)
 			self.ventMain.comboMunicipioCliente.setCurrentText(cliente.municipio)
 			self.ventMain.checkEfectivo.setChecked(cliente.efectivo == 1)
@@ -177,14 +183,13 @@ class Main(QtWidgets.QMainWindow):
 		from controladores.main import cargar
 		try:
 			matricula = self.ventMain.txtMatricula.text()
-			# TODO: Mover a otro sitio
-			borrar = QMessageBox.question(None, 'Borrar vehículo',
-										  f"¿Estás seguro de borrar el vehículo {matricula}?",
-										  QMessageBox.StandardButton.Yes |
-										  QMessageBox.StandardButton.No,
-										  QMessageBox.StandardButton.No)
+			pregunta = modales.CuadroPreguntaSiNo(
+				"Borrar vehículo",
+				f"¿Estás seguro de que quieres borrar el vehículo {matricula}?",
+			)
+			borrar = pregunta.mostrar()
 
-			if borrar == QMessageBox.StandardButton.Yes:
+			if borrar:
 				if VehiculoRepository.delete(matricula):
 					self.limpiar()
 					cargar.tabla_vehiculos(self)
@@ -196,21 +201,21 @@ class Main(QtWidgets.QMainWindow):
 		from controladores.main import cargar
 		try:
 			dni = self.ventMain.txtDni.text()
-			# TODO: Mover a otro sitio
-			borrar = QMessageBox.question(None, 'Borrar vehículo',
-										  f"¿Estás seguro de borrar al cliente {dni} y todos sus vehículos?",
-										  QMessageBox.StandardButton.Yes |
-										  QMessageBox.StandardButton.No,
-										  QMessageBox.StandardButton.No)
+			pregunta = modales.CuadroPreguntaSiNo(
+				"Borrar cliente",
+				f"¿Estás seguro de que quieres borrar al cliente {dni} y todos sus vehículos?",
+			)
+			borrar = pregunta.mostrar()
 
-			if borrar == QMessageBox.StandardButton.Yes:
+			if borrar:
 				q1e = VehiculoRepository.delete_by_dni(dni)
 				q2e = ClienteRepository.delete_by_dni(dni)
 
 				if q1e and q2e:
 					self.limpiar()
 					cargar.tabla_vehiculos(self)
-					aviso.info("Borrado correctamente", "Se ha borrado el cliente y sus vehículos correctamente")
+					aviso.info("Borrado correctamente",
+							   "Se ha borrado el cliente y sus vehículos correctamente")
 		except Exception as error:
 			print(f"Error borrando cliente y coches: {error}")
 
@@ -242,7 +247,6 @@ class Main(QtWidgets.QMainWindow):
 			self.ventMain.txtFechaAlta.setDate(
 				QDate.fromString(datetime.now().strftime("%d/%m/%Y"), "dd/MM/yyyy")
 			)
-
 
 			for btn in self.ventMain.buttonGroupMotorizacion.buttons():
 				btn.setChecked(False)

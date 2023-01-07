@@ -174,7 +174,7 @@ class ServicioBackup:
 				query.prepare("INSERT INTO clientes VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, NULL)")
 				query.addBindValue(fila.dni)
 				query.addBindValue(fila.nombre)
-				query.addBindValue(fila.alta.strftime("%Y-%m-%d"))
+				query.addBindValue(fila.fecha_alta.strftime("%Y-%m-%d"))
 				query.addBindValue(fila.direccion)
 				query.addBindValue(fila.provincia)
 				query.addBindValue(fila.municipio)
