@@ -1,8 +1,10 @@
+from datetime import datetime
+
+from PyQt6.QtCore import QDate
 from PyQt6.QtWidgets import QMessageBox
 
 from bbdd import ClienteRepository, conexion, VehiculoRepository
 from controladores.modales import aviso
-from controladores.dialogos import DialogoCalendario
 from bbdd.modelos import Cliente, Vehiculo
 from servicios import ServicioBackup, validar as validar_dni, ServicioPropietarios
 from ui.ventMain import *
@@ -17,12 +19,10 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain = Ui_ventMain()
 		self.ventMain.setupUi(self)
 
-		self.dialogCalendar = DialogoCalendario()
-
 		# Guarda todos los campos de texto para uso en otros métodos
 		self.campos_texto = [self.ventMain.txtDni, self.ventMain.txtNombre,
 							 self.ventMain.txtDireccionCliente,
-							 self.ventMain.txtFechaAltaCliente, self.ventMain.txtMatricula,
+							 self.ventMain.txtMatricula,
 							 self.ventMain.txtMarca,
 							 self.ventMain.txtModelo]
 
@@ -44,12 +44,9 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.buttonGuardarCliente.clicked.connect(self.on_guardar_cliente)
 		self.ventMain.buttonEliminarCliente.clicked.connect(self.on_borrar_coche)
 
-		# Al seleccionar en el calendario, obtener fecha
-		self.ventMain.buttonFechaAltaCliente.clicked.connect(self.on_abrir_calendario)
-		self.dialogCalendar.dialogCalendar.calendarWidget.clicked.connect(self.on_seleccionar_fecha)
-
 		# Limpiar
 		self.ventMain.buttonLimpiarVehiculo.clicked.connect(self.limpiar)
+		self.limpiar()
 
 		# Poner mayúsculas a todos
 		self.camposMayusculas = [self.ventMain.txtMarca, self.ventMain.txtModelo,
@@ -242,6 +239,10 @@ class Main(QtWidgets.QMainWindow):
 			self.ventMain.txtMatricula.setDisabled(False)
 			self.ventMain.txtDni.setDisabled(False)
 			self.ventMain.comboProvinciaCliente.setCurrentIndex(0)
+			self.ventMain.txtFechaAlta.setDate(
+				QDate.fromString(datetime.now().strftime("%d/%m/%Y"), "dd/MM/yyyy")
+			)
+
 
 			for btn in self.ventMain.buttonGroupMotorizacion.buttons():
 				btn.setChecked(False)
