@@ -2,10 +2,11 @@
 Script para limpiar y compilar el proyecto
 """
 
-import os, shutil
+import os
+import shutil
 import sqlite3
 
-from PyQt6 import uic, QtSql
+from PyQt6 import uic
 
 
 def limpiar_pycache():

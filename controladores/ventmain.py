@@ -6,7 +6,7 @@ from bbdd import ClienteRepository, conexion, VehiculoRepository
 from bbdd.modelos import Cliente, Vehiculo
 from controladores import modales
 from controladores.modales import aviso
-from servicios import ServicioBackup, validar as validar_dni, ServicioPropietarios
+from negocio import ServicioBackup, validar as validar_dni, ServicioPropietarios
 from ui.ventMain import *
 
 
@@ -39,6 +39,7 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.actionCambiarPropietario.triggered.connect(
 			lambda: actions.cambiar_propietario(self))
 		self.ventMain.actionBajaCliente.triggered.connect(self.on_borrar_cliente_coche)
+		self.ventMain.actionInformeClientes.triggered.connect(lambda: actions.informe_cliente(self))
 
 		# Se pulsa enter en DNI
 		self.ventMain.txtDni.editingFinished.connect(self.on_dni_comprobar)

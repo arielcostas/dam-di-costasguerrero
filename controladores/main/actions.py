@@ -7,6 +7,7 @@ from controladores.modales import aviso
 from controladores.dialogos import DialogoAbrir, DialogoSalir, DialogoTipoExportacion, \
 	DialogoTipoImportacion
 from controladores.ventmain import Main
+from negocio.informes import Informes
 
 
 def salir():
@@ -136,3 +137,19 @@ def cambiar_propietario(self: Main):
 
 	except Exception as error:
 		print(f"Error cambiando propietario: {error}")
+
+
+def informe_cliente(self):
+	clientes = ClienteRepository.get_all(False)
+
+	dialogo_abrir = DialogoAbrir()
+	directorio = dialogo_abrir.getSaveFileName(
+		self, "Informe de clientes", "",
+		"(*.pdf)"
+	)
+	if directorio[0]:
+		ruta = directorio[0]
+	else:
+		return
+
+	Informes.informe_clientes(clientes, ruta)

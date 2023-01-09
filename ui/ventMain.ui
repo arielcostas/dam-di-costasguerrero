@@ -244,7 +244,7 @@
            <widget class="QDateEdit" name="txtFechaAlta">
             <property name="dateTime">
              <datetime>
-              <hour>23</hour>
+              <hour>22</hour>
               <minute>0</minute>
               <second>0</second>
               <year>1999</year>
@@ -1229,9 +1229,16 @@
     <addaction name="actionCambiarPropietario"/>
     <addaction name="actionBajaCliente"/>
    </widget>
+   <widget class="QMenu" name="menuInformes">
+    <property name="title">
+     <string>Informes</string>
+    </property>
+    <addaction name="actionInformeClientes"/>
+   </widget>
    <addaction name="menuArchivo"/>
    <addaction name="menuHerramientas"/>
    <addaction name="menuAcciones"/>
+   <addaction name="menuInformes"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolbar">
@@ -1312,6 +1319,11 @@
    </property>
    <property name="text">
     <string>Dar de baja cliente</string>
+   </property>
+  </action>
+  <action name="actionInformeClientes">
+   <property name="text">
+    <string>Listado de clientes</string>
    </property>
   </action>
  </widget>

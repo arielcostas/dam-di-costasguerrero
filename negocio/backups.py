@@ -6,7 +6,7 @@ from openpyxl.workbook import Workbook
 from openpyxl.worksheet.worksheet import Worksheet
 
 from bbdd.modelos import Vehiculo, Cliente
-from servicios import dni
+from negocio import dni
 
 
 class ServicioBackup:
