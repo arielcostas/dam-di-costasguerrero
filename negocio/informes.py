@@ -1,11 +1,7 @@
 from datetime import datetime
 
-from reportlab.graphics.shapes import Line, Drawing
-from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
-from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.pdfgen import canvas
-from reportlab.platypus import Table, SimpleDocTemplate, Paragraph
 
 from bbdd import Cliente
 
@@ -29,6 +25,7 @@ class Informes:
 			doc.setPageSize(A4)
 
 			Informes.cabecera(doc)
+			Informes.pie(doc)
 
 			doc.setFont("Helvetica-Bold", 12)
 			doc.drawString(50, 720, "Informe de clientes")
@@ -47,6 +44,7 @@ class Informes:
 				if h < 80:
 					doc.showPage()
 					Informes.cabecera(doc)
+					Informes.pie(doc)
 					h = 670
 				doc.drawString(50, h, cli.dni)
 				doc.drawString(120, h, cli.nombre)
@@ -62,13 +60,22 @@ class Informes:
 
 	@staticmethod
 	def cabecera(doc: canvas.Canvas):
-		doc.setFont("Helvetica", 12)
+		doc.setFont("Helvetica-Bold", 13)
 		doc.line(30, 820, 570, 820)
-		doc.drawString(50, 805, "Talleres de Teis, S.L.")
+		doc.drawString(50, 795, "Talleres de Teis, S.L.")
 		doc.setFont("Helvetica", 7)
 		doc.drawString(50, 785, "CIF: 12345678A")
 		doc.drawString(50, 775, "Avenida de Galicia, 101")
 		doc.drawString(50, 765, "36208 Vigo - España")
 		doc.drawString(50, 755, "Teléfono: 986 986 986")
 		doc.drawString(50, 745, "a21arielcg@iesteis.es")
+		doc.drawImage("img/logo_fondo.png", 510, 750, 50, 50)
 		doc.line(30, 740, 570, 740)
+
+	@staticmethod
+	def pie(doc: canvas.Canvas):
+		doc.setFont("Helvetica", 7)
+		doc.line(30, 50, 570, 50)
+		doc.drawString(50, 35, "Talleres de Teis, S.L.")
+		doc.drawString(280, 35, "Página %d" % doc.getPageNumber())
+		doc.drawString(500, 35, "Fecha: %s" % datetime.now().strftime("%d/%m/%Y"))
