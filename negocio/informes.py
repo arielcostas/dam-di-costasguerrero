@@ -46,7 +46,7 @@ class Informes:
 					Informes.cabecera(doc)
 					Informes.pie(doc)
 					h = 670
-				doc.drawString(50, h, cli.dni)
+				doc.drawString(50, h, "*****" + cli.dni[-4:-1] + "*")
 				doc.drawString(120, h, cli.nombre)
 				doc.drawString(220, h, cli.direccion)
 				doc.drawString(330, h, cli.municipio)
