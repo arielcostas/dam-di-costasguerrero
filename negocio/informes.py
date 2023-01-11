@@ -3,23 +3,12 @@ from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
-from bbdd import Cliente
+from bbdd import Cliente, Vehiculo
 
 
 class Informes:
 	@staticmethod
 	def informe_clientes(clientes: list[Cliente], ruta: str) -> bool:
-		data = [["DNI", "Nombre", "Fecha de alta", "Efectivo", "Factura", "Transferencia"]]
-		for cliente in clientes:
-			data.append([
-				cliente.dni,
-				cliente.nombre,
-				cliente.fecha_alta,
-				"Si" if cliente.efectivo else "No",
-				"Si" if cliente.factura else "No",
-				"Si" if cliente.transferencia else "No"
-			])
-
 		try:
 			doc = canvas.Canvas(ruta)
 			doc.setPageSize(A4)
@@ -27,30 +16,80 @@ class Informes:
 			Informes.cabecera(doc)
 			Informes.pie(doc)
 
-			doc.setFont("Helvetica-Bold", 12)
-			doc.drawString(50, 720, "Informe de clientes")
-			doc.setFont("Helvetica", 12)
+			def cabecera_tabla():
+				doc.setFont("Helvetica-Bold", 12)
+				doc.drawString(50, 720, "Informe de clientes")
+				doc.setFont("Helvetica", 12)
 
-			doc.line(30, 700, 570, 700)
-			doc.drawString(50, 685, "DNI")
-			doc.drawString(120, 685, "Nombre")
-			doc.drawString(220, 685, "Dirección")
-			doc.drawString(330, 685, "Municipio")
-			doc.drawString(410, 685, "Provincia")
-			doc.line(30, 680, 570, 680)
+				doc.line(30, 700, 570, 700)
+				doc.drawString(50, 685, "DNI")
+				doc.drawString(120, 685, "Nombre")
+				doc.drawString(220, 685, "Dirección")
+				doc.drawString(330, 685, "Municipio")
+				doc.drawString(410, 685, "Provincia")
+				doc.line(30, 680, 570, 680)
+
+			cabecera_tabla()
 
 			h = 660
 			for cli in clientes:
 				if h < 80:
 					doc.showPage()
 					Informes.cabecera(doc)
+					cabecera_tabla()
 					Informes.pie(doc)
 					h = 670
+				doc.setFont("Helvetica", 11)
 				doc.drawString(50, h, "*****" + cli.dni[-4:-1] + "*")
 				doc.drawString(120, h, cli.nombre)
 				doc.drawString(220, h, cli.direccion)
 				doc.drawString(330, h, cli.municipio)
 				doc.drawString(410, h, cli.provincia)
+				h -= 15
+
+			doc.save()
+		except Exception as e:
+			print(e)
+			return False
+
+	@staticmethod
+	def informe_vehiculos(vehiculos: list[Vehiculo], ruta: str) -> bool:
+		try:
+			doc = canvas.Canvas(ruta)
+			doc.setPageSize(A4)
+
+			Informes.cabecera(doc)
+			Informes.pie(doc)
+
+			def cabecera_tabla():
+				doc.setFont("Helvetica-Bold", 12)
+				doc.drawString(50, 720, "Informe de vehículos")
+				doc.setFont("Helvetica", 12)
+
+				doc.line(30, 700, 570, 700)
+				doc.drawString(50, 685, "Matrícula")
+				doc.drawString(120, 685, "DNI dueño")
+				doc.drawString(220, 685, "Marca")
+				doc.drawString(330, 685, "Modelo")
+				doc.drawString(410, 685, "Motorización")
+				doc.line(30, 680, 570, 680)
+
+			cabecera_tabla()
+
+			h = 660
+			for veh in vehiculos:
+				if h < 80:
+					doc.showPage()
+					Informes.cabecera(doc)
+					cabecera_tabla()
+					Informes.pie(doc)
+					h = 670
+				doc.setFont("Helvetica", 11)
+				doc.drawString(50, h, veh.matricula)
+				doc.drawString(120, h, "*****" + veh.dni[-4:-1] + "*")
+				doc.drawString(220, h, veh.marca)
+				doc.drawString(330, h, veh.modelo)
+				doc.drawString(410, h, veh.motor)
 				h -= 15
 
 			doc.save()

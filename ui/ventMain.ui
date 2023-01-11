@@ -244,7 +244,7 @@
            <widget class="QDateEdit" name="txtFechaAlta">
             <property name="dateTime">
              <datetime>
-              <hour>22</hour>
+              <hour>21</hour>
               <minute>0</minute>
               <second>0</second>
               <year>1999</year>
@@ -1234,6 +1234,7 @@
      <string>Informes</string>
     </property>
     <addaction name="actionInformeClientes"/>
+    <addaction name="actionInformeVehiculos"/>
    </widget>
    <addaction name="menuArchivo"/>
    <addaction name="menuHerramientas"/>
@@ -1324,6 +1325,11 @@
   <action name="actionInformeClientes">
    <property name="text">
     <string>Listado de clientes</string>
+   </property>
+  </action>
+  <action name="actionInformeVehiculos">
+   <property name="text">
+    <string>Listado de vehículos</string>
    </property>
   </action>
  </widget>

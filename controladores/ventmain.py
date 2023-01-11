@@ -39,7 +39,8 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.actionCambiarPropietario.triggered.connect(
 			lambda: actions.cambiar_propietario(self))
 		self.ventMain.actionBajaCliente.triggered.connect(self.on_borrar_cliente_coche)
-		self.ventMain.actionInformeClientes.triggered.connect(lambda: actions.informe_cliente(self))
+		self.ventMain.actionInformeClientes.triggered.connect(lambda: actions.informe_clientes(self))
+		self.ventMain.actionInformeVehiculos.triggered.connect(lambda: actions.informe_vehiculos(self))
 
 		# Se pulsa enter en DNI
 		self.ventMain.txtDni.editingFinished.connect(self.on_dni_comprobar)
@@ -150,7 +151,7 @@ class Main(QtWidgets.QMainWindow):
 	def on_guardar_cliente(self):
 		try:
 			vm = self.ventMain
-			cliente = Cliente(vm.txtDni.text(), vm.txtNombre.text(), vm.txtFechaAltaCliente.text(),
+			cliente = Cliente(vm.txtDni.text(), vm.txtNombre.text(), vm.txtFechaAlta.date().toString('yyyy-MM-dd'),
 							  vm.txtDireccionCliente.text(), vm.comboProvinciaCliente.currentText(),
 							  vm.comboMunicipioCliente.currentText(), vm.checkEfectivo.isChecked(),
 							  vm.checkFactura.isChecked(), vm.checkTransferencia.isChecked())
@@ -219,18 +220,6 @@ class Main(QtWidgets.QMainWindow):
 							   "Se ha borrado el cliente y sus vehículos correctamente")
 		except Exception as error:
 			print(f"Error borrando cliente y coches: {error}")
-
-	def on_abrir_calendario(self):
-		self.dialogCalendar.show()
-
-	def on_seleccionar_fecha(self):
-		qdate = self.dialogCalendar.dialogCalendar.calendarWidget.selectedDate()
-		try:
-			data = f"{qdate.day()}/{qdate.month()}/{qdate.year()}"
-			self.ventMain.txtFechaAltaCliente.setText(data)
-			self.dialogCalendar.hide()
-		except Exception as error:
-			print(f"Error cargando fecha cliente: {error}")
 
 	def mayuscula_palabra(self):
 		for campo in self.campos_texto:

@@ -139,7 +139,7 @@ def cambiar_propietario(self: Main):
 		print(f"Error cambiando propietario: {error}")
 
 
-def informe_cliente(self):
+def informe_clientes(self):
 	clientes = ClienteRepository.get_all(False)
 
 	dialogo_abrir = DialogoAbrir()
@@ -153,3 +153,18 @@ def informe_cliente(self):
 		return
 
 	Informes.informe_clientes(clientes, ruta)
+
+def informe_vehiculos(self):
+	vehiculos = VehiculoRepository.get_all(False)
+
+	dialogo_abrir = DialogoAbrir()
+	directorio = dialogo_abrir.getSaveFileName(
+		self, "Informe de vehículos", "",
+		"(*.pdf)"
+	)
+	if directorio[0]:
+		ruta = directorio[0]
+	else:
+		return
+
+	Informes.informe_vehiculos(vehiculos, ruta)
