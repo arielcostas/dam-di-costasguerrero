@@ -140,18 +140,23 @@ def cambiar_propietario(self: Main):
 
 
 def informe_clientes(self):
+	# Obtiene todos los clientes
 	clientes = ClienteRepository.get_all(False)
 
+	# Pregunta al usuario dónde quiere guardar
 	dialogo_abrir = DialogoAbrir()
 	directorio = dialogo_abrir.getSaveFileName(
 		self, "Informe de clientes", "",
 		"(*.pdf)"
 	)
 	if directorio[0]:
+		# Usa la ruta especificada
 		ruta = directorio[0]
 	else:
+		# Sale porque el usuario ha cancelado
 		return
 
+	# genera el informe y lo guarda
 	Informes.informe_clientes(clientes, ruta)
 
 def informe_vehiculos(self):
