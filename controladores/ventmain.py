@@ -75,7 +75,9 @@ class Main(QtWidgets.QMainWindow):
 
 		# Al selecionar una fila de la tabla
 		self.ventMain.tablaClientes.currentItemChanged.connect(self.on_item_seleccionado)
+		self.ventMain.btnNuevoCoche.clicked.connect(self.limpiar_coche)
 
+		# Mostrar el histórico
 		self.ventMain.checkMostrarHistorico.stateChanged.connect(
 			lambda: cargar.tabla_vehiculos(self))
 
@@ -121,6 +123,7 @@ class Main(QtWidgets.QMainWindow):
 				self.ventMain.radioButtonHibrido.setChecked(True)
 			elif vehiculo.motor == "Eléctrico":
 				self.ventMain.radioButtonElectrico.setChecked(True)
+			self.ventMain.btnNuevoCoche.setEnabled(True)
 		except Exception as error:
 			print(f"Error cargando datos del vehículo: {error}")
 
@@ -233,6 +236,7 @@ class Main(QtWidgets.QMainWindow):
 
 			self.ventMain.txtMatricula.setDisabled(False)
 			self.ventMain.txtDni.setDisabled(False)
+			self.ventMain.btnNuevoCoche.setEnabled(False)
 			self.ventMain.comboProvinciaCliente.setCurrentIndex(0)
 			self.ventMain.txtFechaAlta.setDate(
 				QDate.fromString(datetime.now().strftime("%d/%m/%Y"), "dd/MM/yyyy")
@@ -244,3 +248,10 @@ class Main(QtWidgets.QMainWindow):
 			self.ventMain.radioButtonGasolina.setChecked(True)
 		except Exception as error:
 			print(f"Error limpiando cliente: {error}")
+
+	def limpiar_coche(self):
+		self.ventMain.txtMatricula.setDisabled(False)
+		self.ventMain.txtMatricula.setText("")
+		self.ventMain.txtMarca.setText("")
+		self.ventMain.txtModelo.setText("")
+		self.ventMain.radioButtonGasolina.setChecked(True)
