@@ -39,7 +39,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pestana_clientes">
        <property name="acceptDrops">
@@ -244,7 +244,7 @@
            <widget class="QDateEdit" name="txtFechaAlta">
             <property name="dateTime">
              <datetime>
-              <hour>19</hour>
+              <hour>17</hour>
               <minute>0</minute>
               <second>0</second>
               <year>1999</year>
@@ -938,6 +938,9 @@
           <property name="tabKeyNavigation">
            <bool>false</bool>
           </property>
+          <property name="dragEnabled">
+           <bool>false</bool>
+          </property>
           <property name="alternatingRowColors">
            <bool>true</bool>
           </property>
@@ -982,7 +985,32 @@
        <attribute name="title">
         <string>Servicios</string>
        </attribute>
-       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="1,0,9">
+       <layout class="QVBoxLayout" name="verticalLayout_2" stretch="0,1,0,9">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>30</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <pointsize>11</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">background-color: rgb(170,255,255)</string>
+          </property>
+          <property name="text">
+           <string>XESTIONAR SERVIZOS</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
         <item>
          <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,3,1,3,1,2,1,0,0">
           <item>
@@ -1218,6 +1246,300 @@
        <attribute name="title">
         <string>Facturación</string>
        </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout_4">
+          <item>
+           <widget class="QLabel" name="label_2">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>30</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <pointsize>11</pointsize>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">background-color: rgb(170,255,255)</string>
+            </property>
+            <property name="text">
+             <string>XESTIONAR FACTURACIÓN</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_6">
+            <property name="spacing">
+             <number>20</number>
+            </property>
+            <item>
+             <widget class="QTableWidget" name="tableWidget_2">
+              <column>
+               <property name="text">
+                <string>Factura</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>DNI</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Matrícula</string>
+               </property>
+              </column>
+              <column>
+               <property name="text">
+                <string>Fecha</string>
+               </property>
+              </column>
+             </widget>
+            </item>
+            <item>
+             <layout class="QVBoxLayout" name="verticalLayout_3">
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,2,1,2,1,2,0,0">
+                <item>
+                 <widget class="QLabel" name="lblFactCli_2">
+                  <property name="font">
+                   <font>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>ID</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="margin">
+                   <number>4</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLineEdit" name="lblFactId">
+                  <property name="enabled">
+                   <bool>false</bool>
+                  </property>
+                  <property name="text">
+                   <string>NUEVO</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lblFactCli">
+                  <property name="font">
+                   <font>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Cliente</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="margin">
+                   <number>4</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="cmbFactCli"/>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lblFactCar">
+                  <property name="font">
+                   <font>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Vehículo</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="margin">
+                   <number>4</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QComboBox" name="cmbFactCar"/>
+                </item>
+                <item>
+                 <widget class="QLabel" name="lblFactFecha">
+                  <property name="font">
+                   <font>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Fecha</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                  </property>
+                  <property name="margin">
+                   <number>4</number>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDateEdit" name="txtFechaFactura"/>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <widget class="QTableWidget" name="tableWidget">
+                <column>
+                 <property name="text">
+                  <string>Servicio</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Precio unitario</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Cantidad</string>
+                 </property>
+                </column>
+                <column>
+                 <property name="text">
+                  <string>Total</string>
+                 </property>
+                </column>
+               </widget>
+              </item>
+              <item>
+               <widget class="QWidget" name="widget" native="true">
+                <layout class="QHBoxLayout" name="horizontalLayout_13" stretch="0,0,0">
+                 <property name="spacing">
+                  <number>10</number>
+                 </property>
+                 <property name="topMargin">
+                  <number>0</number>
+                 </property>
+                 <property name="bottomMargin">
+                  <number>0</number>
+                 </property>
+                 <item>
+                  <spacer name="horizontalSpacer_18">
+                   <property name="orientation">
+                    <enum>Qt::Horizontal</enum>
+                   </property>
+                   <property name="sizeHint" stdset="0">
+                    <size>
+                     <width>40</width>
+                     <height>20</height>
+                    </size>
+                   </property>
+                  </spacer>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_3">
+                   <property name="font">
+                    <font>
+                     <bold>false</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>Subtotal: </string>
+                   </property>
+                   <property name="alignment">
+                    <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                   </property>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QLabel" name="label_4">
+                   <property name="font">
+                    <font>
+                     <bold>true</bold>
+                    </font>
+                   </property>
+                   <property name="text">
+                    <string>0 €</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </widget>
+              </item>
+              <item>
+               <layout class="QHBoxLayout" name="horizontalLayout_5">
+                <item>
+                 <spacer name="horizontalSpacer_17">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
+                 <widget class="QCheckBox" name="checkBox">
+                  <property name="text">
+                   <string>Formalizar</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton_2">
+                  <property name="text">
+                   <string>Guardar</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QPushButton" name="pushButton">
+                  <property name="minimumSize">
+                   <size>
+                    <width>24</width>
+                    <height>24</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>24</width>
+                    <height>24</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../img/limpiar.png</normaloff>../img/limpiar.png</iconset>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
