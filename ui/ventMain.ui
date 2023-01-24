@@ -6,13 +6,13 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1000</width>
+    <width>1200</width>
     <height>750</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>1000</width>
+    <width>1200</width>
     <height>750</height>
    </size>
   </property>
@@ -244,16 +244,23 @@
            <widget class="QDateEdit" name="txtFechaAlta">
             <property name="dateTime">
              <datetime>
-              <hour>17</hour>
+              <hour>4</hour>
               <minute>0</minute>
               <second>0</second>
-              <year>1999</year>
-              <month>11</month>
-              <day>30</day>
+              <year>2023</year>
+              <month>1</month>
+              <day>24</day>
              </datetime>
             </property>
             <property name="calendarPopup">
              <bool>true</bool>
+            </property>
+            <property name="date">
+             <date>
+              <year>2023</year>
+              <month>1</month>
+              <day>24</day>
+             </date>
             </property>
            </widget>
           </item>
@@ -1280,7 +1287,7 @@
              <number>20</number>
             </property>
             <item>
-             <widget class="QTableWidget" name="tableWidget_2">
+             <widget class="QTableWidget" name="tablaFacturasActuales">
               <column>
                <property name="text">
                 <string>Factura</string>
@@ -1306,7 +1313,10 @@
             <item>
              <layout class="QVBoxLayout" name="verticalLayout_3">
               <item>
-               <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,2,1,2,1,2,0,0">
+               <layout class="QHBoxLayout" name="horizontalLayout_4" stretch="1,2,1,5,1,5,0,3">
+                <property name="spacing">
+                 <number>6</number>
+                </property>
                 <item>
                  <widget class="QLabel" name="lblFactCli_2">
                   <property name="font">
@@ -1354,7 +1364,11 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QComboBox" name="cmbFactCli"/>
+                 <widget class="QComboBox" name="cmbFactCli">
+                  <property name="sizeAdjustPolicy">
+                   <enum>QComboBox::AdjustToContents</enum>
+                  </property>
+                 </widget>
                 </item>
                 <item>
                  <widget class="QLabel" name="lblFactCar">
@@ -1396,12 +1410,21 @@
                  </widget>
                 </item>
                 <item>
-                 <widget class="QDateEdit" name="txtFechaFactura"/>
+                 <widget class="QDateEdit" name="txtFechaFactura">
+                  <property name="calendarPopup">
+                   <bool>true</bool>
+                  </property>
+                 </widget>
                 </item>
                </layout>
               </item>
               <item>
-               <widget class="QTableWidget" name="tableWidget">
+               <widget class="QTableWidget" name="tablaFacturaServicios">
+                <column>
+                 <property name="text">
+                  <string>Codigo</string>
+                 </property>
+                </column>
                 <column>
                  <property name="text">
                   <string>Servicio</string>
@@ -1550,7 +1573,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1000</width>
+     <width>1200</width>
      <height>22</height>
     </rect>
    </property>
