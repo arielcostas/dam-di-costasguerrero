@@ -39,7 +39,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pestana_clientes">
        <property name="acceptDrops">
@@ -244,7 +244,7 @@
            <widget class="QDateEdit" name="txtFechaAlta">
             <property name="dateTime">
              <datetime>
-              <hour>4</hour>
+              <hour>1</hour>
               <minute>0</minute>
               <second>0</second>
               <year>2023</year>
@@ -954,6 +954,9 @@
           <property name="selectionBehavior">
            <enum>QAbstractItemView::SelectRows</enum>
           </property>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
           <column>
            <property name="text">
             <string>DNI</string>
@@ -1215,6 +1218,12 @@
           <property name="sortingEnabled">
            <bool>true</bool>
           </property>
+          <attribute name="horizontalHeaderHighlightSections">
+           <bool>true</bool>
+          </attribute>
+          <attribute name="verticalHeaderVisible">
+           <bool>false</bool>
+          </attribute>
           <column>
            <property name="text">
             <string>ID</string>
@@ -1288,6 +1297,12 @@
             </property>
             <item>
              <widget class="QTableWidget" name="tablaFacturasActuales">
+              <property name="alternatingRowColors">
+               <bool>true</bool>
+              </property>
+              <attribute name="verticalHeaderVisible">
+               <bool>false</bool>
+              </attribute>
               <column>
                <property name="text">
                 <string>Factura</string>
@@ -1420,6 +1435,12 @@
               </item>
               <item>
                <widget class="QTableWidget" name="tablaFacturaServicios">
+                <property name="alternatingRowColors">
+                 <bool>true</bool>
+                </property>
+                <attribute name="verticalHeaderVisible">
+                 <bool>false</bool>
+                </attribute>
                 <column>
                  <property name="text">
                   <string>Codigo</string>
@@ -1488,7 +1509,7 @@
                   </widget>
                  </item>
                  <item>
-                  <widget class="QLabel" name="label_4">
+                  <widget class="QLabel" name="lblSubtotal">
                    <property name="font">
                     <font>
                      <bold>true</bold>

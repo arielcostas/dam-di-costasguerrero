@@ -1,4 +1,7 @@
-from PyQt6 import QtWidgets
+from datetime import datetime
+
+from PyQt6 import QtWidgets, QtCore
+from PyQt6.QtWidgets import QWidget
 
 from bbdd import VehiculoRepository, ClienteRepository, ServicioRepository
 from bbdd.factura import FacturaRepository
@@ -6,16 +9,25 @@ from controladores.ventmain import Main
 
 
 def init_tab(self: Main):
+	limpiar(self)
 	load_clientes(self)
 	load_vehiculos(self)
 	load_facturas(self)
+
 	load_servicios(self)
+
+	# Configurar las columnas editables de la tabla de servicios
+	self.ventMain.tablaFacturaServicios.setItemDelegate(Delegate(self))
 
 	# Al seleccionar otro cliente, cargar sus vehículos
 	self.ventMain.cmbFactCli.currentTextChanged.connect(lambda: load_vehiculos(self))
 
 	# Recargar el listado de clientes cuando se vuelva a la pestaña
 	self.ventMain.tabWidget.currentChanged.connect(lambda: load_clientes(self))
+
+
+def limpiar(self: Main):
+	self.ventMain.txtFechaFactura.setDate(datetime.now())
 
 
 def load_clientes(self: Main):
@@ -71,11 +83,12 @@ def load_servicios(self: Main):
 		self.ventMain.tablaFacturaServicios \
 			.setItem(idx, 1, QtWidgets.QTableWidgetItem(serv.nombre))
 		self.ventMain.tablaFacturaServicios \
-			.setItem(idx, 2, QtWidgets.QTableWidgetItem(str(serv.precio_unitario)))
-		self.ventMain.tablaFacturaServicios \
 			.setItem(idx, 3, QtWidgets.QTableWidgetItem(str(0)))
+
 		self.ventMain.tablaFacturaServicios \
-			.setItem(idx, 4, QtWidgets.QTableWidgetItem(str(0)))
+			.setItem(idx, 2, QtWidgets.QTableWidgetItem(f"{float(serv.precio_unitario):.2f} €"))
+		self.ventMain.tablaFacturaServicios \
+			.setItem(idx, 4, QtWidgets.QTableWidgetItem(f"{float(0):.2f} €"))
 
 	for i in range(0, self.ventMain.tablaFacturaServicios.columnCount()):
 		if i < 1:
@@ -86,3 +99,33 @@ def load_servicios(self: Main):
 			self.ventMain.tablaFacturaServicios \
 				.horizontalHeader() \
 				.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.Stretch)
+
+
+def actualizar_subtotales(self: Main):
+	acumulador = 0
+	for i in range(0, self.ventMain.tablaFacturaServicios.rowCount()):
+		unitario = float(self.ventMain.tablaFacturaServicios.item(i, 2).text()[:-2])
+		cantidad = float(self.ventMain.tablaFacturaServicios.item(i, 3).text())
+
+		if cantidad == 0:
+			continue
+
+		self.ventMain.tablaFacturaServicios \
+			.setItem(i, 4, QtWidgets.QTableWidgetItem(f"{(unitario*cantidad):.2f} €"))
+		acumulador += unitario*cantidad
+
+	self.ventMain.lblSubtotal.setText(f"{(acumulador):.2f} €")
+
+class Delegate(QtWidgets.QStyledItemDelegate):
+	def __init__(self, main: Main):
+		super().__init__()
+		self.main = main
+
+	def createEditor(self, parent, option, index):
+		if index.column() == 3:
+			return super(Delegate, self).createEditor(parent, option, index)
+
+	def destroyEditor(self, editor: QWidget, index: QtCore.QModelIndex) -> None:
+		super().destroyEditor(editor, index)
+		actualizar_subtotales(self.main)
+
