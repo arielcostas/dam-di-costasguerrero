@@ -1,7 +1,10 @@
 class Factura:
 	def __init__(self, fid, dni, matricula, fecha, emitida):
-		self.id = fid
-		self.dni = dni
+		self.fid = fid
+		self.nif = dni
 		self.matricula = matricula
 		self.fecha = fecha
 		self.emitida = emitida
+
+	def __str__(self):
+		return f"Factura {self.fid} - {self.nif} - {self.matricula} - {self.fecha} - {self.emitida}"

@@ -39,7 +39,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pestana_clientes">
        <property name="acceptDrops">
@@ -244,7 +244,7 @@
            <widget class="QDateEdit" name="txtFechaAlta">
             <property name="dateTime">
              <datetime>
-              <hour>1</hour>
+              <hour>22</hour>
               <minute>0</minute>
               <second>0</second>
               <year>2023</year>
@@ -1297,8 +1297,17 @@
             </property>
             <item>
              <widget class="QTableWidget" name="tablaFacturasActuales">
+              <property name="editTriggers">
+               <set>QAbstractItemView::NoEditTriggers</set>
+              </property>
               <property name="alternatingRowColors">
                <bool>true</bool>
+              </property>
+              <property name="selectionMode">
+               <enum>QAbstractItemView::SingleSelection</enum>
+              </property>
+              <property name="selectionBehavior">
+               <enum>QAbstractItemView::SelectRows</enum>
               </property>
               <attribute name="verticalHeaderVisible">
                <bool>false</bool>
@@ -1539,21 +1548,21 @@
                  </spacer>
                 </item>
                 <item>
-                 <widget class="QCheckBox" name="checkBox">
+                 <widget class="QCheckBox" name="chkFormalizarFactura">
                   <property name="text">
                    <string>Formalizar</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButton_2">
+                 <widget class="QPushButton" name="btnGuardarFactura">
                   <property name="text">
                    <string>Guardar</string>
                   </property>
                  </widget>
                 </item>
                 <item>
-                 <widget class="QPushButton" name="pushButton">
+                 <widget class="QPushButton" name="btnLimpiarFactura">
                   <property name="minimumSize">
                    <size>
                     <width>24</width>
