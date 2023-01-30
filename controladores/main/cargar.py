@@ -18,7 +18,6 @@ def lista_municipios(self: Main):
 	for i in datos:
 		self.ventMain.comboMunicipioCliente.addItem(i)
 
-
 def tabla_vehiculos(self: Main):
 	historico = self.ventMain.checkMostrarHistorico.isChecked()
 	try:

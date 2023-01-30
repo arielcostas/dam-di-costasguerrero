@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from PyQt6 import QtWidgets, QtCore
+from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget
 
 from bbdd import VehiculoRepository, ClienteRepository, ServicioRepository
@@ -15,6 +16,9 @@ def init_tab(self: Main):
 
 	# Configurar las columnas editables de la tabla de servicios
 	self.ventMain.tablaFacturaServicios.setItemDelegate(Delegate(self))
+	self.ventMain.tablaFacturasActuales.currentItemChanged.connect(
+		lambda: load_factura(self)
+	)
 
 	self.ventMain.cmbFactCli.currentTextChanged.connect(lambda: load_vehiculos(self))
 
@@ -46,7 +50,6 @@ def load_facturas(self: Main):
 	self.ventMain.tablaFacturasActuales.setRowCount(len(facturas))
 
 	for idx, fact in enumerate(facturas):
-		print(fact)
 		self.ventMain.tablaFacturasActuales \
 			.setItem(idx, 0, QtWidgets.QTableWidgetItem(str(fact.fid)))
 		self.ventMain.tablaFacturasActuales \
@@ -98,8 +101,10 @@ def load_servicios(self: Main):
 def load_servicios_factura(self: Main, factura: Factura):
 	load_servicios(self)
 	for i in range(0, self.ventMain.tablaFacturaServicios.columnCount()):
-		col = self.ventMain.tablaFacturaServicios.item(i, 0).text()
-		FacturaRepository.get_cantidad_producto_factura(factura, col)
+		servicio = self.ventMain.tablaFacturaServicios.item(i, 0).text()
+		cantidad = FacturaRepository.get_cantidad_producto_factura(factura.fid, int(servicio))
+		cantidad = 0 if cantidad is None else cantidad
+		self.ventMain.tablaFacturaServicios.item(i, 3).setText(str(cantidad))
 
 
 def guardar_factura(self: Main):
@@ -146,10 +151,47 @@ def limpiar(self: Main):
 	load_clientes(self)
 	load_vehiculos(self)
 
+	self.ventMain.txtFactId.setText("NUEVA")
 	self.ventMain.txtFechaFactura.setDate(datetime.now())
 	self.ventMain.tablaFacturaServicios.setEnabled(True)
 	self.ventMain.cmbFactCar.setEnabled(True)
 	self.ventMain.cmbFactCli.setEnabled(True)
+	self.ventMain.txtFechaFactura.setEnabled(True)
+
+	self.ventMain.chkFormalizarFactura.setEnabled(True)
+	self.ventMain.chkFormalizarFactura.setChecked(False)
+
+	self.ventMain.btnGuardarFactura.setEnabled(True)
+	actualizar_subtotales(self)
+
+def load_factura(self: Main):
+	try:
+		factura_id = self.ventMain.tablaFacturasActuales.item(
+			self.ventMain.tablaFacturasActuales.currentRow(), 0).text()
+		factura = FacturaRepository.get_by_id(int(factura_id))
+
+		editable = False if factura.emitida == 1 else True
+		self.ventMain.tablaFacturaServicios.setEnabled(editable)
+		self.ventMain.cmbFactCli.setEnabled(editable)
+		self.ventMain.txtFactId.setText(str(factura.fid))
+		# Busca el índice del cliente en el combo con el DNI de la factura
+		idx = self.ventMain.cmbFactCli.findText(factura.nif, Qt.MatchFlag.MatchStartsWith)
+		self.ventMain.cmbFactCli.setCurrentIndex(idx)
+
+		self.ventMain.cmbFactCar.setEnabled(editable)
+		idx = self.ventMain.cmbFactCar.findText(factura.matricula, Qt.MatchFlag.MatchStartsWith)
+		self.ventMain.cmbFactCar.setCurrentIndex(idx)
+
+		self.ventMain.txtFechaFactura.setDate(datetime.strptime(factura.fecha, "%Y-%m-%d"))
+		self.ventMain.txtFechaFactura.setEnabled(editable)
+		self.ventMain.chkFormalizarFactura.setEnabled(editable)
+		self.ventMain.btnGuardarFactura.setEnabled(editable)
+
+		load_servicios_factura(self, factura)
+		actualizar_subtotales(self)
+	except Exception as e:
+		print(e)
+		pass
 
 
 class Delegate(QtWidgets.QStyledItemDelegate):
