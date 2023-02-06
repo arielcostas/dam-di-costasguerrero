@@ -4,10 +4,11 @@ from PyQt6 import QtWidgets, QtCore
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget
 
-from bbdd import VehiculoRepository, ClienteRepository, ServicioRepository
+from bbdd import VehiculoRepository, ClienteRepository, ServicioRepository, Servicio
 from bbdd.factura import FacturaRepository
 from bbdd.modelos.factura import Factura
 from controladores.ventmain import Main
+from negocio import informes, Informes
 
 
 def init_tab(self: Main):
@@ -24,6 +25,7 @@ def init_tab(self: Main):
 
 	self.ventMain.tabWidget.currentChanged.connect(lambda: limpiar(self))
 	self.ventMain.btnLimpiarFactura.clicked.connect(lambda: limpiar(self))
+	self.ventMain.btnImprimirFactura.clicked.connect(lambda: imprimir_factura(self))
 	self.ventMain.btnGuardarFactura.clicked.connect(lambda: guardar_factura(self))
 
 
@@ -54,10 +56,6 @@ def load_facturas(self: Main):
 			.setItem(idx, 0, QtWidgets.QTableWidgetItem(str(fact.fid)))
 		self.ventMain.tablaFacturasActuales \
 			.setItem(idx, 1, QtWidgets.QTableWidgetItem(fact.nif))
-		self.ventMain.tablaFacturasActuales \
-			.setItem(idx, 2, QtWidgets.QTableWidgetItem(fact.matricula))
-		self.ventMain.tablaFacturasActuales \
-			.setItem(idx, 3, QtWidgets.QTableWidgetItem(fact.fecha))
 
 	for i in range(0, self.ventMain.tablaFacturasActuales.columnCount()):
 		if i < 1:
@@ -162,13 +160,13 @@ def limpiar(self: Main):
 	self.ventMain.chkFormalizarFactura.setChecked(False)
 
 	self.ventMain.btnGuardarFactura.setEnabled(True)
+	self.ventMain.btnImprimirFactura.setEnabled(False)
 	actualizar_subtotales(self)
+
 
 def load_factura(self: Main):
 	try:
-		factura_id = self.ventMain.tablaFacturasActuales.item(
-			self.ventMain.tablaFacturasActuales.currentRow(), 0).text()
-		factura = FacturaRepository.get_by_id(int(factura_id))
+		factura = recuperar_factura(self)
 
 		editable = False if factura.emitida == 1 else True
 		self.ventMain.tablaFacturaServicios.setEnabled(editable)
@@ -187,11 +185,34 @@ def load_factura(self: Main):
 		self.ventMain.chkFormalizarFactura.setEnabled(editable)
 		self.ventMain.btnGuardarFactura.setEnabled(editable)
 
+		self.ventMain.btnImprimirFactura.setEnabled(True)
 		load_servicios_factura(self, factura)
 		actualizar_subtotales(self)
 	except Exception as e:
 		print(e)
 		pass
+
+
+def recuperar_factura(self):
+	factura_id = self.ventMain.tablaFacturasActuales.item(
+		self.ventMain.tablaFacturasActuales.currentRow(), 0).text()
+	factura = FacturaRepository.get_by_id(int(factura_id))
+	return factura
+
+
+def imprimir_factura(self: Main):
+	try:
+		factura = recuperar_factura(self)
+		servicios = ServicioRepository.get_all(False)
+
+		srvs: list[tuple[Servicio, int]] = []
+		for servicio in servicios:
+			cantidad = FacturaRepository.get_cantidad_producto_factura(factura.fid, servicio.sid)
+			srvs.append((servicio, cantidad))
+
+		Informes.factura(factura, srvs, "C:\\Users\\a21arielcg\\Desktop\\factura.pdf")
+	except Exception as e:
+		print("Error al imprimir factura: ", e)
 
 
 class Delegate(QtWidgets.QStyledItemDelegate):

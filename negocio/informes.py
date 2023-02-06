@@ -3,7 +3,8 @@ from datetime import datetime
 from reportlab.lib.pagesizes import A4
 from reportlab.pdfgen import canvas
 
-from bbdd import Cliente, Vehiculo
+from bbdd import Cliente, Vehiculo, Servicio
+from bbdd.modelos.factura import Factura
 
 
 class Informes:
@@ -53,7 +54,7 @@ class Informes:
 			return False
 
 	@staticmethod
-	def informe_vehiculos(vehiculos: list[Vehiculo], ruta: str) -> bool:
+	def informe_vehiculos(vehiculos: list[Vehiculo], servicios: list[Servicio], ruta: str) -> bool:
 		try:
 			doc = canvas.Canvas(ruta)
 			doc.setPageSize(A4)
@@ -95,6 +96,57 @@ class Informes:
 			doc.save()
 		except Exception as e:
 			print(e)
+			return False
+
+	@staticmethod
+	def factura(factura: Factura, servicios: list[tuple[Servicio, int]], ruta: str) -> bool:
+		try:
+			doc = canvas.Canvas(ruta)
+			doc.setPageSize(A4)
+
+			Informes.cabecera(doc)
+			Informes.pie(doc)
+
+			def cabecera_tabla():
+				doc.setFont("Helvetica-Bold", 12)
+				doc.drawString(50, 720, "Factura")
+				doc.setFont("Helvetica", 12)
+
+				doc.line(30, 700, 570, 700)
+				doc.drawString(50, 685, "Nº")
+				doc.drawString(120, 685, "Producto")
+				doc.drawString(220, 685, "Cantidad")
+				doc.drawString(330, 685, "Precio unitario")
+				doc.drawString(410, 685, "Subtotal")
+				doc.line(30, 680, 570, 680)
+
+			cabecera_tabla()
+
+			h = 660
+			i = 1
+			for serv in servicios:
+				if serv[1] == 0:
+					continue
+
+				if h < 80:
+					doc.showPage()
+					Informes.cabecera(doc)
+					cabecera_tabla()
+					Informes.pie(doc)
+					h = 670
+				doc.setFont("Helvetica", 11)
+				doc.drawString(50, h, str(i))
+				doc.drawString(120, h, serv[0].nombre)
+				doc.drawString(270, h, str(serv[0].precio_unitario))
+				doc.drawString(330, h, str(serv[1]))
+				doc.drawString(410, h, str(serv[0].precio_unitario * serv[1]))
+
+				h -= 15
+				i += 1
+
+			doc.save()
+		except Exception as e:
+			print("Error al generar el informe de clientes", e)
 			return False
 
 	@staticmethod
