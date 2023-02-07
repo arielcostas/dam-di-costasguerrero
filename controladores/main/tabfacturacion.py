@@ -98,7 +98,7 @@ def load_servicios(self: Main):
 
 def load_servicios_factura(self: Main, factura: Factura):
 	load_servicios(self)
-	for i in range(0, self.ventMain.tablaFacturaServicios.columnCount()):
+	for i in range(0, self.ventMain.tablaFacturaServicios.rowCount()):
 		servicio = self.ventMain.tablaFacturaServicios.item(i, 0).text()
 		cantidad = FacturaRepository.get_cantidad_producto_factura(factura.fid, int(servicio))
 		cantidad = 0 if cantidad is None else cantidad
@@ -208,7 +208,8 @@ def imprimir_factura(self: Main):
 		srvs: list[tuple[Servicio, int]] = []
 		for servicio in servicios:
 			cantidad = FacturaRepository.get_cantidad_producto_factura(factura.fid, servicio.sid)
-			srvs.append((servicio, cantidad))
+			if cantidad is not None and cantidad > 0:
+				srvs.append((servicio, cantidad))
 
 		Informes.factura(factura, srvs, "C:\\Users\\a21arielcg\\Desktop\\factura.pdf")
 	except Exception as e:

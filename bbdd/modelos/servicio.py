@@ -6,3 +6,6 @@ class Servicio:
 		self.fecha_alta = fecha_alta
 		self.fecha_modificacion = fecha_modificacion
 		self.fecha_baja = fecha_baja
+
+	def __str__(self):
+		return f"Servicio: {self.nombre} - {self.precio_unitario} - {self.fecha_alta}"
