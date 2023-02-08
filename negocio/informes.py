@@ -18,34 +18,36 @@ class Informes:
 			Informes.pie(doc)
 
 			def cabecera_tabla():
-				doc.setFont("Helvetica-Bold", 12)
+				doc.setFont("Helvetica-Bold", 16)
 				doc.drawString(50, 720, "Informe de clientes")
-				doc.setFont("Helvetica", 12)
+				doc.setFont("Courier", 9)
 
 				doc.line(30, 700, 570, 700)
-				doc.drawString(50, 685, "DNI")
-				doc.drawString(120, 685, "Nombre")
-				doc.drawString(220, 685, "Dirección")
-				doc.drawString(330, 685, "Municipio")
-				doc.drawString(410, 685, "Provincia")
+				doc.setFont("Courier-Bold", 12)
+				doc.drawString(30, 685, "DNI")
+				doc.drawString(100, 685, "Nombre")
+				doc.drawString(240, 685, "Dirección")
+				doc.drawString(390, 685, "Municipio")
+				doc.drawString(480, 685, "Provincia")
+				doc.setFont("Helvetica", 12)
 				doc.line(30, 680, 570, 680)
 
 			cabecera_tabla()
 
-			h = 660
+			h = 665
 			for cli in clientes:
 				if h < 80:
 					doc.showPage()
 					Informes.cabecera(doc)
 					cabecera_tabla()
 					Informes.pie(doc)
-					h = 670
-				doc.setFont("Helvetica", 11)
-				doc.drawString(50, h, "*****" + cli.dni[-4:-1] + "*")
-				doc.drawString(120, h, cli.nombre)
-				doc.drawString(220, h, cli.direccion)
-				doc.drawString(330, h, cli.municipio)
-				doc.drawString(410, h, cli.provincia)
+					h = 665
+				doc.setFont("Courier", 11)
+				doc.drawString(30, h, "*****" + cli.dni[-4:-1] + "*")
+				doc.drawString(100, h, cli.nombre)
+				doc.drawString(240, h, cli.direccion)
+				doc.drawString(390, h, cli.municipio)
+				doc.drawString(480, h, cli.provincia)
 				h -= 15
 
 			doc.save()
@@ -63,34 +65,36 @@ class Informes:
 			Informes.pie(doc)
 
 			def cabecera_tabla():
-				doc.setFont("Helvetica-Bold", 12)
+				doc.setFont("Helvetica-Bold", 16)
 				doc.drawString(50, 720, "Informe de vehículos")
-				doc.setFont("Helvetica", 12)
+				doc.setFont("Courier", 9)
 
 				doc.line(30, 700, 570, 700)
-				doc.drawString(50, 685, "Matrícula")
-				doc.drawString(120, 685, "DNI dueño")
-				doc.drawString(220, 685, "Marca")
-				doc.drawString(330, 685, "Modelo")
-				doc.drawString(410, 685, "Motorización")
+				doc.setFont("Courier-Bold", 12)
+				doc.drawString(30, 685, "Matrícula")
+				doc.drawString(130, 685, "DNI dueño")
+				doc.drawString(230, 685, "Marca")
+				doc.drawString(350, 685, "Modelo")
+				doc.drawString(480, 685, "Motorización".rjust(10, " "))
+				doc.setFont("Helvetica", 12)
 				doc.line(30, 680, 570, 680)
 
 			cabecera_tabla()
 
-			h = 660
+			h = 665
 			for veh in vehiculos:
 				if h < 80:
 					doc.showPage()
 					Informes.cabecera(doc)
 					cabecera_tabla()
 					Informes.pie(doc)
-					h = 670
-				doc.setFont("Helvetica", 11)
-				doc.drawString(50, h, veh.matricula)
-				doc.drawString(120, h, "*****" + veh.dni[-4:-1] + "*")
-				doc.drawString(220, h, veh.marca)
-				doc.drawString(330, h, veh.modelo)
-				doc.drawString(410, h, veh.motor)
+					h = 665
+				doc.setFont("Courier", 11)
+				doc.drawString(30, h, veh.matricula)
+				doc.drawString(130, h, "*****" + veh.dni[-4:-1] + "*")
+				doc.drawString(230, h, veh.marca)
+				doc.drawString(350, h, veh.modelo)
+				doc.drawString(500, h, veh.motor.rjust(10, " "))
 				h -= 15
 
 			doc.save()
@@ -112,28 +116,36 @@ class Informes:
 			doc.setFont("Helvetica-Bold", 16)
 			doc.drawString(50, 700, "Factura #" + str(factura.fid))
 			doc.setFont("Courier", 9)
-			doc.drawString(460, 715, cli.nombre)
-			doc.drawString(460, 705, "NIF: " + factura.nif)
-			doc.drawString(460, 695, cli.direccion)
-			doc.drawString(460, 685, cli.municipio + " - " + cli.provincia)
+
+			clinom = cli.nombre
+			clinif = "NIF: " + factura.nif
+			clidir = cli.direccion
+			climun = cli.municipio + " - " + cli.provincia
+
+			maximo = max(clinom, clinif, clidir, climun)
+			
+			doc.drawString(460, 715, clinom.rjust(len(maximo)))
+			doc.drawString(460, 705, clinif.rjust(len(maximo)))
+			doc.drawString(460, 695, clidir.rjust(len(maximo)))
+			doc.drawString(460, 685, climun.rjust(len(maximo)))
 
 			def cabecera_tabla():
 				doc.setFont("Helvetica", 12)
 				doc.line(30, 670, 570, 670)
 				doc.setFont("Courier-Bold", 12)
 
-				doc.drawString(50, 655, "Nº")
-				doc.drawString(100, 655, "Producto")
-				doc.drawString(250, 655, "Precio unitario")
-				doc.drawString(390, 655, "Cantidad")
-				doc.drawString(480, 655, "Subtotal")
+				doc.drawString(50, 656, "Nº")
+				doc.drawString(100, 656, "Producto")
+				doc.drawString(250, 656, "Precio unitario")
+				doc.drawString(390, 656, "Cantidad")
+				doc.drawString(500, 656, "Subtotal".rjust(10))
 				doc.setFont("Helvetica", 12)
 				doc.line(30, 650, 570, 650)
 
 			cabecera_tabla()
 
 			precio_total = 0
-			h = 630
+			h = 635
 			i = 1
 			for serv in servicios:
 				if h < 80:
@@ -141,20 +153,33 @@ class Informes:
 					Informes.cabecera(doc)
 					cabecera_tabla()
 					Informes.pie(doc)
-					h = 670
+					h = 635
 				doc.setFont("Courier", 11)
 				doc.drawString(50, h, f"{i}")
 				doc.drawString(100, h, serv[0].nombre)
 				doc.drawString(250, h, f"{serv[0].precio_unitario:.2f}".rjust(10))
 				doc.drawString(390, h, f"{serv[1]:.2f}".rjust(5))
-				doc.drawString(480, h, f"{serv[0].precio_unitario * serv[1]:.2f}".rjust(10))
+				doc.drawString(500, h, f"{serv[0].precio_unitario * serv[1]:.2f} €".rjust(10))
 
 				h -= 15
 				i += 1
 				precio_total += serv[0].precio_unitario * serv[1]
 
+			iva = precio_total * 0.21
+
+			doc.setFont("Helvetica", 11)
+			doc.drawString(420, 95, "Subtotal: ")
 			doc.setFont("Courier-Bold", 11)
-			doc.drawString(480, 85, f"{precio_total:.2f} €".rjust(10))
+			doc.drawString(480, 95, f"{precio_total:.2f} €".rjust(10))
+			doc.setFont("Helvetica", 11)
+			doc.drawString(420, 80, "IVA (21%): ")
+			doc.setFont("Courier-Bold", 11)
+			doc.drawString(480, 80, f"{iva:.2f} €".rjust(10))
+			doc.setFont("Helvetica", 11)
+			doc.drawString(420, 65, "Total: ")
+			doc.setFont("Courier-Bold", 11)
+			doc.drawString(480, 65, f"{precio_total + iva:.2f} €".rjust(10))
+
 			doc.setFont("Helvetica", 11)
 
 			doc.save()

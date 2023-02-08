@@ -172,4 +172,4 @@ def informe_vehiculos(self):
 	else:
 		return
 
-	Informes.informe_vehiculos(vehiculos)
+	Informes.informe_vehiculos(vehiculos, ruta)
