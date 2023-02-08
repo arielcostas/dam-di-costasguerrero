@@ -142,6 +142,8 @@ def actualizar_subtotales(self: Main):
 		acumulador += unitario * cantidad
 
 	self.ventMain.lblSubtotal.setText(f"{acumulador :.2f} €")
+	self.ventMain.lblSubtotalIva.setText(f"{acumulador * 0.21 :.2f} €")
+	self.ventMain.lblSubtotalTotal.setText(f"{acumulador * 1.21 :.2f} €")
 
 
 def limpiar(self: Main):
