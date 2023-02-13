@@ -39,7 +39,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>2</number>
       </property>
       <widget class="QWidget" name="pestana_clientes">
        <property name="acceptDrops">
@@ -244,7 +244,7 @@
            <widget class="QDateEdit" name="txtFechaAlta">
             <property name="dateTime">
              <datetime>
-              <hour>15</hour>
+              <hour>14</hour>
               <minute>0</minute>
               <second>0</second>
               <year>2023</year>
@@ -1443,6 +1443,35 @@
               </item>
               <item>
                <layout class="QHBoxLayout" name="horizontalLayout_5">
+                <item>
+                 <widget class="QPushButton" name="btnBuscaFact">
+                  <property name="sizePolicy">
+                   <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+                    <horstretch>24</horstretch>
+                    <verstretch>24</verstretch>
+                   </sizepolicy>
+                  </property>
+                  <property name="minimumSize">
+                   <size>
+                    <width>24</width>
+                    <height>24</height>
+                   </size>
+                  </property>
+                  <property name="maximumSize">
+                   <size>
+                    <width>24</width>
+                    <height>24</height>
+                   </size>
+                  </property>
+                  <property name="text">
+                   <string/>
+                  </property>
+                  <property name="icon">
+                   <iconset>
+                    <normaloff>../img/buscar.png</normaloff>../img/buscar.png</iconset>
+                  </property>
+                 </widget>
+                </item>
                 <item>
                  <spacer name="horizontalSpacer_17">
                   <property name="orientation">

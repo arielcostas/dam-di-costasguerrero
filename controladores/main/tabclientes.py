@@ -9,11 +9,11 @@ def init_tab(self: Main):
 
 
 def buscar_cli(self: Main):
-	inputDlg = QtWidgets.QInputDialog()
+	input_dlg = QtWidgets.QInputDialog()
 	if self.ultima_busqueda_car is None or self.ultima_busqueda_car == "":
 		self.ultima_busqueda_car = ""
 
-	texto, ok = inputDlg.getText(self, "Búsqueda de clientes", "Matrícula a buscar", QtWidgets.QLineEdit.EchoMode.Normal, self.ultima_busqueda_car)
+	texto, ok = input_dlg.getText(self, "Búsqueda de clientes", "Matrícula a buscar", QtWidgets.QLineEdit.EchoMode.Normal, self.ultima_busqueda_car)
 	if not ok:
 		return
 

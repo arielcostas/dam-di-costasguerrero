@@ -54,3 +54,4 @@ def tabla_vehiculos(self: Main):
 					.setSectionResizeMode(i, QtWidgets.QHeaderView.ResizeMode.ResizeToContents)
 	except Exception as error:
 		print(f"Error cargando tabla vehiculos: {error}")
+

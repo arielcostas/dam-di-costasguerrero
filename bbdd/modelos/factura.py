@@ -6,5 +6,5 @@ class Factura:
 		self.fecha = fecha
 		self.emitida = emitida
 
-	def __str__(self):
-		return f"Factura {self.fid} - {self.nif} - {self.matricula} - {self.fecha} - {self.emitida}"
+	def __repr__(self):
+		return f"Factura({self.fid}, {self.nif}, {self.matricula}, {self.fecha}, {self.emitida})"

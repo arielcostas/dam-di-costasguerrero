@@ -7,8 +7,10 @@ from PyQt6.QtWidgets import QWidget
 from bbdd import VehiculoRepository, ClienteRepository, ServicioRepository, Servicio
 from bbdd.factura import FacturaRepository
 from bbdd.modelos.factura import Factura
+from controladores.main import cargar
 from controladores.ventmain import Main
 from negocio import informes, Informes
+
 
 def init_tab(self: Main):
 	limpiar(self)
@@ -26,6 +28,8 @@ def init_tab(self: Main):
 	self.ventMain.btnLimpiarFactura.clicked.connect(lambda: limpiar(self))
 	self.ventMain.btnImprimirFactura.clicked.connect(lambda: imprimir_factura(self))
 	self.ventMain.btnGuardarFactura.clicked.connect(lambda: guardar_factura(self))
+	self.ventMain.btnBuscaFact.clicked.connect(lambda: buscar_factura(self))
+
 
 def load_clientes(self: Main):
 	self.ventMain.cmbFactCli.clear()
@@ -47,6 +51,14 @@ def load_vehiculos(self: Main):
 
 def load_facturas(self: Main):
 	facturas = FacturaRepository.get_all()
+	if self.ultima_busqueda_fact is not None or self.ultima_busqueda_fact != "":
+		facturas = [
+			fac for fac in facturas if
+			fac.matricula.__contains__(self.ultima_busqueda_fact) or
+			fac.nif.__contains__(self.ultima_busqueda_fact) or
+			str(fac.fid).__contains__(self.ultima_busqueda_fact)
+		]
+
 	self.ventMain.tablaFacturasActuales.setRowCount(len(facturas))
 
 	for idx, fact in enumerate(facturas):
@@ -214,6 +226,25 @@ def imprimir_factura(self: Main):
 		Informes.factura(factura, srvs, "C:\\Users\\a21arielcg\\Desktop\\factura.pdf")
 	except Exception as e:
 		print("Error al imprimir factura: ", e)
+
+
+def buscar_factura(self: Main):
+	input_dlg = QtWidgets.QInputDialog()
+	if self.ultima_busqueda_fact is None or self.ultima_busqueda_fact == "":
+		self.ultima_busqueda_fact = ""
+
+	texto, ok = input_dlg.getText(
+		self,
+		"Búsqueda de facturas", "Nº de factura, matrícula o DNI",
+		QtWidgets.QLineEdit.EchoMode.Normal,
+		self.ultima_busqueda_car
+	)
+	if not ok:
+		return
+
+	self.ultima_busqueda_fact = texto
+
+	load_facturas(self)
 
 
 class Delegate(QtWidgets.QStyledItemDelegate):

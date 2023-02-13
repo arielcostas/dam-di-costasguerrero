@@ -14,6 +14,7 @@ from ui.ventMain import *
 class Main(QtWidgets.QMainWindow):
 	def __init__(self):
 		super(Main, self).__init__()
+		self.ultima_busqueda_fact = ""
 		self.ultima_busqueda_car = ""
 		self.servicioBackup = ServicioBackup()
 		self.servicioPropietarios = ServicioPropietarios()
