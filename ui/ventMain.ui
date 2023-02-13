@@ -39,7 +39,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>0</number>
       </property>
       <widget class="QWidget" name="pestana_clientes">
        <property name="acceptDrops">
@@ -244,7 +244,7 @@
            <widget class="QDateEdit" name="txtFechaAlta">
             <property name="dateTime">
              <datetime>
-              <hour>17</hour>
+              <hour>15</hour>
               <minute>0</minute>
               <second>0</second>
               <year>2023</year>
@@ -731,6 +731,9 @@
               <height>24</height>
              </size>
             </property>
+            <property name="toolTip">
+             <string>Añadir un nuevo coche al cliente</string>
+            </property>
             <property name="text">
              <string/>
             </property>
@@ -741,9 +744,9 @@
            </widget>
           </item>
           <item>
-           <widget class="QPushButton" name="buttonBuscarVehiculo">
+           <widget class="QPushButton" name="btnBusCar">
             <property name="enabled">
-             <bool>false</bool>
+             <bool>true</bool>
             </property>
             <property name="minimumSize">
              <size>
@@ -756,6 +759,9 @@
               <width>24</width>
               <height>24</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Buscar por matrícula</string>
             </property>
             <property name="text">
              <string/>
@@ -779,6 +785,9 @@
               <width>24</width>
               <height>24</height>
              </size>
+            </property>
+            <property name="toolTip">
+             <string>Limpiar formulario</string>
             </property>
             <property name="text">
              <string/>

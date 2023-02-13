@@ -18,11 +18,17 @@ def lista_municipios(self: Main):
 	for i in datos:
 		self.ventMain.comboMunicipioCliente.addItem(i)
 
+
 def tabla_vehiculos(self: Main):
 	historico = self.ventMain.checkMostrarHistorico.isChecked()
 	try:
 		self.ventMain.tablaClientes.clearContents()
 		datos = VehiculoRepository.get_all(historico)
+		if self.ultima_busqueda_car is not None and self.ultima_busqueda_car != "":
+			datos = [
+				d for d in datos if d.matricula.__contains__(self.ultima_busqueda_car)
+			]
+
 		self.ventMain.tablaClientes.setRowCount(len(datos))
 		for idx, el in enumerate(datos):
 			self.ventMain.tablaClientes \

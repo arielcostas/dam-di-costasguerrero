@@ -10,7 +10,6 @@ from bbdd.modelos.factura import Factura
 from controladores.ventmain import Main
 from negocio import informes, Informes
 
-
 def init_tab(self: Main):
 	limpiar(self)
 	load_facturas(self)
@@ -27,7 +26,6 @@ def init_tab(self: Main):
 	self.ventMain.btnLimpiarFactura.clicked.connect(lambda: limpiar(self))
 	self.ventMain.btnImprimirFactura.clicked.connect(lambda: imprimir_factura(self))
 	self.ventMain.btnGuardarFactura.clicked.connect(lambda: guardar_factura(self))
-
 
 def load_clientes(self: Main):
 	self.ventMain.cmbFactCli.clear()

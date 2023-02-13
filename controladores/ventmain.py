@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from PyQt6.QtCore import QDate
+from PyQt6.QtWidgets import QInputDialog
 
 from bbdd import ClienteRepository, conexion, VehiculoRepository
 from bbdd.modelos import Cliente, Vehiculo
@@ -13,6 +14,7 @@ from ui.ventMain import *
 class Main(QtWidgets.QMainWindow):
 	def __init__(self):
 		super(Main, self).__init__()
+		self.ultima_busqueda_car = ""
 		self.servicioBackup = ServicioBackup()
 		self.servicioPropietarios = ServicioPropietarios()
 
@@ -29,7 +31,7 @@ class Main(QtWidgets.QMainWindow):
 		]
 
 		# Botones de la barra de herramientas
-		from .main import actions, cargar, tabservicios
+		from .main import actions, cargar
 
 		self.ventMain.actionSalir.triggered.connect(lambda: actions.salir())
 		self.ventMain.actionHacerCopia.triggered.connect(lambda: actions.exportar_copia(self))
@@ -81,10 +83,14 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.checkMostrarHistorico.stateChanged.connect(
 			lambda: cargar.tabla_vehiculos(self))
 
+		from .main import tabservicios
 		tabservicios.init_tab(self)
 
 		from .main import tabfacturacion
 		tabfacturacion.init_tab(self)
+
+		from .main import tabclientes
+		tabclientes.init_tab(self)
 
 	def on_item_seleccionado(self, item: QtWidgets.QTableWidgetItem):
 		if item is not None:
