@@ -10,7 +10,9 @@ class VehiculoRepository:
 	def get_all(historico: bool = False)-> list[Vehiculo]:
 		"""
 		Recupera todos los vehiculos de la base de datos
+
 		:param historico: Si es True, recupera todos los vehiculos, si es False, solo los activos
+
 		:return: Una lista con todos los vehiculos
 		"""
 		try:
@@ -41,7 +43,9 @@ class VehiculoRepository:
 	def get_by_dni(dni: str)-> list[Vehiculo]:
 		"""
 		Recupera todos los vehiculos de la base de datos
+
 		:param historico: Si es True, recupera todos los vehiculos, si es False, solo los activos
+
 		:return: Una lista con todos los vehiculos
 		"""
 		try:
@@ -70,7 +74,9 @@ class VehiculoRepository:
 	def get_by_id(matricula: str) -> Vehiculo:
 		"""
 		Recupera un vehiculo de la base de datos
+
 		:param matricula: La matricula del vehiculo a recuperar
+
 		:return: El vehiculo recuperado o None si no se ha encontrado
 		"""
 		query = QtSql.QSqlQuery()
@@ -92,6 +98,13 @@ class VehiculoRepository:
 
 	@staticmethod
 	def insert(vehiculo: Vehiculo) -> bool:
+		"""
+		Inserta un vehiculo en la base de datos
+
+		:param vehiculo: El vehiculo a insertar
+
+		:return: True si se ha insertado correctamente, False si ha habido un error
+		"""
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare("INSERT OR REPLACE INTO coches VALUES (?,?,?,?,?, NULL)")
@@ -107,6 +120,13 @@ class VehiculoRepository:
 
 	@staticmethod
 	def delete(matricula: str) -> bool:
+		"""
+		Elimina un vehiculo de la base de datos
+
+		:param matricula: La matricula del vehiculo a eliminar
+
+		:return: True si se ha eliminado correctamente, False si ha habido un error
+		"""
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare("UPDATE coches SET fecha_baja = CURRENT_TIMESTAMP WHERE matricula = ?")
@@ -118,6 +138,13 @@ class VehiculoRepository:
 
 	@staticmethod
 	def delete_by_dni(dni: str) -> bool:
+		"""
+		Elimina todos los vehiculos de un cliente
+
+		:param dni: DNI del cliente
+
+		:return: True si se ha eliminado correctamente, False si ha habido un error
+		"""
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare("UPDATE coches SET fecha_baja=:fecha_baja WHERE dnicli = :dni")

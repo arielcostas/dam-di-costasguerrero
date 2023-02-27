@@ -1,5 +1,7 @@
 """
-Script para limpiar y compilar el proyecto
+Script para limpiar caché del proyecto y compilar los archivos .ui a .py (PyQt6)
+Escrito por Ariel Costas
+Cedido al dominio público
 """
 
 import os
