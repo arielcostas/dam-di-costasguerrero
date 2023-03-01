@@ -1,12 +1,8 @@
-import os
 import sys
 
-from PyQt6.QtGui import QFontDatabase
-
-from qt_material import apply_stylesheet
+from PyQt6 import QtWidgets, QtGui
 
 from controladores.ventmain import Main
-from PyQt6 import QtWidgets, QtGui
 
 if __name__ == "__main__":
 	app = QtWidgets.QApplication([])

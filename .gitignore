@@ -2,3 +2,5 @@
 bbdd.sqlite
 ui/*.py
 docs/
+build
+dist
