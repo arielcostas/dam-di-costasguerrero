@@ -1,4 +1,7 @@
 class Factura:
+	"""
+	Representa el modelo Factura de la base de datos
+	"""
 	def __init__(self, fid, dni, matricula, fecha, emitida):
 		self.fid = fid
 		self.nif = dni

@@ -5,6 +5,9 @@ from ui.dlgCambiarPropietario import Ui_dialogoCambiarPropietario
 
 
 class DialogoCambiarPropietario(QtWidgets.QDialog):
+	"""
+	Dialogo para cambiar el propietario de un vehículo.
+	"""
 	def __init__(self, clientes: list[Cliente], vehiculos: list[Vehiculo]):
 		super().__init__()
 		self.ui = Ui_dialogoCambiarPropietario()

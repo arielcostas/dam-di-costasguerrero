@@ -8,11 +8,12 @@ from bbdd.modelos import Cliente
 class ClienteRepository:
 	@staticmethod
 	def get_all(incluir_eliminados: bool = False) -> list[Cliente]:
-		'''
+		"""
 		Obtiene todos los clientes de la base de datos y los devuelve
+
 		:param incluir_eliminados: Si es True, incluye los clientes eliminados
 		:return: un listado de clientes
-		'''
+		"""
 		query = QtSql.QSqlQuery()
 		if incluir_eliminados:
 			query.prepare('SELECT * FROM clientes')
@@ -38,10 +39,12 @@ class ClienteRepository:
 
 	@staticmethod
 	def get_by_dni(dni: str) -> Cliente | None:
-		'''
+		"""
 		Obtiene el cliente cuyo DNI coincida
-		:return: el cliente que coincida con el DNI
-		'''
+
+		:param dni: el DNI del cliente
+		:return: el cliente que coincida con el DNI o None si no existe
+		"""
 		query = QtSql.QSqlQuery()
 		query.prepare('SELECT * FROM clientes WHERE dni = :id_cliente')
 		query.bindValue(':id_cliente', dni)
@@ -63,10 +66,12 @@ class ClienteRepository:
 
 	@staticmethod
 	def delete_by_dni(dni: str) -> bool:
-		'''
+		"""
 		Elimina el cliente cuyo DNI coincida
+
+		:param dni: el DNI del cliente a eliminar
 		:return: True si se ha eliminado correctamente, False si no
-		'''
+		"""
 		query = QtSql.QSqlQuery()
 		query.prepare("UPDATE clientes SET fecha_baja=:fecha_baja WHERE dni = :dni")
 		query.bindValue(':fecha_baja', datetime.now().strftime("%Y-%m-%d"))
@@ -75,6 +80,12 @@ class ClienteRepository:
 
 	@staticmethod
 	def insert(cliente: Cliente) -> bool:
+		"""
+		Inserta un cliente en la base de datos
+
+		:param cliente: Los datos del cliente a insertar
+		:return: True si se ha insertado correctamente, False si no
+		"""
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare(

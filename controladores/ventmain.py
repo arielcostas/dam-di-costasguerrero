@@ -13,6 +13,9 @@ from ui.ventMain import *
 
 class Main(QtWidgets.QMainWindow):
 	def __init__(self):
+		"""
+		Inicializa la ventana principal
+		"""
 		super(Main, self).__init__()
 		self.ultima_busqueda_fact = ""
 		self.ultima_busqueda_car = ""
@@ -42,8 +45,10 @@ class Main(QtWidgets.QMainWindow):
 		self.ventMain.actionCambiarPropietario.triggered.connect(
 			lambda: actions.cambiar_propietario(self))
 		self.ventMain.actionBajaCliente.triggered.connect(self.on_borrar_cliente_coche)
-		self.ventMain.actionInformeClientes.triggered.connect(lambda: actions.informe_clientes(self))
-		self.ventMain.actionInformeVehiculos.triggered.connect(lambda: actions.informe_vehiculos(self))
+		self.ventMain.actionInformeClientes.triggered.connect(
+			lambda: actions.informe_clientes(self))
+		self.ventMain.actionInformeVehiculos.triggered.connect(
+			lambda: actions.informe_vehiculos(self))
 
 		# Se pulsa enter en DNI
 		self.ventMain.txtDni.editingFinished.connect(self.on_dni_comprobar)
@@ -94,6 +99,12 @@ class Main(QtWidgets.QMainWindow):
 		tabclientes.init_tab(self)
 
 	def on_item_seleccionado(self, item: QtWidgets.QTableWidgetItem):
+		"""
+		Se ha seleccionado una fila de la tabla de clientes
+
+		:param item:  Fila seleccionada
+		:return: None
+		"""
 		if item is not None:
 			dni = self.ventMain.tablaClientes.item(item.row(), 0)
 			matricula = self.ventMain.tablaClientes.item(item.row(), 1)
@@ -101,6 +112,12 @@ class Main(QtWidgets.QMainWindow):
 			self.cargar_datos_vehiculo(matricula.text())
 
 	def cargar_datos_cliente(self, dni: str):
+		"""
+		Carga los datos del cliente en los campos de texto
+
+		:param dni: DNI del cliente
+		:return:  None
+		"""
 		try:
 			cliente: Cliente = ClienteRepository.get_by_dni(dni)
 			self.ventMain.txtDni.setText(cliente.dni)
@@ -119,6 +136,12 @@ class Main(QtWidgets.QMainWindow):
 			print(f"Error cargando datos del cliente: {error}")
 
 	def cargar_datos_vehiculo(self, matricula: str):
+		"""
+		Carga los datos del vehículo en los campos de texto
+
+		:param matricula: Matrícula del vehículo
+		:return: None
+		"""
 		try:
 			vehiculo = VehiculoRepository.get_by_id(matricula)
 			self.ventMain.txtMatricula.setText(vehiculo.matricula)
@@ -137,21 +160,43 @@ class Main(QtWidgets.QMainWindow):
 		except Exception as error:
 			print(f"Error cargando datos del vehículo: {error}")
 
-	def get_motor(self):
+	def get_motor(self) -> str:
+		"""
+		Devuelve el tipo de motor seleccionado
+
+		:return: Tipo de motor
+		"""
 		try:
 			return self.ventMain.buttonGroupMotorizacion.checkedButton().text()
 		except Exception as error:
 			print(f"Error seleccionando motor: {error}")
 
 	def set_dni_valido(self, dni: str):
+		"""
+		Muestra el marcado de válido en el DNI
+
+		:param dni:  DNI a formatear
+		:return:  None
+		"""
 		self.ventMain.lblValidardni.setText('✅')
 		self.ventMain.txtDni.setText(dni.upper())
 
 	def set_dni_invalido(self, dni: str):
+		"""
+		Muestra el marcado de inválido en el DNI
+
+		:param dni: DNI a formatear
+		:return:  None
+		"""
 		self.ventMain.lblValidardni.setText('❌')
 		self.ventMain.txtDni.setText(dni.upper())
 
 	def on_dni_comprobar(self):
+		"""
+		Comprueba la validez del DNI
+
+		:return: None
+		"""
 		try:
 			dni = self.ventMain.txtDni.text()
 			if validar_dni(dni):
@@ -162,9 +207,15 @@ class Main(QtWidgets.QMainWindow):
 			print(f"Error mostrando marcado validez DNI: {error}")
 
 	def on_guardar_cliente(self):
+		"""
+		Guarda los datos del cliente en la base de datos
+
+		:return: None
+		"""
 		try:
 			vm = self.ventMain
-			cliente = Cliente(vm.txtDni.text(), vm.txtNombre.text(), vm.txtFechaAlta.date().toString('yyyy-MM-dd'),
+			cliente = Cliente(vm.txtDni.text(), vm.txtNombre.text(),
+							  vm.txtFechaAlta.date().toString('yyyy-MM-dd'),
 							  vm.txtDireccionCliente.text(), vm.comboProvinciaCliente.currentText(),
 							  vm.comboMunicipioCliente.currentText(), vm.checkEfectivo.isChecked(),
 							  vm.checkFactura.isChecked(), vm.checkTransferencia.isChecked())
@@ -195,6 +246,11 @@ class Main(QtWidgets.QMainWindow):
 			aviso.error("Error guardando", "No se han podido guardar los datos")
 
 	def on_borrar_coche(self):
+		"""
+		Borra el vehículo de la base de datos
+
+		:return: None
+		"""
 		from controladores.main import cargar
 		try:
 			matricula = self.ventMain.txtMatricula.text()
@@ -213,6 +269,11 @@ class Main(QtWidgets.QMainWindow):
 			print(f"Error borrando coche: {error}")
 
 	def on_borrar_cliente_coche(self):
+		"""
+		Se borra el cliente y todos sus vehículos de la base de datos
+
+		:return: None
+		"""
 		from controladores.main import cargar
 		try:
 			dni = self.ventMain.txtDni.text()
@@ -235,11 +296,21 @@ class Main(QtWidgets.QMainWindow):
 			print(f"Error borrando cliente y coches: {error}")
 
 	def mayuscula_palabra(self):
+		"""
+		Pone en mayúscula la primera letra de cada palabra
+
+		:return: None
+		"""
 		for campo in self.campos_texto:
 			campo.setText(campo.text().title())
 		self.ventMain.txtMatricula.setText(self.ventMain.txtMatricula.text().upper())
 
 	def limpiar(self):
+		"""
+		Limpia los campos de texto
+
+		:return: None
+		"""
 		try:
 			for campo in self.campos_texto:
 				campo.setText("")
@@ -260,6 +331,11 @@ class Main(QtWidgets.QMainWindow):
 			print(f"Error limpiando cliente: {error}")
 
 	def limpiar_coche(self):
+		"""
+		Borra los campos de texto del vehículo
+
+		:return: None
+		"""
 		self.ventMain.txtMatricula.setDisabled(False)
 		self.ventMain.txtMatricula.setText("")
 		self.ventMain.txtMarca.setText("")

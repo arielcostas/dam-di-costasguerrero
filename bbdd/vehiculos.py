@@ -76,7 +76,6 @@ class VehiculoRepository:
 		Recupera un vehiculo de la base de datos
 
 		:param matricula: La matricula del vehiculo a recuperar
-
 		:return: El vehiculo recuperado o None si no se ha encontrado
 		"""
 		query = QtSql.QSqlQuery()
@@ -102,7 +101,6 @@ class VehiculoRepository:
 		Inserta un vehiculo en la base de datos
 
 		:param vehiculo: El vehiculo a insertar
-
 		:return: True si se ha insertado correctamente, False si ha habido un error
 		"""
 		try:
@@ -124,7 +122,6 @@ class VehiculoRepository:
 		Elimina un vehiculo de la base de datos
 
 		:param matricula: La matricula del vehiculo a eliminar
-
 		:return: True si se ha eliminado correctamente, False si ha habido un error
 		"""
 		try:
@@ -142,7 +139,6 @@ class VehiculoRepository:
 		Elimina todos los vehiculos de un cliente
 
 		:param dni: DNI del cliente
-
 		:return: True si se ha eliminado correctamente, False si ha habido un error
 		"""
 		try:

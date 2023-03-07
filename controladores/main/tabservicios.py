@@ -9,6 +9,12 @@ NUEVO_PRODUCTO_ID = "NUEVO"
 
 
 def init_tab(self: Main):
+	"""
+	Inicializa la pestaña de servicios
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	cargar_tabla(self)
 
 	self.ventMain.textId.setText(NUEVO_PRODUCTO_ID)
@@ -25,7 +31,14 @@ def init_tab(self: Main):
 	self.ventMain.btnLimpiarServicio.clicked.connect(lambda: on_limpiar(self))
 	self.ventMain.btnBuscarServicio.clicked.connect(lambda: on_buscar(self))
 
+
 def cargar_servicio(self: Main):
+	"""
+	Carga el servicio seleccionado en la tabla
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	try:
 		row = self.ventMain.tablaServicios.currentRow()
 		if row is not None:
@@ -41,6 +54,12 @@ def cargar_servicio(self: Main):
 
 
 def on_buscar(self: Main):
+	"""
+	Busca servicios por nombre
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	try:
 		dlg = QtWidgets.QInputDialog(self)
 		dlg.setWindowTitle("Buscar servicios")
@@ -54,6 +73,12 @@ def on_buscar(self: Main):
 
 
 def on_guardar_servicio(self: Main):
+	"""
+	Guarda el servicio
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	id = self.ventMain.textId.text()
 	nombre = self.ventMain.textNombreServicio.text()
 	precio_unitario = self.ventMain.textPrecioUnitario.value()
@@ -74,6 +99,12 @@ def on_guardar_servicio(self: Main):
 
 
 def on_eliminar_servicio(self: Main):
+	"""
+	Elimina el servicio seleccionado
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	id = self.ventMain.textId.text()
 	eliminado = ServicioRepository.eliminar_servicio(id)
 	if eliminado:
@@ -82,18 +113,39 @@ def on_eliminar_servicio(self: Main):
 	else:
 		modales.error("Guardado de servicios", "No se pudo eliminar el servicio")
 
+
 def on_nombre_servicio_editado(self: Main):
+	"""
+	Formatea el nombre del servicio
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	self.ventMain.textNombreServicio.setText(
 		self.ventMain.textNombreServicio.text().capitalize()
 	)
 
 
 def cargar_tabla(self: Main):
+	"""
+	Carga la tabla de servicios
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	cargar_historico = self.ventMain.checkHistoricoServicios.isChecked()
 	filas = ServicioRepository.get_all(cargar_historico)
 	insertar_tabla(self, filas)
 
+
 def insertar_tabla(self: Main, filas: list[Servicio]):
+	"""
+	Inserta los datos de los servicios en la tabla
+
+	:param self: Ventana principal
+	:param filas: Lista de servicios
+	:return: None
+	"""
 	self.ventMain.tablaServicios.clearContents()
 	self.ventMain.tablaServicios.setRowCount(len(filas))
 	for idx, el in enumerate(filas):
@@ -121,6 +173,12 @@ def insertar_tabla(self: Main, filas: list[Servicio]):
 
 
 def on_limpiar(self: Main):
+	"""
+	Limpia los campos de la pestaña de servicios
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	self.ventMain.textId.setText(NUEVO_PRODUCTO_ID)
 	self.ventMain.textNombreServicio.setText("")
 	self.ventMain.textPrecioUnitario.setValue(0.00)

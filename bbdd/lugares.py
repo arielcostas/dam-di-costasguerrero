@@ -4,6 +4,11 @@ from PyQt6 import QtSql
 class LugaresRepository:
 	@staticmethod
 	def get_provincias() -> list[str]:
+		"""
+		Recupera todas las provincias de la base de datos
+
+		:return: Un listado de cadenas con los nombres de las provincias
+		"""
 		query = QtSql.QSqlQuery()
 		query.prepare("SELECT provincia FROM provincias")
 		if query.exec():
@@ -18,6 +23,7 @@ class LugaresRepository:
 	def get_municipios(provincia: str) -> list[str]:
 		"""
 		Recupera los municipios de una provincia dado su nombre
+
 		:param provincia: El nombre de la provincia a buscar
 		:return: Una lista con los nombres de los municipios
 		"""

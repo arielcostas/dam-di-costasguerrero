@@ -4,18 +4,22 @@ from datetime import datetime
 from PyQt6 import QtWidgets, QtCore
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget
-from controladores import modales
 
 from bbdd import VehiculoRepository, ClienteRepository, ServicioRepository, Servicio
 from bbdd.factura import FacturaRepository
 from bbdd.modelos.factura import Factura
 from controladores.dialogos import DialogoAbrir
-from controladores.main import cargar
 from controladores.ventmain import Main
-from negocio import informes, Informes
+from negocio import Informes
 
 
 def init_tab(self: Main):
+	"""
+	Inicializa la pestaña de facturación
+
+	:param self: Ventana principal
+	:return:  None
+	"""
 	limpiar(self)
 	load_facturas(self)
 
@@ -35,6 +39,12 @@ def init_tab(self: Main):
 
 
 def load_clientes(self: Main):
+	"""
+	Carga los clientes en el combo de facturación
+
+	:param self: Ventana principal
+	:return:  None
+	"""
 	self.ventMain.cmbFactCli.clear()
 	self.ventMain.cmbFactCli.addItems(
 		f"{c.dni} - {c.nombre}" for c in
@@ -43,6 +53,12 @@ def load_clientes(self: Main):
 
 
 def load_vehiculos(self: Main):
+	"""
+	Carga los vehículos del cliente seleccionado en el combo de facturación
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	self.ventMain.cmbFactCar.clear()
 	self.ventMain.cmbFactCar.addItems(
 		f"{v.matricula} - {v.marca} {v.modelo}" for v in
@@ -53,6 +69,12 @@ def load_vehiculos(self: Main):
 
 
 def load_facturas(self: Main):
+	"""
+	Carga las facturas en la tabla de facturas
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	facturas = FacturaRepository.get_all()
 	if self.ultima_busqueda_fact is not None or self.ultima_busqueda_fact != "":
 		facturas = [
@@ -82,6 +104,12 @@ def load_facturas(self: Main):
 
 
 def load_servicios(self: Main):
+	"""
+	Carga los servicios en la tabla de servicios
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	servicios = ServicioRepository.get_all(False)
 	self.ventMain.tablaFacturaServicios.setRowCount(len(servicios))
 
@@ -110,6 +138,13 @@ def load_servicios(self: Main):
 
 
 def load_servicios_factura(self: Main, factura: Factura):
+	"""
+	Carga los servicios de la factura seleccionada en la tabla de servicios
+
+	:param self: Ventana principal
+	:param factura: Factura seleccionada
+	:return: None
+	"""
 	load_servicios(self)
 	for i in range(0, self.ventMain.tablaFacturaServicios.rowCount()):
 		servicio = self.ventMain.tablaFacturaServicios.item(i, 0).text()
@@ -119,6 +154,12 @@ def load_servicios_factura(self: Main, factura: Factura):
 
 
 def guardar_factura(self: Main):
+	"""
+	Guarda la factura en la base de datos
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	factura = Factura(
 		None,
 		self.ventMain.cmbFactCli.currentText()[0:9],
@@ -142,6 +183,12 @@ def guardar_factura(self: Main):
 
 
 def actualizar_subtotales(self: Main):
+	"""
+	Actualiza los subtotales de la factura
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	acumulador = 0
 	for i in range(0, self.ventMain.tablaFacturaServicios.rowCount()):
 		unitario = float(self.ventMain.tablaFacturaServicios.item(i, 2).text()[:-2])
@@ -160,6 +207,12 @@ def actualizar_subtotales(self: Main):
 
 
 def limpiar(self: Main):
+	"""
+	Limpia los campos de la pestaña de facturas
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	load_servicios(self)
 	load_clientes(self)
 	load_vehiculos(self)
@@ -180,6 +233,12 @@ def limpiar(self: Main):
 
 
 def load_factura(self: Main):
+	"""
+	Carga la factura seleccionada en la pestaña de facturas
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	try:
 		factura = recuperar_factura(self)
 
@@ -209,6 +268,12 @@ def load_factura(self: Main):
 
 
 def recuperar_factura(self):
+	"""
+	Recupera la factura seleccionada en la tabla de facturas actuales
+
+	:param self: La ventana principal para detectar la factura seleccionada
+	:return: La factura seleccionada
+	"""
 	factura_id = self.ventMain.tablaFacturasActuales.item(
 		self.ventMain.tablaFacturasActuales.currentRow(), 0).text()
 	factura = FacturaRepository.get_by_id(int(factura_id))
@@ -254,6 +319,12 @@ def imprimir_factura(self: Main):
 
 
 def buscar_factura(self: Main):
+	"""
+	Busca una factura por su número, matrícula o DNI
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	input_dlg = QtWidgets.QInputDialog()
 	if self.ultima_busqueda_fact is None or self.ultima_busqueda_fact == "":
 		self.ultima_busqueda_fact = ""
@@ -273,6 +344,11 @@ def buscar_factura(self: Main):
 
 
 class Delegate(QtWidgets.QStyledItemDelegate):
+	"""
+	Clase que permite controlar qué celdas de la tabla de servicios se pueden editar
+
+	:param main: Ventana principal
+	"""
 	def __init__(self, main: Main):
 		super().__init__()
 		self.main = main

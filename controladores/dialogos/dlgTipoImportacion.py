@@ -4,6 +4,9 @@ from ui.dlgTipoImportacion import Ui_dialogoTipoImportacion
 
 
 class DialogoTipoImportacion(QtWidgets.QDialog):
+	"""
+	Dialogo para seleccionar los tipos de importación.
+	"""
 	def __init__(self, clientes: bool, vehiculos: bool):
 		super(DialogoTipoImportacion, self).__init__()
 		self.ui = Ui_dialogoTipoImportacion()

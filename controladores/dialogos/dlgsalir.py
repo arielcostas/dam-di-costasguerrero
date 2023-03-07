@@ -6,6 +6,9 @@ from ui.dlgSalir import Ui_dlgSalir
 
 
 class DialogoSalir(QtWidgets.QDialog):
+	"""
+	Dialogo para confirmar que se quiere salir de la aplicación.
+	"""
 	def __init__(self):
 		super(DialogoSalir, self).__init__()
 		self.dialogSalir = Ui_dlgSalir()

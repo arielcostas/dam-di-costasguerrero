@@ -9,6 +9,11 @@ from controladores.modales import aviso
 
 
 def abrir():
+	"""
+	Abre la conexión de QtSql con SQLite
+
+	:return: True si se pudo abrir la conexión, False en caso contrario
+	"""
 	if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
 		dbfile = "C:\\Program Files (x86)\\TalleresTeis\\bbdd.sqlite"
 		if not os.path.exists(dbfile):

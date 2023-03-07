@@ -7,7 +7,13 @@ from bbdd.modelos import Servicio
 
 class ServicioRepository:
 	@staticmethod
-	def get_all(historico: bool)-> list[Servicio]:
+	def get_all(historico: bool) -> list[Servicio]:
+		"""
+		Obtiene todos los servicios de la base de datos y los devuelve
+
+		:param historico: Si es True, incluye los servicios eliminados
+		:return: un listado de servicios
+		"""
 		try:
 			query = QtSql.QSqlQuery()
 			if historico:
@@ -33,6 +39,12 @@ class ServicioRepository:
 
 	@staticmethod
 	def get_by_id(sid: str) -> Servicio:
+		"""
+		Obtiene el servicio cuyo ID coincida
+
+		:param sid: El ID del servicio
+		:return: El servicio que coincida con el ID
+		"""
 		query = QtSql.QSqlQuery()
 		query.prepare("SELECT * FROM servicios WHERE id = ? LIMIT 1")
 		query.addBindValue(sid)
@@ -50,9 +62,17 @@ class ServicioRepository:
 
 	@staticmethod
 	def nuevo_servicio(nombre: str, precio_unitario: float) -> bool:
+		"""
+		Crea un nuevo servicio en la base de datos
+
+		:param nombre: El nombre del servicio
+		:param precio_unitario: El precio unitario del servicio
+		:return: True si se ha creado correctamente, False en caso contrario
+		"""
 		try:
 			query = QtSql.QSqlQuery()
-			query.prepare("INSERT INTO servicios(nombre, precioUnitario, fechaAlta, fechaModificacion) VALUES (?,?,?,?)")
+			query.prepare(
+				"INSERT INTO servicios(nombre, precioUnitario, fechaAlta, fechaModificacion) VALUES (?,?,?,?)")
 
 			query.addBindValue(nombre)
 			query.addBindValue(precio_unitario)
@@ -65,9 +85,18 @@ class ServicioRepository:
 
 	@staticmethod
 	def modificar_servicio(sid, nombre, precio_unitario) -> bool:
+		"""
+		Modifica un servicio en la base de datos
+
+		:param sid: El ID del servicio
+		:param nombre: El nuevo nombre del servicio
+		:param precio_unitario:  El nuevo precio unitario del servicio
+		:return: True si se ha modificado correctamente, False en caso contrario
+		"""
 		try:
 			query = QtSql.QSqlQuery()
-			query.prepare("UPDATE servicios SET nombre=?, precioUnitario=?, fechaModificacion=? WHERE id=?")
+			query.prepare(
+				"UPDATE servicios SET nombre=?, precioUnitario=?, fechaModificacion=? WHERE id=?")
 
 			query.addBindValue(nombre)
 			query.addBindValue(precio_unitario)
@@ -80,6 +109,12 @@ class ServicioRepository:
 
 	@staticmethod
 	def eliminar_servicio(sid: str) -> bool:
+		"""
+		Elimina un servicio de la base de datos
+
+		:param sid: El ID del servicio
+		:return:  True si se ha eliminado correctamente, False en caso contrario
+		"""
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare("UPDATE servicios SET fechaModificacion=?, fechaBaja=? WHERE id=?")
@@ -94,6 +129,12 @@ class ServicioRepository:
 
 	@staticmethod
 	def buscar(term):
+		"""
+		Busca servicios por nombre
+
+		:param term: El término a buscar
+		:return: Una lista de servicios que coincidan con el término
+		"""
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare("SELECT * FROM servicios WHERE fechaBaja IS NULL AND nombre LIKE ?")

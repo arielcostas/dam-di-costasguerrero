@@ -7,10 +7,11 @@ from bbdd.modelos.factura import Factura
 class FacturaRepository:
 	@staticmethod
 	def get_all() -> list[Factura]:
-		'''
+		"""
 		Obtiene todas las facturas de la base de datos y las devuelve
+
 		:return: un listado de facturas
-		'''
+		"""
 		query = QtSql.QSqlQuery()
 		query.prepare('SELECT * FROM facturas')
 		query.exec()
@@ -29,6 +30,12 @@ class FacturaRepository:
 
 	@staticmethod
 	def get_by_id(factura_id: int) -> Factura:
+		"""
+		Obtiene una factura por su id
+
+		:param factura_id: id de la factura
+		:return:  la factura
+		"""
 		query = QtSql.QSqlQuery()
 		query.prepare('SELECT * FROM facturas WHERE id=? LIMIT 1')
 		query.addBindValue(factura_id)
@@ -45,12 +52,13 @@ class FacturaRepository:
 
 	@staticmethod
 	def get_cantidad_producto_factura(factura: int, servicio_id: int) -> int:
-		'''
+		"""
 		Obtiene cuántos productos de un tipo hay en una factura
+
 		:param factura: factura de la que obtener
 		:param servicio_id: id del producto
 		:return: cantidad
-		'''
+		"""
 		query = QtSql.QSqlQuery()
 		query.prepare(
 			"SELECT cantidad FROM facturas_servicios WHERE factura_id=? AND "
@@ -65,7 +73,14 @@ class FacturaRepository:
 			return 0
 
 	@staticmethod
-	def guardar_factura(factura: Factura, servicios: list[(int, int)]):
+	def guardar_factura(factura: Factura, servicios: list[(int, int)]) -> bool:
+		"""
+		Guarda una factura en la base de datos
+
+		:param factura: La factura a guardar
+		:param servicios:  Los servicios de la factura
+		:return: True si se ha guardado correctamente, False si no
+		"""
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare(
@@ -95,6 +110,7 @@ class FacturaRepository:
 				if not query2.exec():
 					print(query2.lastError().text())
 					return False
+				return True
 		except Exception as e:
 			print(e)
 			return False

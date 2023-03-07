@@ -1,4 +1,7 @@
 class Servicio:
+	"""
+	Representa el modelo Servicio de la base de datos
+	"""
 	def __init__(self, sid: int, nombre: str, precio_unitario: str, fecha_alta: str, fecha_modificacion: str, fecha_baja: str):
 		self.sid = sid
 		self.nombre = nombre

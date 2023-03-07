@@ -11,11 +11,20 @@ from negocio.informes import Informes
 
 
 def salir():
+	"""
+	Abre el diálogo de salir
+	:return: None
+	"""
 	dialog_salir = DialogoSalir()
 	dialog_salir.mostrar_salir()
 
 
 def exportar_copia(self: Main):
+	"""
+	Exporta una copia de seguridad de la base de datos
+	:param self: Ventana principal
+	:return: None
+	"""
 	try:
 		dialogo = DialogoAbrir()
 
@@ -32,6 +41,12 @@ def exportar_copia(self: Main):
 
 
 def importar_copia(self: Main):
+	"""
+	Importa una copia de seguridad de la base de datos
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	try:
 		dialogo = DialogoAbrir()
 		directorio, filename = dialogo.getOpenFileName(
@@ -50,6 +65,12 @@ def importar_copia(self: Main):
 
 
 def exportar_excel(self: Main):
+	"""
+	Exporta los datos de la base de datos a un archivo excel
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	try:
 		dialogo_exportacion = DialogoTipoExportacion()
 		if dialogo_exportacion.exec():
@@ -78,6 +99,12 @@ def exportar_excel(self: Main):
 
 
 def importar_excel(self: Main):
+	"""
+	Importa los datos de un archivo excel a la base de datos
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	try:
 		# Elegir el archivo de donde lee
 		dialogo = DialogoAbrir()
@@ -120,6 +147,11 @@ def importar_excel(self: Main):
 
 
 def cambiar_propietario(self: Main):
+	"""
+	Función que cambia el propietario de un vehículo
+	:param self: Ventana principal
+	:return: None
+	"""
 	try:
 		clientes = ClienteRepository().get_all()
 		vehiculos = VehiculoRepository.get_all(True)
@@ -140,6 +172,11 @@ def cambiar_propietario(self: Main):
 
 
 def informe_clientes(self):
+	"""
+	Genera un informe de todos los clientes y lo guarda
+	:param self: Ventana principal
+	:return: None
+	"""
 	# Obtiene todos los clientes
 	clientes = ClienteRepository.get_all(False)
 
@@ -159,7 +196,14 @@ def informe_clientes(self):
 	# genera el informe y lo guarda
 	Informes.informe_clientes(clientes, ruta)
 
+
 def informe_vehiculos(self):
+	"""
+	Genera un informe de todos los vehículos y lo guarda en un archivo PDF
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	vehiculos = VehiculoRepository.get_all(False)
 
 	dialogo_abrir = DialogoAbrir()

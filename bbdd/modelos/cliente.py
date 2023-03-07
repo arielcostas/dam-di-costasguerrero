@@ -1,4 +1,7 @@
 class Cliente:
+	"""
+	Representa el modelo Cliente de la base de datos
+	"""
 	def __init__(self, dni, nombre, alta, direccion, provincia, municipio, efectivo, factura, transferencia):
 		self.dni: str = dni
 		self.nombre: str = nombre

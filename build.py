@@ -52,9 +52,11 @@ def crear_basedatos():
 	Realiza todas las consultas del archivo `crearTablas.sql` en la base de datos QtSql
 	"""
 	conn = sqlite3.connect("bbdd.sqlite")
+	# Does the os.walk but sorting the files by name ascending
+
 	try:
 		for root, dirs, files in os.walk("basesdatos"):
-			for file in files:
+			for file in sorted(files):
 				if file.endswith(".sql"):
 					print("crear_basedatos: Ejecutando", os.path.join(root, file))
 					with open(os.path.join(root, file), "r", encoding="utf-8") as f:

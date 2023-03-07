@@ -5,6 +5,12 @@ from controladores.ventmain import Main
 
 
 def lista_provincias(self: Main):
+	"""
+	Carga las provincias en el combo de provincias
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	self.ventMain.comboProvinciaCliente.clear()
 	datos = LugaresRepository.get_provincias()
 	for i in datos:
@@ -12,6 +18,12 @@ def lista_provincias(self: Main):
 
 
 def lista_municipios(self: Main):
+	"""
+	Carga los municipios de la provincia seleccionada en el combo de provincias
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	self.ventMain.comboMunicipioCliente.clear()
 	provincia = self.ventMain.comboProvinciaCliente.currentText()
 	datos = LugaresRepository.get_municipios(provincia)
@@ -20,6 +32,12 @@ def lista_municipios(self: Main):
 
 
 def tabla_vehiculos(self: Main):
+	"""
+	Carga la tabla de vehiculos en la ventana principal
+
+	:param self: Ventana principal
+	:return: None
+	"""
 	historico = self.ventMain.checkMostrarHistorico.isChecked()
 	try:
 		self.ventMain.tablaClientes.clearContents()
