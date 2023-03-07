@@ -1,12 +1,15 @@
+import os
 from datetime import datetime
 
 from PyQt6 import QtWidgets, QtCore
 from PyQt6.QtCore import Qt
 from PyQt6.QtWidgets import QWidget
+from controladores import modales
 
 from bbdd import VehiculoRepository, ClienteRepository, ServicioRepository, Servicio
 from bbdd.factura import FacturaRepository
 from bbdd.modelos.factura import Factura
+from controladores.dialogos import DialogoAbrir
 from controladores.main import cargar
 from controladores.ventmain import Main
 from negocio import informes, Informes
@@ -213,17 +216,39 @@ def recuperar_factura(self):
 
 
 def imprimir_factura(self: Main):
+	"""
+	Imprime la factura seleccionada en la tabla de facturas actuales
+
+	:param self:  La ventana principal para detectar la factura seleccionada
+	:return: None
+	"""
 	try:
 		factura = recuperar_factura(self)
 		servicios = ServicioRepository.get_all(False)
 
 		srvs: list[tuple[Servicio, int]] = []
+
+		dialogo = DialogoAbrir()
+		directorio, _ = dialogo.getSaveFileName(
+			self,
+			"Guardar factura", "",
+			"Portable Document Format (*.pdf)"
+		)
+
+		if directorio == "":
+			return
+
+		if not(directorio.endswith(".pdf")):
+			directorio += ".pdf"
+
+
 		for servicio in servicios:
 			cantidad = FacturaRepository.get_cantidad_producto_factura(factura.fid, servicio.sid)
 			if cantidad is not None and cantidad > 0:
 				srvs.append((servicio, cantidad))
 
-		Informes.factura(factura, srvs, "C:\\Users\\a21arielcg\\Desktop\\factura.pdf")
+		Informes.factura(factura, srvs, directorio)
+		os.startfile(directorio)
 	except Exception as e:
 		print("Error al imprimir factura: ", e)
 
