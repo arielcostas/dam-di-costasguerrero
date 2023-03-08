@@ -114,6 +114,17 @@ class FacturaRepository:
 					print(query2.lastError().text())
 					return False
 
+			# Reduce el stock de cada producto facturado si se ha emitido la factura
+			if factura.emitida:
+				query3 = QtSql.QSqlQuery()
+				query3.prepare("UPDATE servicios SET stock=stock-? WHERE id=? AND almacenable=1")
+				for servicio, cantidad in servicios:
+					query3.addBindValue(int(cantidad))
+					query3.addBindValue(int(servicio))
+					if not query3.exec():
+						print(query3.lastError().text())
+						return False
+
 			return True
 		except Exception as e:
 			print(e)

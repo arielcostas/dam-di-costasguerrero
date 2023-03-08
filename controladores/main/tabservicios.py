@@ -45,9 +45,15 @@ def cargar_servicio(self: Main):
 			sid = self.ventMain.tablaServicios.item(row, 0).text()
 			serv = ServicioRepository.get_by_id(sid)
 
+			on_limpiar(self)
 			self.ventMain.textId.setText(str(serv.sid))
 			self.ventMain.textNombreServicio.setText(serv.nombre)
 			self.ventMain.textPrecioUnitario.setValue(serv.precio_unitario)
+
+			self.ventMain.textStockServicio.setValue(serv.stock)
+			if not serv.almacenable:
+				self.ventMain.textStockServicio.setEnabled(False)
+
 			self.ventMain.btnEliminarServicio.setDisabled(False)
 	except Exception as error:
 		print(f"Error cargando servicio: {error}")
@@ -83,15 +89,21 @@ def on_guardar_servicio(self: Main):
 	nombre = self.ventMain.textNombreServicio.text()
 	precio_unitario = self.ventMain.textPrecioUnitario.value()
 
+	stock = self.ventMain.textStockServicio.value()
+	stockbd = stock
+	almacenable = stock != -1
+	if stock == -1:
+		stockbd = 0
+
 	if id == NUEVO_PRODUCTO_ID:
-		if ServicioRepository.nuevo_servicio(nombre, precio_unitario):
+		if ServicioRepository.nuevo_servicio(nombre, precio_unitario, stockbd, almacenable):
 			cargar_tabla(self)
 			on_limpiar(self)
 			modales.info("Guardado de servicios", "Se ha creado el servicio")
 		else:
 			modales.error("Guardado de servicios", "Hubo un error creando el servicio")
 	else:
-		if ServicioRepository.modificar_servicio(id, nombre, precio_unitario):
+		if ServicioRepository.modificar_servicio(id, nombre, precio_unitario, stockbd):
 			cargar_tabla(self)
 			modales.info("Guardado de servicios", "Se ha actualizado el servicio")
 		else:
@@ -159,8 +171,17 @@ def insertar_tabla(self: Main, filas: list[Servicio]):
 			.setItem(idx, 3, QtWidgets.QTableWidgetItem(el.fecha_alta))
 		self.ventMain.tablaServicios \
 			.setItem(idx, 4, QtWidgets.QTableWidgetItem(el.fecha_modificacion))
+
+		if el.almacenable:
+			self.ventMain.tablaServicios \
+				.setItem(idx, 5, QtWidgets.QTableWidgetItem(str(el.stock)))
+		else:
+			self.ventMain.tablaServicios \
+				.setItem(idx, 5, QtWidgets.QTableWidgetItem("N/A"))
+
 		self.ventMain.tablaServicios \
-			.setItem(idx, 5, QtWidgets.QTableWidgetItem(el.fecha_baja))
+			.setItem(idx, 6, QtWidgets.QTableWidgetItem(el.fecha_baja))
+
 
 	for i in range(0, self.ventMain.tablaServicios.columnCount()):
 		self.ventMain.tablaServicios \
@@ -183,3 +204,5 @@ def on_limpiar(self: Main):
 	self.ventMain.textNombreServicio.setText("")
 	self.ventMain.textPrecioUnitario.setValue(0.00)
 	self.ventMain.btnEliminarServicio.setDisabled(True)
+	self.ventMain.textStockServicio.setValue(0)
+	self.ventMain.textStockServicio.setEnabled(True)

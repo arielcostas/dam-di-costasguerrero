@@ -39,7 +39,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>2</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="pestana_clientes">
        <property name="acceptDrops">
@@ -244,7 +244,7 @@
            <widget class="QDateEdit" name="txtFechaAlta">
             <property name="dateTime">
              <datetime>
-              <hour>10</hour>
+              <hour>9</hour>
               <minute>0</minute>
               <second>0</second>
               <year>2023</year>
@@ -1031,7 +1031,7 @@
          </widget>
         </item>
         <item>
-         <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,3,1,3,1,2,1,0,0">
+         <layout class="QHBoxLayout" name="horizontalLayout" stretch="1,1,3,1,3,1,2,0,0,1,0,0">
           <item>
            <spacer name="horizontalSpacer_13">
             <property name="orientation">
@@ -1116,6 +1116,28 @@
             </property>
             <property name="stepType">
              <enum>QAbstractSpinBox::AdaptiveDecimalStepType</enum>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QLabel" name="label_7">
+            <property name="font">
+             <font>
+              <bold>true</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Stock</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QSpinBox" name="textStockServicio">
+            <property name="minimum">
+             <number>-1</number>
+            </property>
+            <property name="maximum">
+             <number>1000000</number>
             </property>
            </widget>
           </item>
@@ -1256,6 +1278,11 @@
           <column>
            <property name="text">
             <string>Última modificación</string>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Stock</string>
            </property>
           </column>
           <column>

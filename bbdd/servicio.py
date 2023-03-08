@@ -20,17 +20,14 @@ class ServicioRepository:
 				query.prepare("SELECT * FROM servicios")
 			else:
 				query.prepare("SELECT * FROM servicios WHERE fechaBaja IS NULL")
+
 			if query.exec():
 				servicios: list[Servicio] = []
 				while query.next():
-					servicios.append(Servicio(
-						query.value(0),
-						query.value(1),
-						query.value(2),
-						query.value(3),
-						query.value(4),
-						query.value(5),
-					))
+					servicio = Servicio(query.value(0), query.value(1), query.value(2),
+										query.value(3), query.value(4), query.value(5),
+										query.value(6), True if query.value(7) == 1 else False)
+					servicios.append(servicio)
 				return servicios
 			else:
 				raise Exception(query.lastError().text())
@@ -58,10 +55,12 @@ class ServicioRepository:
 				query.value(3),
 				query.value(4),
 				query.value(5),
+				query.value(6),
+				True if query.value(7) == 1 else False
 			)
 
 	@staticmethod
-	def nuevo_servicio(nombre: str, precio_unitario: float) -> bool:
+	def nuevo_servicio(nombre: str, precio_unitario: float, stock: int, almacenable: bool) -> bool:
 		"""
 		Crea un nuevo servicio en la base de datos
 
@@ -72,19 +71,21 @@ class ServicioRepository:
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare(
-				"INSERT INTO servicios(nombre, precioUnitario, fechaAlta, fechaModificacion) VALUES (?,?,?,?)")
+				"INSERT INTO servicios(nombre, precioUnitario, fechaAlta, fechaModificacion, stock, almacenable) VALUES (?,?,?,?,?,?)")
 
 			query.addBindValue(nombre)
 			query.addBindValue(precio_unitario)
 			query.addBindValue(datetime.now().strftime("%Y-%m-%d"))
 			query.addBindValue(datetime.now().strftime("%Y-%m-%d"))
+			query.addBindValue(stock if almacenable else 0)
+			query.addBindValue(1 if almacenable else 0)
 
 			return query.exec()
 		except Exception as error:
 			print(f"Error creando servicio: {error}")
 
 	@staticmethod
-	def modificar_servicio(sid, nombre, precio_unitario) -> bool:
+	def modificar_servicio(sid, nombre, precio_unitario, stock) -> bool:
 		"""
 		Modifica un servicio en la base de datos
 
@@ -96,11 +97,12 @@ class ServicioRepository:
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare(
-				"UPDATE servicios SET nombre=?, precioUnitario=?, fechaModificacion=? WHERE id=?")
+				"UPDATE servicios SET nombre=?, precioUnitario=?, fechaModificacion=?, stock=? WHERE id=?")
 
 			query.addBindValue(nombre)
 			query.addBindValue(precio_unitario)
 			query.addBindValue(datetime.now().strftime("%Y-%m-%d"))
+			query.addBindValue(stock)
 			query.addBindValue(sid)
 
 			return query.exec()
@@ -150,6 +152,8 @@ class ServicioRepository:
 						query.value(3),
 						query.value(4),
 						query.value(5),
+						query.value(6),
+						True if query.value(7) == 1 else False
 					))
 				return servicios
 			else:
