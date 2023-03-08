@@ -23,6 +23,8 @@ def abrir():
 	else:
 		dbfile = os.path.join(os.path.dirname(__file__), '..', 'bbdd.sqlite')
 
+	dbfile = os.path.abspath(dbfile)
+
 	modales.info("Base de datos", "Se abrirá la base de datos: " + dbfile)
 
 	db = QtSql.QSqlDatabase.addDatabase("QSQLITE")

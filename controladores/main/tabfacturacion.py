@@ -13,6 +13,8 @@ from controladores.ventmain import Main
 from negocio import Informes
 
 
+NUEVA_FACTURA_ID = "NUEVA"
+
 def init_tab(self: Main):
 	"""
 	Inicializa la pestaña de facturación
@@ -36,6 +38,8 @@ def init_tab(self: Main):
 	self.ventMain.btnImprimirFactura.clicked.connect(lambda: imprimir_factura(self))
 	self.ventMain.btnGuardarFactura.clicked.connect(lambda: guardar_factura(self))
 	self.ventMain.btnBuscaFact.clicked.connect(lambda: buscar_factura(self))
+
+	self.ventMain.txtDescuentoFact.editingFinished.connect(lambda: actualizar_subtotales(self))
 
 
 def load_clientes(self: Main):
@@ -160,26 +164,36 @@ def guardar_factura(self: Main):
 	:param self: Ventana principal
 	:return: None
 	"""
-	factura = Factura(
-		None,
-		self.ventMain.cmbFactCli.currentText()[0:9],
-		self.ventMain.cmbFactCar.currentText().split(" - ")[0],
-		self.ventMain.txtFechaFactura.date().toString("yyyy-MM-dd"),
-		1 if self.ventMain.chkFormalizarFactura.isChecked() else 0
-	)
+	try:
+		factId = None
+		if not(self.ventMain.txtFactId.text() == NUEVA_FACTURA_ID):
+			factId = self.ventMain.txtFactId.text()
 
-	servicios = []
-	for i in range(0, self.ventMain.tablaFacturaServicios.rowCount()):
-		servicios.append(
-			(
-				self.ventMain.tablaFacturaServicios.item(i, 0).text(),
-				self.ventMain.tablaFacturaServicios.item(i, 3).text()
-			)
+		print(factId)
+
+		factura = Factura(
+			None if factId is None else int(factId),
+			self.ventMain.cmbFactCli.currentText()[0:9],
+			self.ventMain.cmbFactCar.currentText().split(" - ")[0],
+			self.ventMain.txtFechaFactura.date().toString("yyyy-MM-dd"),
+			1 if self.ventMain.chkFormalizarFactura.isChecked() else 0,
+			self.ventMain.txtDescuentoFact.value()
 		)
 
-	FacturaRepository.guardar_factura(factura, servicios)
-	load_facturas(self)
-	limpiar(self)
+		servicios = []
+		for i in range(0, self.ventMain.tablaFacturaServicios.rowCount()):
+			servicios.append(
+				(
+					self.ventMain.tablaFacturaServicios.item(i, 0).text(),
+					self.ventMain.tablaFacturaServicios.item(i, 3).text()
+				)
+			)
+
+		FacturaRepository.guardar_factura(factura, servicios)
+		load_facturas(self)
+		limpiar(self)
+	except Exception as error:
+		print("error guardando factura: ", error)
 
 
 def actualizar_subtotales(self: Main):
@@ -201,9 +215,14 @@ def actualizar_subtotales(self: Main):
 			.setItem(i, 4, QtWidgets.QTableWidgetItem(f"{(unitario * cantidad):.2f} €"))
 		acumulador += unitario * cantidad
 
-	self.ventMain.lblSubtotal.setText(f"{acumulador :.2f} €")
-	self.ventMain.lblSubtotalIva.setText(f"{acumulador * 0.21 :.2f} €")
-	self.ventMain.lblSubtotalTotal.setText(f"{acumulador * 1.21 :.2f} €")
+	self.ventMain.lblSubtotal.setText(f"{acumulador :.2f} €") # 107.30
+
+	descuento = self.ventMain.txtDescuentoFact.value() # 10
+	descontado = acumulador * (descuento / 100) # 107.30 * 0.10
+	self.ventMain.lblSubtotalDescuento.setText(f"{descontado :.2f} €") # 10.73
+
+	self.ventMain.lblSubtotalIva.setText(f"{(acumulador - descontado) * 0.21 :.2f} €") # (107.30-10.73) * 0.21
+	self.ventMain.lblSubtotalTotal.setText(f"{(acumulador - descontado) * 1.21 :.2f} €")
 
 
 def limpiar(self: Main):
@@ -217,18 +236,23 @@ def limpiar(self: Main):
 	load_clientes(self)
 	load_vehiculos(self)
 
-	self.ventMain.txtFactId.setText("NUEVA")
+	self.ventMain.txtFactId.setText(NUEVA_FACTURA_ID)
 	self.ventMain.txtFechaFactura.setDate(datetime.now())
 	self.ventMain.tablaFacturaServicios.setEnabled(True)
 	self.ventMain.cmbFactCar.setEnabled(True)
 	self.ventMain.cmbFactCli.setEnabled(True)
 	self.ventMain.txtFechaFactura.setEnabled(True)
+	self.ventMain.txtDescuentoFact.setEnabled(True)
+	self.ventMain.txtDescuentoFact.setValue(0.0)
+
+	self.ventMain.tablaFacturasActuales.setCurrentCell(-1, -1)
 
 	self.ventMain.chkFormalizarFactura.setEnabled(True)
 	self.ventMain.chkFormalizarFactura.setChecked(False)
 
 	self.ventMain.btnGuardarFactura.setEnabled(True)
 	self.ventMain.btnImprimirFactura.setEnabled(False)
+
 	actualizar_subtotales(self)
 
 
@@ -256,6 +280,8 @@ def load_factura(self: Main):
 
 		self.ventMain.txtFechaFactura.setDate(datetime.strptime(factura.fecha, "%Y-%m-%d"))
 		self.ventMain.txtFechaFactura.setEnabled(editable)
+		self.ventMain.txtDescuentoFact.setValue(factura.descuento)
+		self.ventMain.txtDescuentoFact.setEnabled(editable)
 		self.ventMain.chkFormalizarFactura.setEnabled(editable)
 		self.ventMain.btnGuardarFactura.setEnabled(editable)
 

@@ -22,7 +22,8 @@ class FacturaRepository:
 				query.value(1),
 				query.value(2),
 				query.value(3),
-				query.value(4)
+				query.value(4),
+				query.value(5)
 			)
 
 			facturas.append(cliente)
@@ -47,7 +48,8 @@ class FacturaRepository:
 				query.value(1),
 				query.value(2),
 				query.value(3),
-				query.value(4)
+				query.value(4),
+				query.value(5)
 			)
 
 	@staticmethod
@@ -84,13 +86,15 @@ class FacturaRepository:
 		try:
 			query = QtSql.QSqlQuery()
 			query.prepare(
-				"INSERT OR REPLACE INTO facturas (nif, matricula, fecha, emitida) VALUES (?, ?, ?, ?)"
+				"INSERT OR REPLACE INTO facturas (id, nif, matricula, fecha, emitida, descuento) VALUES (?, ?, ?, ?, ?, ?)"
 			)
 
+			query.addBindValue(factura.fid)
 			query.addBindValue(factura.nif)
 			query.addBindValue(factura.matricula)
 			query.addBindValue(factura.fecha)
 			query.addBindValue(factura.emitida)
+			query.addBindValue(factura.descuento)
 
 			if not query.exec():
 				print(query.lastError().text())
@@ -103,14 +107,14 @@ class FacturaRepository:
 
 			id_factura = query.lastInsertId()
 			for servicio, cantidad in servicios:
-
 				query2.addBindValue(id_factura)
 				query2.addBindValue(int(servicio))
 				query2.addBindValue(int(cantidad))
 				if not query2.exec():
 					print(query2.lastError().text())
 					return False
-				return True
+
+			return True
 		except Exception as e:
 			print(e)
 			return False

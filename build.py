@@ -54,16 +54,18 @@ def crear_basedatos():
 	conn = sqlite3.connect("bbdd.sqlite")
 	# Does the os.walk but sorting the files by name ascending
 
-	try:
-		for root, dirs, files in os.walk("basesdatos"):
-			for file in sorted(files):
-				if file.endswith(".sql"):
-					print("crear_basedatos: Ejecutando", os.path.join(root, file))
-					with open(os.path.join(root, file), "r", encoding="utf-8") as f:
-						lineas = f.read()
+	for root, dirs, files in os.walk("basesdatos"):
+		for file in sorted(files):
+			if file.endswith(".sql"):
+				print("crear_basedatos: Ejecutando", os.path.join(root, file))
+				with open(os.path.join(root, file), "r", encoding="utf-8") as f:
+					lineas = f.read()
+					try:
 						conn.executescript(lineas)
-	except Exception as e:
-		print("crear_basedatos: Error ", e)
+					except Exception as e:
+						print("crear_basedatos: Error ", e)
+						continue
+
 
 
 if __name__ == "__main__":

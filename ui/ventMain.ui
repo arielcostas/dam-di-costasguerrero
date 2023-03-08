@@ -244,7 +244,7 @@
            <widget class="QDateEdit" name="txtFechaAlta">
             <property name="dateTime">
              <datetime>
-              <hour>14</hour>
+              <hour>11</hour>
               <minute>0</minute>
               <second>0</second>
               <year>2023</year>
@@ -1486,6 +1486,51 @@
                  </spacer>
                 </item>
                 <item>
+                 <widget class="QLabel" name="lblDescuento">
+                  <property name="font">
+                   <font>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Descuento</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QDoubleSpinBox" name="txtDescuentoFact">
+                  <property name="minimumSize">
+                   <size>
+                    <width>60</width>
+                    <height>0</height>
+                   </size>
+                  </property>
+                  <property name="stepType">
+                   <enum>QAbstractSpinBox::DefaultStepType</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="label_5">
+                  <property name="text">
+                   <string>%</string>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <spacer name="horizontalSpacer_21">
+                  <property name="orientation">
+                   <enum>Qt::Horizontal</enum>
+                  </property>
+                  <property name="sizeHint" stdset="0">
+                   <size>
+                    <width>40</width>
+                    <height>20</height>
+                   </size>
+                  </property>
+                 </spacer>
+                </item>
+                <item>
                  <widget class="QCheckBox" name="chkFormalizarFactura">
                   <property name="text">
                    <string>Formalizar</string>
@@ -1584,7 +1629,7 @@
               </item>
               <item>
                <widget class="QWidget" name="widget" native="true">
-                <layout class="QVBoxLayout" name="verticalLayout_5" stretch="16,0,0">
+                <layout class="QVBoxLayout" name="verticalLayout_5" stretch="16,0,0,0">
                  <property name="spacing">
                   <number>0</number>
                  </property>
@@ -1642,13 +1687,83 @@
                     </item>
                     <item>
                      <widget class="QLabel" name="lblSubtotal">
+                      <property name="minimumSize">
+                       <size>
+                        <width>40</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="font">
                        <font>
+                        <family>Consolas</family>
                         <bold>true</bold>
                        </font>
                       </property>
                       <property name="text">
                        <string>0 €</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+                      </property>
+                     </widget>
+                    </item>
+                   </layout>
+                  </widget>
+                 </item>
+                 <item>
+                  <widget class="QWidget" name="widget_descuento" native="true">
+                   <layout class="QHBoxLayout" name="horizontalLayout_25">
+                    <property name="leftMargin">
+                     <number>9</number>
+                    </property>
+                    <property name="topMargin">
+                     <number>0</number>
+                    </property>
+                    <property name="rightMargin">
+                     <number>25</number>
+                    </property>
+                    <property name="bottomMargin">
+                     <number>0</number>
+                    </property>
+                    <item>
+                     <spacer name="horizontalSpacer_20">
+                      <property name="orientation">
+                       <enum>Qt::Horizontal</enum>
+                      </property>
+                      <property name="sizeHint" stdset="0">
+                       <size>
+                        <width>40</width>
+                        <height>20</height>
+                       </size>
+                      </property>
+                     </spacer>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="label_6">
+                      <property name="text">
+                       <string>Descuento</string>
+                      </property>
+                     </widget>
+                    </item>
+                    <item>
+                     <widget class="QLabel" name="lblSubtotalDescuento">
+                      <property name="minimumSize">
+                       <size>
+                        <width>40</width>
+                        <height>0</height>
+                       </size>
+                      </property>
+                      <property name="font">
+                       <font>
+                        <family>Consolas</family>
+                        <bold>true</bold>
+                       </font>
+                      </property>
+                      <property name="text">
+                       <string>0 €</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                       </property>
                      </widget>
                     </item>
@@ -1692,13 +1807,23 @@
                     </item>
                     <item>
                      <widget class="QLabel" name="lblSubtotalIva">
+                      <property name="minimumSize">
+                       <size>
+                        <width>40</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="font">
                        <font>
+                        <family>Consolas</family>
                         <bold>true</bold>
                        </font>
                       </property>
                       <property name="text">
                        <string>0 €</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                       </property>
                      </widget>
                     </item>
@@ -1750,13 +1875,23 @@
                     </item>
                     <item>
                      <widget class="QLabel" name="lblSubtotalTotal">
+                      <property name="minimumSize">
+                       <size>
+                        <width>40</width>
+                        <height>0</height>
+                       </size>
+                      </property>
                       <property name="font">
                        <font>
+                        <family>Consolas</family>
                         <bold>true</bold>
                        </font>
                       </property>
                       <property name="text">
                        <string>0 €</string>
+                      </property>
+                      <property name="alignment">
+                       <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
                       </property>
                      </widget>
                     </item>
@@ -1817,10 +1952,17 @@
     <addaction name="actionInformeClientes"/>
     <addaction name="actionInformeVehiculos"/>
    </widget>
+   <widget class="QMenu" name="menuAcerca_de">
+    <property name="title">
+     <string>Acerca de</string>
+    </property>
+    <addaction name="actionAcercaDe"/>
+   </widget>
    <addaction name="menuArchivo"/>
    <addaction name="menuHerramientas"/>
    <addaction name="menuAcciones"/>
    <addaction name="menuInformes"/>
+   <addaction name="menuAcerca_de"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
   <widget class="QToolBar" name="toolbar">
@@ -1911,6 +2053,16 @@
   <action name="actionInformeVehiculos">
    <property name="text">
     <string>Listado de vehículos</string>
+   </property>
+  </action>
+  <action name="actionInformaci_n">
+   <property name="text">
+    <string>Información</string>
+   </property>
+  </action>
+  <action name="actionAcercaDe">
+   <property name="text">
+    <string>Acerca de</string>
    </property>
   </action>
  </widget>

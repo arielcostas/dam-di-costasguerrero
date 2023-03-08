@@ -165,20 +165,29 @@ class Informes:
 				i += 1
 				precio_total += serv[0].precio_unitario * serv[1]
 
-			iva = precio_total * 0.21
+			multiplicador_descuento = factura.descuento / 100
+			descontado = precio_total * multiplicador_descuento
+			iva = (precio_total - descontado) * 0.21
 
 			doc.setFont("Helvetica", 11)
 			doc.drawString(420, 95, "Subtotal: ")
 			doc.setFont("Courier-Bold", 11)
 			doc.drawString(480, 95, f"{precio_total:.2f} €".rjust(10))
+
 			doc.setFont("Helvetica", 11)
-			doc.drawString(420, 80, "IVA (21%): ")
+			doc.drawString(420, 80, "Descuento: ")
 			doc.setFont("Courier-Bold", 11)
-			doc.drawString(480, 80, f"{iva:.2f} €".rjust(10))
+			doc.drawString(480, 80, f"{descontado:.2f} €".rjust(10))
+
 			doc.setFont("Helvetica", 11)
-			doc.drawString(420, 65, "Total: ")
+			doc.drawString(420, 65, "IVA (21%): ")
 			doc.setFont("Courier-Bold", 11)
-			doc.drawString(480, 65, f"{precio_total + iva:.2f} €".rjust(10))
+			doc.drawString(480, 65, f"{iva:.2f} €".rjust(10))
+
+			doc.setFont("Helvetica", 11)
+			doc.drawString(420, 50, "Total: ")
+			doc.setFont("Courier-Bold", 11)
+			doc.drawString(480, 50, f"{precio_total-descontado+iva:.2f} €".rjust(10))
 
 			doc.setFont("Helvetica", 11)
 
