@@ -49,6 +49,7 @@ class Main(QtWidgets.QMainWindow):
 			lambda: actions.informe_clientes(self))
 		self.ventMain.actionInformeVehiculos.triggered.connect(
 			lambda: actions.informe_vehiculos(self))
+		self.ventMain.actionAcercaDe.triggered.connect(actions.mostrar_acerca_de)
 
 		# Se pulsa enter en DNI
 		self.ventMain.txtDni.editingFinished.connect(self.on_dni_comprobar)

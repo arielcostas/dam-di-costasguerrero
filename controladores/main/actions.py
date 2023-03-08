@@ -2,12 +2,14 @@ from datetime import datetime
 
 from bbdd import ClienteRepository, conexion, VehiculoRepository
 from controladores.dialogos.cambiarpropietario import DialogoCambiarPropietario
+from controladores.dialogos.dlginfo import DialogoInfo
 from controladores.main import cargar
 from controladores.modales import aviso
 from controladores.dialogos import DialogoAbrir, DialogoSalir, DialogoTipoExportacion, \
 	DialogoTipoImportacion
 from controladores.ventmain import Main
 from negocio.informes import Informes
+from ui.dlgAcercaDe import Ui_dlgAcercaDe
 
 
 def salir():
@@ -217,3 +219,16 @@ def informe_vehiculos(self):
 		return
 
 	Informes.informe_vehiculos(vehiculos, ruta)
+
+
+def mostrar_acerca_de():
+	"""
+	Muestra el diálogo de información del programa
+
+	:return: None
+	"""
+	try:
+		dlgInfo = DialogoInfo()
+		dlgInfo.show()
+	except Exception as error:
+		print("error acerca de: ", error)

@@ -244,7 +244,7 @@
            <widget class="QDateEdit" name="txtFechaAlta">
             <property name="dateTime">
              <datetime>
-              <hour>11</hour>
+              <hour>10</hour>
               <minute>0</minute>
               <second>0</second>
               <year>2023</year>
@@ -2053,11 +2053,6 @@
   <action name="actionInformeVehiculos">
    <property name="text">
     <string>Listado de vehículos</string>
-   </property>
-  </action>
-  <action name="actionInformaci_n">
-   <property name="text">
-    <string>Información</string>
    </property>
   </action>
   <action name="actionAcercaDe">
